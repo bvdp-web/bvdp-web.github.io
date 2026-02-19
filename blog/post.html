@@ -1,0 +1,43 @@
+
+---
+
+# 📄 3️⃣ Single Post Template — `/blog/post.html`
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog Post</title>
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+
+<nav>
+  <div class="nav-container">
+    <a href="/">Home</a>
+    <a href="/blog/">Blog</a>
+    <button id="darkToggle">🌙</button>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="card" id="content">Loading...</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="/assets/script.js"></script>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const post = params.get("post");
+
+  fetch(`/posts/${post}.md`)
+    .then(res => res.text())
+    .then(md => {
+      document.getElementById("content").innerHTML = marked.parse(md);
+    });
+</script>
+
+</body>
+</html>

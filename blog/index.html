@@ -1,0 +1,39 @@
+<div class="container">
+  <h1>Blog</h1>
+
+  <input type="text" id="search" placeholder="Search posts..." />
+
+  <div id="posts"></div>
+</div>
+
+<script src="/assets/script.js"></script>
+<script>
+fetch("/data/posts.json")
+  .then(res => res.json())
+  .then(data => {
+    const container = document.getElementById("posts");
+
+    data.forEach(post => {
+      container.innerHTML += `
+        <div class="card">
+          <h2>${post.title}</h2>
+          <p>${post.description}</p>
+          <a href="/blog/post.html?post=${post.file}" class="button">Read</a>
+        </div>
+      `;
+    });
+
+    // Search
+    document.getElementById("search").addEventListener("input", e => {
+      const term = e.target.value.toLowerCase();
+      const cards = document.querySelectorAll(".card");
+
+      cards.forEach(card => {
+        card.style.display =
+          card.innerText.toLowerCase().includes(term)
+            ? "block"
+            : "none";
+      });
+    });
+  });
+</script>

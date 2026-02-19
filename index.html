@@ -1,34 +1,45 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
   <title>BvdP Website</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 50px;
-      background-color: #f4f4f9;
-      color: #333;
-    }
-    h1 {
-      color: #2c3e50;
-    }
-    p {
-      font-size: 1.2em;
-    }
-    a {
-      color: #007bff;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-  </style>
+  <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
-  <h1>Welkom op mijn GitHub-website</h1>
-  <p>Dit is een lege hoofdpagina</p>
+
+<nav>
+  <div class="nav-container">
+    <a href="/">Home</a>
+    <a href="/about/">About</a>
+    <a href="/projects/">Projects</a>
+    <a href="/blog/">Blog</a>
+    <a href="/contact/">Contact</a>
+  </div>
+  <button id="darkToggle">🌙</button>
+</nav>
+
+<div class="container">
+  <h1>Welcome 👋</h1>
+  <div class="card">
+    <p>This is a modern GitHub Pages website.</p>
+    <a href="/blog/" class="button">Visit the Blog</a>
+  </div>
+</div>
+
+<footer>
+  © 2026 Your Organization
+</footer>
+
+<script>
+  const links = document.querySelectorAll("nav a");
+  const currentPath = window.location.pathname;
+  links.forEach(link => {
+    if (link.getAttribute("href") === currentPath) {
+      link.classList.add("active");
+    }
+  });
+</script>
+
 </body>
 </html>
