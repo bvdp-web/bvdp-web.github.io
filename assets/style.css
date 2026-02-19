@@ -118,6 +118,9 @@ body.dark nav {
 body.dark .card {
   background: #1e293b;
 }
+body.dark footer {
+  background: #0a101d;
+}
 
 #darkToggle {
   background: none;
@@ -199,5 +202,6 @@ body.dark .card {
   text-shadow: 0 0 10px rgba(0,0,0,0.7);
   pointer-events: none;
 }
+
 
 
