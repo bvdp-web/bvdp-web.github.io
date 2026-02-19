@@ -35,7 +35,7 @@
   let currentPage = 1;
   let allPosts = [];
   let masterPosts = []; // important for search reset
-  fetch("/data/posts.json")
+  fetch("/preken/posts.json")
     .then(res => res.json())
     .then(data => {
       masterPosts = data.sort((a,b)=> new Date(b.date) - new Date(a.date));

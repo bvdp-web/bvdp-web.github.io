@@ -1,0 +1,12 @@
+[
+  {
+    "title": "My First Post",
+    "file": "first-post",
+    "description": "Introduction to my blog."
+  },
+  {
+    "title": "Second Post",
+    "file": "second-post",
+    "description": "Another article."
+  }
+]
