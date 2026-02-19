@@ -29,7 +29,7 @@
     const params = new URLSearchParams(window.location.search);
     const post = params.get("post");
 
-    fetch(`/preken/posts/${post}.md`)
+    fetch(`/preken/articles/${post}.md`)
       .then(res => res.text())
       .then(md => {
         document.getElementById("content").innerHTML = marked.parse(md);
@@ -37,3 +37,4 @@
   </script>
 </body>
 </html>
+
