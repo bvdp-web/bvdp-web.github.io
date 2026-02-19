@@ -18,6 +18,12 @@ nav {
   padding: 16px 0;
 }
 
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
 .nav-container {
   max-width: 1000px;
   margin: auto;
@@ -193,4 +199,5 @@ body.dark .card {
   text-shadow: 0 0 10px rgba(0,0,0,0.7);
   pointer-events: none;
 }
+
 
