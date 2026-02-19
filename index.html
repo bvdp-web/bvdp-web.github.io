@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
@@ -7,39 +7,35 @@
   <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
-
-<nav>
-  <div class="nav-container">
-    <a href="/">Home</a>
-    <a href="/about/">About</a>
-    <a href="/projects/">Projects</a>
-    <a href="/blog/">Blog</a>
-    <a href="/contact/">Contact</a>
+  <nav>
+    <div class="nav-container">
+      <a href="/">Home</a>
+      <a href="/artikelen/">Artikelen</a>
+      <a href="/preken/">Preken</a>
+      <a href="/gs">Geschiedenis Overzicht</a>
+      <a href="/about/">Over mij</a>
+      <button id="darkToggle">🌙</button>
+    </div>
+  </nav>
+  <div class="container">
+    <h1>Welkom om BvdP's website</h1>
+    <div class="card">
+      <p>Op deze website kunt u mijn artikelen, preken en andere wetenswaardigheden vinden.</p>
+      <p>Het <a href="/gs">Geschiedenis Overzicht</a> biedt een overzicht tussen de Bijbelse/Israëlische geschiedenis, omliggende historische feiten met betrekking tot de Bijbelse geschiedenis, de kerkgeschiedenis, de geschiedenis van de Westerse wijsbegeerte, de klassieke muziekgeschiedenis en de kunst- en literatuurgeschiedenis</p>
+      <p>Verder heb ik nog wat muziekplaylists opgenomen op deze homepagina</p>
+    </div>
   </div>
-  <button id="darkToggle">🌙</button>
-</nav>
-
-<div class="container">
-  <h1>Welcome 👋</h1>
-  <div class="card">
-    <p>This is a modern GitHub Pages website.</p>
-    <a href="/blog/" class="button">Visit the Blog</a>
-  </div>
-</div>
-
-<footer>
-  © 2026 Your Organization
-</footer>
-
-<script>
-  const links = document.querySelectorAll("nav a");
-  const currentPath = window.location.pathname;
-  links.forEach(link => {
-    if (link.getAttribute("href") === currentPath) {
-      link.classList.add("active");
-    }
-  });
-</script>
-
-</body>
+  <footer>
+    © 2026 BvdP Website
+  </footer>
+  <script>
+    const links = document.querySelectorAll("nav a");
+    const currentPath = window.location.pathname;
+    links.forEach(link => {
+      if (link.getAttribute("href") === currentPath) {
+        link.classList.add("active");
+      }
+    });
+  </script>
+  </body>
 </html>
