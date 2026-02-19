@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>BvdP Website - Artikelen</title>
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+  <nav>
+    <div class="nav-container">
+      <a href="/">Home</a>
+      <a href="/artikelen/">Artikelen</a>
+      <a href="/preken/">Preken</a>
+      <a href="/gs">Geschiedenis Overzicht</a>
+      <a href="/about/">Over mij</a>
+      <button id="darkToggle">🌙</button>
+    </div>
+  </nav>
+  <div class="container">
+    <div class="card" id="content">Loading...</div>
+  </div>
+  <footer>
+    © 2026 BvdP Website
+  </footer> 
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="/assets/script.js"></script>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const post = params.get("post");
+
+    fetch(`/preken/posts/${post}.md`)
+      .then(res => res.text())
+      .then(md => {
+        document.getElementById("content").innerHTML = marked.parse(md);
+      });
+  </script>
+</body>
+</html>
