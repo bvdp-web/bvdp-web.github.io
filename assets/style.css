@@ -115,9 +115,14 @@ body.dark nav {
   background: #020617;
 }
 
+body.dark .container {
+  color: lightblue;
+}
+
 body.dark .card {
   background: #1e293b;
 }
+
 body.dark footer {
   background: #0a101d;
 }
@@ -202,6 +207,7 @@ body.dark footer {
   text-shadow: 0 0 10px rgba(0,0,0,0.7);
   pointer-events: none;
 }
+
 
 
 
