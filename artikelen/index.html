@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>BvdP Website - Artikelen</title>
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+  <nav>
+    <div class="nav-container">
+      <a href="/">Home</a>
+      <a href="/artikelen/">Artikelen</a>
+      <a href="/preken/">Preken</a>
+      <a href="/gs">Geschiedenis Overzicht</a>
+      <a href="/about/">Over mij</a>
+      <button id="darkToggle">🌙</button>
+    </div>
+  </nav>
+  <div class="container">
+    <h1>Artikelen</h1>
+    <div class="card">
+      <p>Op deze pagina kunt u mijn artikelen vinden.</p>
+      <p>Het zijn artikelen met vooral een gelovige en theologische inslag, maar vooral ook mijn visie op verschillende zaken omtrent het maatschappelijke, kerkelijke en gelovige.</p>
+      <p>Verder kunt u hier nog een aantak koppelingen vinden naar websites, die naar mijn mening goede artikelen bevatten.</p>
+    </div>
+    <input type="text" id="search" placeholder="Zoek artikelen..." />
+    <div id="posts"></div>
+    <div id="pagination"></div>
+  </div>
+  <footer>
+    © 2026 BvdP Website
+  </footer> 
+  <script src="/assets/script.js"></script>
+  <script>
+  const POSTS_PER_PAGE = 5;
+  let currentPage = 1;
+  let allPosts = [];
+  let masterPosts = []; // important for search reset
+  fetch("/data/posts.json")
+    .then(res => res.json())
+    .then(data => {
+      masterPosts = data.sort((a,b)=> new Date(b.date) - new Date(a.date));
+      allPosts = [...masterPosts];
+      renderPage();
+    });
+  function renderPage() {
+    const container = document.getElementById("posts");
+    container.innerHTML = "";
+    const start = (currentPage - 1) * POSTS_PER_PAGE;
+    const end = start + POSTS_PER_PAGE;
+    const pagePosts = allPosts.slice(start, end);
+    pagePosts.forEach(post => {
+      container.innerHTML += `
+        <div class="card">
+          <h2>${post.title}</h2>
+          <small>${post.date}</small>
+          <p>${post.description}</p>
+          <a href="/blog/post.html?post=${post.file}" class="button">Read</a>
+        </div>
+      `;
+    });
+    renderPagination();
+  }
+  function renderPagination() {
+    const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
+    const pagination = document.getElementById("pagination");
+    pagination.innerHTML = "";
+    for (let i = 1; i <= totalPages; i++) {
+      pagination.innerHTML += `
+        <button onclick="goToPage(${i})">${i}</button>
+      `;
+    }
+  }
+  function goToPage(page) {
+    currentPage = page;
+    renderPage();
+  }
+  document.getElementById("search").addEventListener("input", e => {
+    const term = e.target.value.toLowerCase();
+    allPosts = masterPosts.filter(post =>
+      post.title.toLowerCase().includes(term) ||
+      post.description.toLowerCase().includes(term)
+    );
+    currentPage = 1;
+    renderPage();
+  });
+  </script>
+  <script>
+    const links = document.querySelectorAll("nav a");
+    const currentPath = window.location.pathname;
+    links.forEach(link => {
+      if (link.getAttribute("href") === currentPath) {
+        link.classList.add("active");
+      }
+    });
+  </script>
+  </body>
+</html>
