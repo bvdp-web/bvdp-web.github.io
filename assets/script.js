@@ -1,3 +1,18 @@
+// Menu
+const links = document.querySelectorAll("nav a");
+const currentPath = window.location.pathname;
+links.forEach(link => {
+  const href = link.getAttribute("href");
+  // Ensure href ends with a slash if it's a directory
+  const normalizedHref = href.endsWith("/") ? href : href + "/";
+  // Normalize current path for comparison
+  const normalizedPath = currentPath.endsWith("/") ? currentPath : currentPath + "/";
+  // Check if current path starts with href
+  if (normalizedPath.startsWith(normalizedHref)) {
+    link.classList.add("active");
+  }
+});
+
 // Hamburger toggle
 document.getElementById("hamburger")
   .addEventListener("click", function() {
@@ -41,4 +56,3 @@ document.querySelectorAll(".youtube .thumbnail").forEach(thumb => {
     card.classList.add("loaded");
   });
 });
-
