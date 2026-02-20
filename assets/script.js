@@ -41,7 +41,7 @@ document.querySelectorAll(".youtube .thumbnail").forEach(thumb => {
     const videoUrl = card.dataset.video;
     if (card.classList.contains("loaded")) return;
     const iframe = document.createElement("iframe");
-    iframe.src = videoUrl + "&autoplay=1";
+    iframe.src = videoUrl + "&autoplay=1&shuffle=1&loop=1";
     iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
     iframe.allowFullscreen = true;
     iframe.style.width = "100%";
