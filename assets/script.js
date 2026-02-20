@@ -1,3 +1,10 @@
+// Hamburger toggle
+document.getElementById("hamburger")
+  .addEventListener("click", function() {
+    document.querySelector(".nav-links")
+      .classList.toggle("active");
+});
+
 // Dark mode toggle
 const toggle = document.getElementById("darkToggle");
 
@@ -33,3 +40,4 @@ document.querySelectorAll(".youtube .card").forEach(card => {
     }
   });
 });
+
