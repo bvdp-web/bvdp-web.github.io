@@ -129,6 +129,28 @@ footer {
   color: #9ca3af;
   margin-top: 60px;
 }
+
+/* Daily Verses */
+.card.dailyVerses {
+  background: #f4ecd8;
+  border: 1px solid #d8c9a3;
+}
+#dailyVersesTitle {
+  color: turquoise;
+  font-family: "Georgia", Times New Roman, serif;
+  text-align: center;
+}
+#dailyVersesWrapper {
+  text-align: center;
+}
+body.dark .card.dailyVerses {
+  background: #1e1a14;
+  border: 1px solid #3a3125;
+}
+body.dark #dailyVersesTitle {
+  color: #6ea79e
+}
+
 /* Dark Mode*/
 body.dark {
   background: #0f172a;
