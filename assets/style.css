@@ -18,7 +18,6 @@ body {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: var(--nav-bg, white);
   transition: all 0.3s ease;
 }
 .nav-container {
@@ -32,7 +31,7 @@ body {
 .logo {
   font-weight: bold;
   text-decoration: none;
-  color: inherit;
+  color: #d1d5db;
 }
 .nav-links {
   display: flex;
@@ -237,9 +236,3 @@ body.dark footer {
   text-shadow: 0 0 10px rgba(0,0,0,0.7);
   pointer-events: none;
 }
-
-
-
-
-
-
