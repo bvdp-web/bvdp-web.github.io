@@ -24,7 +24,7 @@ toggle?.addEventListener("click", () => {
 
 
 // Youtube embeds
-document.querySelectorAll(".youtube .card").forEach(card => {
+document.querySelectorAll(".youtube > .card > .thumbnail").forEach(card => {
   card.addEventListener("click", () => {
     const videoUrl = card.dataset.video;
     if (!card.querySelector("iframe")) {
@@ -40,4 +40,3 @@ document.querySelectorAll(".youtube .card").forEach(card => {
     }
   });
 });
-
