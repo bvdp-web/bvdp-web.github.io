@@ -151,6 +151,21 @@ body.dark #dailyVersesTitle {
   color: #6ea79e
 }
 
+/* Quote Images */
+.quote-images {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin: 40px 0;
+}
+.quote-images img {
+  width: 75%;
+  max-width: 300px;
+  height: auto;
+}
+
 /* Dark Mode*/
 body.dark {
   background: #0f172a;
