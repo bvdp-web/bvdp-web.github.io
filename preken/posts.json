@@ -2,6 +2,7 @@
   {
     "title": "My First Post",
     "file": "first-post",
+    "date": "2026-02-21",
     "description": "Introduction to my blog."
   },
   {
@@ -10,3 +11,4 @@
     "description": "Another article."
   }
 ]
+
