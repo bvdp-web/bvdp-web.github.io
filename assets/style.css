@@ -13,42 +13,81 @@ body {
 }
 
 /* Navigation */
-nav {
+.navbar {
   background: #111827;
-  padding: 16px 0;
-}
-
-nav {
   position: sticky;
   top: 0;
   z-index: 1000;
+  background: var(--nav-bg, white);
+  transition: all 0.3s ease;
 }
-
 .nav-container {
-  max-width: 1000px;
+  max-width: 1100px;
   margin: auto;
+  padding: 15px 20px;
   display: flex;
-  justify-content: center;
-  gap: 30px;
+  justify-content: space-between;
+  align-items: center;
 }
-
-nav a {
-  color: #d1d5db;
+.logo {
+  font-weight: bold;
   text-decoration: none;
+  color: inherit;
+}
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 25px;
+  align-items: center;
+  margin: 0;
+}
+.nav-links a {
+  text-decoration: none;
+  color: #d1d5db;
   font-weight: 500;
   transition: 0.3s;
 }
-
-nav a:hover {
+.nav-links a:hover {
   color: #ffffff;
 }
-
-/* Active menu highlight */
-nav a.active {
+.nav-links a.active {
   color: #ffffff;
   border-bottom: 2px solid #3b82f6;
   padding-bottom: 4px;
 }
+.nav-links button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-size: 18px;
+}
+.hamburger {
+  display: none;
+  font-size: 26px;
+  cursor: pointer;
+}
+/* 📱 MOBILE */
+@media (max-width: 768px) {
+  .nav-links {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    background: var(--nav-bg, white);
+    flex-direction: column;
+    gap: 20px;
+    padding: 25px 0;
+    display: none;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  }
+  .nav-links.active {
+    display: flex;
+  }
+  .hamburger {
+    display: block;
+  }
+}
+
 
 /* Layout */
 .container {
@@ -96,22 +135,13 @@ footer {
   margin-top: 60px;
 }
 
-/* Responsive */
-@media(max-width: 700px) {
-  .nav-container {
-    flex-direction: column;
-    align-items: center;
-  }
-}
-
-
 /* Dark Mode*/
 body.dark {
   background: #0f172a;
   color: #e2e8f0;
 }
 
-body.dark nav {
+body.dark .navbar {
   background: #020617;
 }
 
@@ -207,6 +237,7 @@ body.dark footer {
   text-shadow: 0 0 10px rgba(0,0,0,0.7);
   pointer-events: none;
 }
+
 
 
 
