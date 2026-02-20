@@ -115,7 +115,7 @@ body.dark nav {
   background: #020617;
 }
 
-body.dark .container {
+body.dark .container a {
   color: lightblue;
 }
 
@@ -207,6 +207,7 @@ body.dark footer {
   text-shadow: 0 0 10px rgba(0,0,0,0.7);
   pointer-events: none;
 }
+
 
 
 
