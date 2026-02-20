@@ -24,19 +24,21 @@ toggle?.addEventListener("click", () => {
 
 
 // Youtube embeds
-document.querySelectorAll(".youtube > .card > .thumbnail").forEach(card => {
-  card.addEventListener("click", () => {
+document.querySelectorAll(".youtube .thumbnail").forEach(thumb => {
+  thumb.addEventListener("click", () => {
+    const card = thumb.closest(".card");
     const videoUrl = card.dataset.video;
-    if (!card.querySelector("iframe")) {
-      card.innerHTML = `
-        <iframe 
-          src="${videoUrl}&autoplay=1" 
-          frameborder="0" 
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-          allowfullscreen
-          style="width:100%; height:100%; aspect-ratio:16/9; border-radius:10px;"
-        ></iframe>
-      `;
-    }
+    if (card.classList.contains("loaded")) return;
+    const iframe = document.createElement("iframe");
+    iframe.src = videoUrl + "&autoplay=1";
+    iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+    iframe.allowFullscreen = true;
+    iframe.style.width = "100%";
+    iframe.style.aspectRatio = "16/9";
+    iframe.style.borderRadius = "10px";
+    iframe.style.border = "0";
+    thumb.replaceWith(iframe);
+    card.classList.add("loaded");
   });
 });
+
