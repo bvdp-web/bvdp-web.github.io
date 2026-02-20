@@ -7,14 +7,19 @@
   <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
-  <nav>
+  <nav class="navbar">
     <div class="nav-container">
-      <a href="/">Home</a>
-      <a href="/artikelen/">Artikelen</a>
-      <a href="/preken/">Preken</a>
-      <a href="/gs">Geschiedenis Overzicht</a>
-      <a href="/about/">Over mij</a>
-      <button id="darkToggle">🌙</button>
+      <a href="/" class="logo">Home</a>
+      <ul class="nav-links">
+        <li><a href="/artikelen/">Artikelen</a></li>
+        <li><a href="/preken/">Preken</a></li>
+        <li><a target="_blank" href="/gs">Geschiedenis Overzicht</a></li>
+        <li><a href="/about/">Over mij</a></li>
+        <li><button id="darkToggle">🌙</button></li>
+      </ul>
+      <div class="hamburger" id="hamburger">
+        ☰
+      </div>
     </div>
   </nav>
   <div class="container">
@@ -86,15 +91,5 @@
     renderPage();
   });
   </script>
-  <script>
-    const links = document.querySelectorAll("nav a");
-    const currentPath = window.location.pathname;
-    links.forEach(link => {
-      if (link.getAttribute("href") === currentPath) {
-        link.classList.add("active");
-      }
-    });
-  </script>
-  </body>
+</body>
 </html>
-
