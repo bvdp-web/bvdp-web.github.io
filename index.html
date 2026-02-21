@@ -35,9 +35,21 @@
       <div id="dailyVersesWrapper"></div>
       <script async defer src="https://dailyverses.net/get/verse.js?language=hsv"></script>
     </div>
-    <div class="quote-images">
-      <img src="https://kwize.com/pics/Quote-of-the-Day-3-0-0-2116d.jpg" alt="Christelijke Uitspraak van de Dag">
-      <img src="https://kwize.com/pics/Quote-of-the-Day-3-0-0-0.jpg" alt="Uitspraak van het Moment">
+    <div class="card random-uitspraak">
+      <div id="random-uitspraak"></div>
+      <script>
+        fetch('uitspraken.txt')
+          .then(response => response.text())
+          .then(text => {
+            const lines = text.split('\n').filter(line => line.trim() !== '');
+            const randomIndex = Math.floor(Math.random() * lines.length);
+            document.getElementById('random-uitspraak').textContent = lines[randomIndex];
+          })
+          .catch(error => {
+            document.getElementById('random-uitspraak').textContent = "Kan mijn uitspraak van de dag niet weergeven.";
+            console.error(error);
+          });
+      </script>
     </div>
     <div class="youtube">
       <div class="card" data-video="https://www.youtube.com/embed?list=PLHiK8qwIEIJNZzaxgtEmVyaWv_qZ1NFUq">
@@ -64,6 +76,10 @@
         <h2>Klassieke Muziek</h2>
         <p>Een playlist met de mooiste klassieke muziekstukken.</p>
       </div>
+    </div>
+    <div class="quote-images">
+      <img src="https://kwize.com/pics/Quote-of-the-Day-3-0-0-2116d.jpg" alt="Christelijke Uitspraak van de Dag">
+      <img src="https://kwize.com/pics/Quote-of-the-Day-3-0-0-0.jpg" alt="Uitspraak van het Moment">
     </div>
   </div>
   <footer>
