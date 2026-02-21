@@ -222,7 +222,7 @@ body.dark footer {
 /* YT embeds */
 .youtube {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(80%, 380px), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(80%, 350px), 1fr));
   gap: 30px;
   margin-top: 40px;
 }
