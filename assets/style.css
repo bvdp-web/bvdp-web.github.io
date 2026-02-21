@@ -51,6 +51,13 @@ body {
   font-weight: bold;
   text-decoration: none;
   color: #d1d5db;
+  display: flex;
+  align-content: center;
+  gap: 8px;
+}
+.logo img {
+  display: block;
+  height: 24px;
 }
 .nav-links {
   display: flex;
