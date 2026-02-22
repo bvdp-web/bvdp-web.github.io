@@ -30,7 +30,7 @@ jobs:
               echo "," >> artikelen/posts.json
             fi
 
-            echo "  {" >> artikelen/post.json
+            echo "  {" >> artikelen/posts.json
             echo "    \"title\": \"$title\"," >> artikelen/posts.json
             echo "    \"file\": \"$filename\"," >> artikelen/posts.json
             echo "    \"date\": \"$date\"," >> artikelen/posts.json
