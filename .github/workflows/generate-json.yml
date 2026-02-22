@@ -20,54 +20,44 @@ jobs:
       - name: Generate artikelen/posts.json
         run: |
           mkdir -p artikelen
-          echo "[" > artikelen/posts.json
-          first=true
-          for file in artikelen/articles/*.md; do
-            title=$(grep '^title:' "$file" | sed 's/title: //')
-            date=$(grep '^date:' "$file" | sed 's/date: //')
-            description=$(grep '^description:' "$file" | sed 's/description: //')
-            filename=$(basename "$file" .md)
-
-            if [ "$first" = true ]; then
-              first=false
-            else
-              echo "," >> artikelen/posts.json
-            fi
-
-            echo "  {" >> artikelen/posts.json
-            echo "    \"title\": \"$title\"," >> artikelen/posts.json
-            echo "    \"file\": \"$filename\"," >> artikelen/posts.json
-            echo "    \"date\": \"$date\"," >> artikelen/posts.json
-            echo "    \"description\": \"$description\"" >> artikelen/posts.json
-            echo -n "  }" >> artikelen/posts.json
-          done
-          echo "]" >> artikelen/posts.json
+          jq -n '
+            [inputs]
+          ' > artikelen/posts.json < <(
+            for file in artikelen/articles/*.md; do
+              title=$(grep '^title:' "$file" | sed 's/title: //' | tr -d '\r')
+              date=$(grep '^date:' "$file" | sed 's/date: //' | tr -d '\r')
+              description=$(grep '^description:' "$file" | sed 's/description: //' | tr -d '\r')
+              filename=$(basename "$file" .md)
+      
+              jq -n \
+                --arg title "$title" \
+                --arg file "$filename" \
+                --arg date "$date" \
+                --arg description "$description" \
+                '{title:$title,file:$file,date:$date,description:$description}'
+            done
+          )
 
       - name: Generate preken/posts.json
         run: |
           mkdir -p preken
-          echo "[" > preken/posts.json
-          first=true
-          for file in preken/articles/*.md; do
-            title=$(grep '^title:' "$file" | sed 's/title: //')
-            date=$(grep '^date:' "$file" | sed 's/date: //')
-            description=$(grep '^description:' "$file" | sed 's/description: //')
-            filename=$(basename "$file" .md)
-
-            if [ "$first" = true ]; then
-              first=false
-            else
-              echo "," >> preken/posts.json
-            fi
-
-            echo "  {" >> preken/posts.json
-            echo "    \"title\": \"$title\"," >> preken/posts.json
-            echo "    \"file\": \"$filename\"," >> preken/posts.json
-            echo "    \"date\": \"$date\"," >> preken/posts.json
-            echo "    \"description\": \"$description\"" >> preken/posts.json
-            echo -n "  }" >> preken/posts.json
-          done
-          echo "]" >> preken/posts.json
+          jq -n '
+            [inputs]
+          ' > preken/posts.json < <(
+            for file in preken/articles/*.md; do
+              title=$(grep '^title:' "$file" | sed 's/title: //' | tr -d '\r')
+              date=$(grep '^date:' "$file" | sed 's/date: //' | tr -d '\r')
+              description=$(grep '^description:' "$file" | sed 's/description: //' | tr -d '\r')
+              filename=$(basename "$file" .md)
+      
+              jq -n \
+                --arg title "$title" \
+                --arg file "$filename" \
+                --arg date "$date" \
+                --arg description "$description" \
+                '{title:$title,file:$file,date:$date,description:$description}'
+            done
+          )
 
       - name: Commit changes
         run: |
