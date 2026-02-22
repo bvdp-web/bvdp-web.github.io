@@ -56,7 +56,7 @@ jobs:
               echo "," >> preken/posts.json
             fi
 
-            echo "  {" >> preken/post.json
+            echo "  {" >> preken/posts.json
             echo "    \"title\": \"$title\"," >> preken/posts.json
             echo "    \"file\": \"$filename\"," >> preken/posts.json
             echo "    \"date\": \"$date\"," >> preken/posts.json
