@@ -8,7 +8,7 @@ description: Mijn gedachten over een rijkgevuld kerstmaal
 
 Gezelligheid, knusheid  
 is dat lekker:  
-geld uitgeven  
+geld uitgeven,  
 lekker vreten?  
 
 Geld als wondermiddel  
