@@ -34,11 +34,27 @@
   <script>
     const params = new URLSearchParams(window.location.search);
     const post = params.get("post");
-    fetch(`/artikelen/articles/${post}.md`)
-      .then(res => res.text())
-      .then(md => {
+    async function loadPost() {
+      if (!post) {
+        return showNotFound();
+      }
+      try {
+        const res = await fetch(`/artikelen/articles/${post}.md`);
+        if (!res.ok) throw new Error();
+        const md = await res.text();
         document.getElementById("content").innerHTML = marked.parse(md);
-      });
+      } catch {
+        showNotFound();
+      }
+    }
+    function showNotFound() {
+      document.getElementById("content").innerHTML = `
+        <h1>Artikel niet gevonden</h1>
+        <a href="/artikelen/">Terug naar de artikelen</a>
+      `;
+    }
+    loadPost();
   </script>
 </body>
 </html>
+
