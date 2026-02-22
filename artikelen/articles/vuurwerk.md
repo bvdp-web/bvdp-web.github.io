@@ -1,7 +1,7 @@
 ---
 title: Vuurwerk
 date: 2025-12-31
-description: Een gedicht over het traditioneel gevierde oudjaarsnacht
+description: Een gedicht over de traditioneel gevierde oudjaarsnacht
 ---
 
 # Vuurwerk
