@@ -1,0 +1,40 @@
+name: Convert DOCX to Markdown
+
+on:
+  push:
+    paths:
+      - 'artikelen/articles/*.docx'
+      - 'preken/articles/*.docx'
+
+jobs:
+  convert-docx:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Pandoc
+        run: sudo apt install pandoc
+
+      - name: Convert DOCX to MD - Artikelen
+        run: |
+          mkdir -p artikelen/articles/
+          for file in artikelen/articles/*.docx; do
+            filename=$(basename "$file" .docx)
+            pandoc "$file" -t markdown -o "artikelen/articles/$filename.md"
+          done
+
+      - name: Convert DOCX to MD - Preken
+        run: |
+          mkdir -p preken/articles/
+          for file in preken/articles/*.docx; do
+            filename=$(basename "$file" .docx)
+            pandoc "$file" -t markdown -o "preken/articles/$filename.md"
+          done
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions"
+          git add artikelen/articles/*.md preken/articles/*.md
+          git commit -m "Auto-convert .docx to .md" || echo "No changes"
+          git push
