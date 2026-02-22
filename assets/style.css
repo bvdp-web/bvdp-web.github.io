@@ -303,6 +303,21 @@ body.dark footer {
   pointer-events: none;
 }
 
+/* Back button*/
+.back-btn {
+  display: inline-block;
+  margin: 20px 0;
+  padding: 8px 14px;
+  background: var(--card-bg, #f3f3f3);
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: 0.2s ease;
+}
+.back-btn:hover {
+  opacity: 0.8;
+}
+
 /* 404 page */
 .container[id="404"] {
   text-align: center;
