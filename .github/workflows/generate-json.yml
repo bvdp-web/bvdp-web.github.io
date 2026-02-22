@@ -13,10 +13,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Generate artikelen/post.json
+      - name: Generate artikelen/posts.json
         run: |
           mkdir -p artikelen
-          echo "[" > artikelen/post.json
+          echo "[" > artikelen/posts.json
           first=true
           for file in artikelen/articles/*.md; do
             title=$(grep '^title:' "$file" | sed 's/title: //')
@@ -27,22 +27,22 @@ jobs:
             if [ "$first" = true ]; then
               first=false
             else
-              echo "," >> artikelen/post.json
+              echo "," >> artikelen/posts.json
             fi
 
             echo "  {" >> artikelen/post.json
-            echo "    \"title\": \"$title\"," >> artikelen/post.json
-            echo "    \"file\": \"$filename\"," >> artikelen/post.json
-            echo "    \"date\": \"$date\"," >> artikelen/post.json
-            echo "    \"description\": \"$description\"" >> artikelen/post.json
-            echo -n "  }" >> artikelen/post.json
+            echo "    \"title\": \"$title\"," >> artikelen/posts.json
+            echo "    \"file\": \"$filename\"," >> artikelen/posts.json
+            echo "    \"date\": \"$date\"," >> artikelen/posts.json
+            echo "    \"description\": \"$description\"" >> artikelen/posts.json
+            echo -n "  }" >> artikelen/posts.json
           done
-          echo "]" >> artikelen/post.json
+          echo "]" >> artikelen/posts.json
 
-      - name: Generate preken/post.json
+      - name: Generate preken/posts.json
         run: |
           mkdir -p preken
-          echo "[" > preken/post.json
+          echo "[" > preken/posts.json
           first=true
           for file in preken/articles/*.md; do
             title=$(grep '^title:' "$file" | sed 's/title: //')
@@ -53,21 +53,21 @@ jobs:
             if [ "$first" = true ]; then
               first=false
             else
-              echo "," >> preken/post.json
+              echo "," >> preken/posts.json
             fi
 
             echo "  {" >> preken/post.json
-            echo "    \"title\": \"$title\"," >> preken/post.json
-            echo "    \"file\": \"$filename\"," >> preken/post.json
-            echo "    \"date\": \"$date\"," >> preken/post.json
-            echo "    \"description\": \"$description\"" >> preken/post.json
-            echo -n "  }" >> preken/post.json
+            echo "    \"title\": \"$title\"," >> preken/posts.json
+            echo "    \"file\": \"$filename\"," >> preken/posts.json
+            echo "    \"date\": \"$date\"," >> preken/posts.json
+            echo "    \"description\": \"$description\"" >> preken/posts.json
+            echo -n "  }" >> preken/posts.json
           done
-          echo "]" >> preken/post.json
+          echo "]" >> preken/posts.json
 
       - name: Commit changes
         run: |
           git config user.name "github-actions"
-          git add artikelen/post.json preken/post.json
-          git commit -m "Auto update artikelen/post.json & preken/post.json" || echo "No changes"
+          git add artikelen/posts.json preken/posts.json
+          git commit -m "Auto update artikelen/posts.json & preken/posts.json" || echo "No changes"
           git push
