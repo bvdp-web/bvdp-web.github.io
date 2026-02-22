@@ -1,7 +1,7 @@
 ---
 title: Abba Vader
-date: 2024-05-19
-description: Een gedicht over wat echt van waarde is.
+date: 2024-05-24
+description: Een gedicht over wat echt van waarde is
 ---
 
 # Abba Vader
