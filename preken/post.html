@@ -31,14 +31,6 @@
   </footer> 
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="/assets/script.js"></script>
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const post = params.get("post");
-    fetch(`/preken/articles/${post}.md`)
-      .then(res => res.text())
-      .then(md => {
-        document.getElementById("content").innerHTML = marked.parse(md);
-      });
-  </script>
+  <script src="/assets/post-loader.js"></script>
 </body>
 </html>
