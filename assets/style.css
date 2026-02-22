@@ -295,3 +295,8 @@ body.dark footer {
   text-shadow: 0 0 10px rgba(0,0,0,0.7);
   pointer-events: none;
 }
+
+/* 404 page */
+#404 {
+  text-align: center
+}
