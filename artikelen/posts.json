@@ -1,12 +1,11 @@
 [
-  {
-    "title": "My First Post",
-    "file": "first-post",
-    "description": "Introduction to my blog."
+    "title": "Abba Vader",
+    "file": "abbavader",
+    "date": "2026-02-22",
+    "description": "Een gedicht over wat echt van waarde is."
   },
-  {
-    "title": "Second Post",
-    "file": "second-post",
-    "description": "Another article."
-  }
-]
+    "title": "God die ons beschermt",
+    "file": "goddieonsbeschermt",
+    "date": "2026-02-22",
+    "description": "Een gedicht over in wiens schaduw we willen staan"
+  }]

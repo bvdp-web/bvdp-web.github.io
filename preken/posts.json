@@ -1,14 +1,6 @@
 [
-  {
-    "title": "My First Post",
+    "title": "",
     "file": "first-post",
-    "date": "2026-02-21",
-    "description": "Introduction to my blog."
-  },
-  {
-    "title": "Second Post",
-    "file": "second-post",
-    "date": "2026-02-21",
-    "description": "Another article."
-  }
-]
+    "date": "",
+    "description": ""
+  }]
