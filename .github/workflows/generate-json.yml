@@ -10,25 +10,28 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
     steps:
       - uses: actions/checkout@v4
 
       - name: Ensure LF line endings
-        run: |
-          git config --global core.autocrlf input
+        run: git config --global core.autocrlf input
 
+      # -----------------------------
+      # Generate artikelen/posts.json
+      # -----------------------------
       - name: Generate artikelen/posts.json
         run: |
           mkdir -p artikelen
-          jq -n '
-            [inputs]
-          ' > artikelen/posts.json < <(
-            for file in artikelen/articles/*.md; do
+          jq -n '[inputs]' > artikelen/posts.json < <(
+            for file in $(ls -t artikelen/articles/*.md 2>/dev/null); do
               title=$(grep '^title:' "$file" | sed 's/title: //' | tr -d '\r')
               date=$(grep '^date:' "$file" | sed 's/date: //' | tr -d '\r')
               description=$(grep '^description:' "$file" | sed 's/description: //' | tr -d '\r')
               filename=$(basename "$file" .md)
-      
+
               jq -n \
                 --arg title "$title" \
                 --arg file "$filename" \
@@ -38,18 +41,19 @@ jobs:
             done
           )
 
+      # -----------------------------
+      # Generate preken/posts.json
+      # -----------------------------
       - name: Generate preken/posts.json
         run: |
           mkdir -p preken
-          jq -n '
-            [inputs]
-          ' > preken/posts.json < <(
-            for file in preken/articles/*.md; do
+          jq -n '[inputs]' > preken/posts.json < <(
+            for file in $(ls -t preken/articles/*.md 2>/dev/null); do
               title=$(grep '^title:' "$file" | sed 's/title: //' | tr -d '\r')
               date=$(grep '^date:' "$file" | sed 's/date: //' | tr -d '\r')
               description=$(grep '^description:' "$file" | sed 's/description: //' | tr -d '\r')
               filename=$(basename "$file" .md)
-      
+
               jq -n \
                 --arg title "$title" \
                 --arg file "$filename" \
@@ -59,9 +63,18 @@ jobs:
             done
           )
 
+      # -----------------------------
+      # Commit only if changed
+      # -----------------------------
       - name: Commit changes
         run: |
           git config user.name "github-actions"
+
           git add artikelen/posts.json preken/posts.json
-          git commit -m "Auto update artikelen/posts.json & preken/posts.json" || echo "No changes"
-          git push
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Auto update artikelen/posts.json & preken/posts.json"
+            git push origin HEAD:${GITHUB_REF#refs/heads/}
+          fi
