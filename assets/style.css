@@ -304,18 +304,22 @@ body.dark footer {
 }
 
 /* Back button*/
-[id="back-button"] {
-  margin-bottom: 20px;
-}
 .back-btn {
   display: inline-block;
   margin: 20px 0;
   padding: 8px 14px;
-  background: var(--card-bg, #f3f3f3);
+  background: #e2e8f0;
+  color: #111827;
   border-radius: 6px;
   text-decoration: none;
   font-weight: 500;
   transition: 0.2s ease;
+}
+body.dark .back-btn {
+  background: #1e293b;
+}
+body.dark .back-btn > a {
+  color: #f1f5f9;
 }
 .back-btn:hover {
   opacity: 0.8;
