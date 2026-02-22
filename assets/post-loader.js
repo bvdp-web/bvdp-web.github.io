@@ -7,6 +7,15 @@
   const pathParts = window.location.pathname.split("/");
   const section = pathParts.includes("preken") ? "preken" : "artikelen";
 
+  const backContainer = document.getElementById("back-button");
+  if (backContainer) {
+    backContainer.innerHTML = `
+      <a class="back-btn" href="/${section}/">
+        ← Terug naar het overzicht
+      </a>
+    `;
+  }
+  
   async function loadPost() {
     if (!post) return showNotFound();
 
