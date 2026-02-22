@@ -1,3 +1,9 @@
+---
+title: Abba Vader
+date: 2026-02-22
+description: Een gedicht over wat echt van waarde is.
+---
+
 # Abba Vader
 
 Van waarde, wat is het?</br>
@@ -25,4 +31,5 @@ Jezus, Die er altijd is,</br>
 is het Die jou eeuwigheidswaarde geeft,</br>
 en Die voor eeuwig leeft.</br>
 Ook al is de rest een gemis.</br>
+
 
