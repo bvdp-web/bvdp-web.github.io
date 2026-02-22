@@ -1,7 +1,7 @@
 ---
 title: Staan in Gods schaduw
-date: 2025-5-20
-discription: Een gedicht over het staan in Gods schaduw
+date: 2025-05-20
+description: Een gedicht over het staan in Gods schaduw
 ---
 
 # Staan in Gods schaduw  
