@@ -309,6 +309,6 @@ body.dark footer {
 }
 
 /* 404 page */
-#404 {
-  text-align: center
+.container[id="404"] {
+  text-align: center;
 }
