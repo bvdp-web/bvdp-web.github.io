@@ -1,9 +1,9 @@
 [
   {
-    "title": "Abba Vader",
+    "title": "Abba Vader",
     "file": "abbavader",
-    "date": "2024-05-19",
-    "description": "Een gedicht over wat echt van waarde is."
+    "date": "2024-05-19",
+    "description": "Een gedicht over wat echt van waarde is."
   },
   {
     "title": "God die ons beschermt",
@@ -14,7 +14,6 @@
   {
     "title": "Staan in Gods schaduw",
     "file": "staaningodsschaduw",
-    "date": "2025-5-20",
-    "description": ""
-  }
-]
+    "date": "2025-05-20",
+    "description": "Een gedicht over het staan in Gods schaduw"
+  }]
