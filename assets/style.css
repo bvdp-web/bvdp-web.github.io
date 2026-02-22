@@ -133,7 +133,7 @@ h2 {
   margin-bottom: 20px;
 }
 p {
-  margin: auto;
+  margin: inherit;
 }
 .card {
   background: white;
