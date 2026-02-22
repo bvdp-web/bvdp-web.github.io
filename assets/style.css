@@ -304,6 +304,9 @@ body.dark footer {
 }
 
 /* Back button*/
+[id="back-button"] {
+  margin-bottom: 20px;
+}
 .back-btn {
   display: inline-block;
   margin: 20px 0;
