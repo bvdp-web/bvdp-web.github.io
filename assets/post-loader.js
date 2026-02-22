@@ -1,14 +1,9 @@
-(function () {
+(async function () {
   const params = new URLSearchParams(window.location.search);
   const post = params.get("post");
   const content = document.getElementById("content");
-
   if (!content) return;
 
-  // Detect section automatically from URL
-  // Example:
-  // /artikelen/post.html
-  // /preken/post.html
   const pathParts = window.location.pathname.split("/");
   const section = pathParts.includes("preken") ? "preken" : "artikelen";
 
@@ -19,7 +14,10 @@
       const res = await fetch(`/${section}/articles/${post}.md`);
       if (!res.ok) throw new Error();
 
-      const md = await res.text();
+      let md = await res.text();
+
+      md = md.replace(/^---\s*[\s\S]*?---\s*/, "");
+
       content.innerHTML = marked.parse(md);
     } catch {
       showNotFound();
