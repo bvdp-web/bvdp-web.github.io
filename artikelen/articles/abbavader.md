@@ -1,6 +1,6 @@
 ---
 title: Abba Vader
-date: 2026-02-22
+date: 2024-05-19
 description: Een gedicht over wat echt van waarde is.
 ---
 
@@ -31,3 +31,4 @@ Jezus, Die er altijd is,
 is het Die jou eeuwigheidswaarde geeft,  
 en Die voor eeuwig leeft.  
 Ook al is de rest een gemis.  
+
