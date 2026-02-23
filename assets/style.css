@@ -259,6 +259,20 @@ body.dark footer {
   color: white;
   cursor: pointer;
 }
+#pagination button {
+  margin: 0 4px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+#pagination button.active {
+  background-color: #333;
+  color: white;
+  font-weight: bold;
+}
+#pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 
 /* YT embeds */
 .youtube {
@@ -329,3 +343,4 @@ body.dark .back-btn > a {
 .container[id="404"] {
   text-align: center;
 }
+
