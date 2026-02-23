@@ -1,0 +1,393 @@
+/* Fonts */
+@font-face {
+  font-family: 'Playwrite AT';
+  font-style: italic;
+  font-weight: 100 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/playwriteat/v6/Gw6jwc7n6kfJN4fVoKON7HIuDDxu.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Playwrite AT';
+  font-style: normal;
+  font-weight: 100 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/playwriteat/v6/Gw69wc7n6kfJN4fVoKON7HIeCw.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'SBL Hebrew';
+  src: url(/assets/SBL_Hbrw.ttf);
+}
+@font-face {
+  font-family: 'SBL Greek';
+  src: url(/assets/SBL_grk.ttf);
+}
+
+/* Variables */
+body {
+  --body-bg: #f4f6f9;
+  --body-color: #333; 
+  --nav-bg: #111827;
+  --nav-color: #d1d5db;
+  --nav-active-hover: #ffffff;
+  --card-bg: #ffffff;
+  --footer-bg: #111827;
+  --footer-color: #9ca3af;
+  --dailyverses-bg: #f4ecd8;
+  --dailyverses-color: #d8c9a3;
+  --dailyverses-title: turquoise;
+  --button-bg: #3b82f6;
+  --button-color: #ffffff;
+  --button-bg-active: #333;
+  --back-button-bg: #e2e8f0;
+  --back-button-color: #111827;
+}
+body.dark {
+  --body-bg: #0f172a;
+  --body-color: #e2e8f0;
+  --nav-bg: #020617;
+  --card-bg: #1e293b; 
+  --footer-bg: #0a101d;
+  --dailyverses-bg: #1e1a14;
+  --dailyverses-color: #3a3125;
+  --dailyverses-title: #6ea79e;
+  --button-bg-active: #777;
+  --back-button-bg: #132946;
+}
+body.dark .container a {
+  color: lightblue;
+}
+
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  background: var(--body-bg);
+  color: var(--body-color);
+  line-height: 1.6;
+}
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+/* Navigation */
+.navbar {
+  background: var(--nav-bg);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+.nav-container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.logo {
+  font-weight: bold;
+  text-decoration: none;
+  color: var(--nav-color);
+  display: flex;
+  align-content: center;
+  gap: 8px;
+}
+.logo img {
+  display: block;
+  height: 24px;
+}
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 25px;
+  align-items: center;
+  margin: 0;
+}
+.nav-links a {
+  text-decoration: none;
+  color: var(--nav-color);
+  font-weight: 500;
+  transition: 0.3s;
+}
+.nav-links a:hover,
+.hamburger {
+  color: var(--nav-active-hover);
+}
+.nav-links a.active {
+  color: var(--nav-active-hover);
+  border-bottom: 2px solid #3b82f6;
+  padding-bottom: 4px;
+}
+.nav-links button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-size: 18px;
+}
+#darkToggle {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1rem;
+  min-width: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hamburger {
+  display: none;
+  font-size: 26px;
+  cursor: pointer;
+  color: var(--nav-color);
+}
+/* 📱 MOBILE */
+@media (max-width: 768px) {
+  .nav-links {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    background: var(--nav-bg);
+    flex-direction: column;
+    gap: 20px;
+    padding: 25px 0;
+    display: none;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  }
+  .nav-links.active {
+    display: flex;
+  }
+  .hamburger {
+    display: block;
+  }
+}
+
+/* Layout General */
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 60px 20px 20px;
+}
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+h2 {
+  margin-bottom: 20px;
+}
+p {
+  margin: inherit;
+}
+.card {
+  background: var(--card-bg);
+  padding: 25px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 30px;
+  background: var(--footer-bg);
+  color: var(--footer-color);
+  margin-top: 60px;
+}
+
+/* Home */
+/* Daily Verses */
+.card.dailyVerses {
+  background: var(--dailyverses-bg);
+  border: 1px solid var(--dailyverses-color);
+}
+#dailyVersesTitle {
+  color: var(--dailyverses-title);
+  font-family: "Georgia", Times New Roman, serif;
+  text-align: center;
+}
+#dailyVersesWrapper {
+  text-align: center;
+}
+/* Uitspaak van de Dag */
+#uitspraak {
+  text-align: center;
+  font-family: "Playwrite AT", cursive;
+  font-weight: 300;
+  font-style: normal;
+  font-size: x-large;
+}
+/* YT embeds */
+.youtube {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(80%, 350px), 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
+.youtube > .card {
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+  transition: transform 0.2s;
+}
+.youtube > .card:hover {
+  transform: translateY(-5px);
+}
+.youtube > .card > .thumbnail {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  aspect-ratio: 16 / 9;
+  cursor: pointer;
+}
+.youtube > .card > .thumbnail img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.youtube .play-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 3rem;
+  color: var(--button-color);
+  text-shadow: 0 0 10px rgba(0,0,0,0.7);
+  pointer-events: none;
+}
+/* Quote Images */
+.quote-images {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin: 40px 0;
+}
+.quote-images img {
+  width: 75%;
+  max-width: 300px;
+  height: auto;
+}
+
+/* Artikelen + Preken */
+/* Search */
+#search {
+  padding: 10px;
+  width: 100%;
+  margin-bottom: 20px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+/* Lezen button */
+.button {
+  display: inline-block;
+  padding: 10px 20px;
+  background: var(--button-bg);
+  color: var(--button-color);
+  border-radius: 6px;
+  text-decoration: none;
+  margin-top: 10px;
+}
+.button:hover {
+  background: #2563eb;
+}
+/* Pagination */
+#pagination {
+  margin-top: 20px;
+}
+#pagination button {
+  padding: 6px 12px;
+  margin: 4px;
+  border-radius: 5px;
+  border: none;
+  background: var(--button-bg);
+  color: var(--button-color);
+  cursor: pointer;
+}
+#pagination button.active {
+  background: var(--button-bg-active);
+}
+#pagination button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+#pagination .dots {
+  margin: 0 6px;
+}
+/* Back button*/
+.back-btn {
+  display: inline-block;
+  margin: 20px 0;
+  padding: 8px 14px;
+  background: var(--back-button-bg);
+  color: var(--back-button-color);
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: 0.2s ease;
+  cursor: pointer;
+}
+.back-btn:hover {
+  opacity: 0.8;
+}
+/* Hebrew and Greek styling */
+.hebrew-inline {
+  font-family: "SBL Hebrew";
+  direction: rtl;
+  unicode-bidi: isolate;
+  font-feature-settings: "kern", "liga";
+  letter-spacing: 0.05em;
+  white-space: nowrap; /* keeps Hebrew words intact */
+}
+.hebrew-heading {
+  font-family: "SBL Hebrew";
+  direction: rtl;
+  unicode-bidi: isolate;
+  font-size: 1.15em;
+  letter-spacing: 0.05em;
+}
+.hebrew-block {
+  font-family: "SBL Hebrew";
+  direction: rtl;
+  text-align: right;
+  unicode-bidi: isolate;
+  line-height: 1.8;
+  letter-spacing: 0.05em;
+}
+.greek-inline {
+  font-family: "SBL Greek";
+  font-feature-settings: "kern", "liga";
+  white-space: nowrap;
+  letter-spacing: 0.03em;
+}
+.greek-heading {
+  font-family: "SBL Greek";
+  font-size: 1.1em;
+  letter-spacing: 0.03em;
+}
+.greek-block {
+  font-family: "SBL Greek";
+  line-height: 1.8;
+  letter-spacing: 0.03em;
+}
+
+/* 404 page */
+footer[class="404"] {
+  bottom: 0;
+  position: fixed;
+  width: 100%;
+}
+.container[id="404"] {
+  text-align: center;
+}
