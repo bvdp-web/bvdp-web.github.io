@@ -12,7 +12,9 @@
     // Create back button element
     const backBtn = document.createElement("a");
     backBtn.className = "back-btn";
-    backBtn.href = `/${section}/`;
+    backBtn.href = "#"; // <-- prevents default navigation
+    backBtn.title = "Ga terug naar de vorige pagina";
+    backBtn.setAttribute("aria-label", "Ga terug naar de vorige pagina");
     backBtn.textContent = "← Terug naar het overzicht";
 
     // Add dynamic click handler
