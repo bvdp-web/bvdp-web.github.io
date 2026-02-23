@@ -329,12 +329,14 @@ body.dark #pagination button.active {
   font-weight: 500;
   transition: 0.2s ease;
 }
+.back-btn > a {
+  cursor: pointer;
+}
 body.dark .back-btn {
   background: #1e293b;
 }
 body.dark .back-btn > a {
   color: #f1f5f9;
-  cursor: pointer;
 }
 .back-btn:hover {
   opacity: 0.8;
@@ -344,3 +346,4 @@ body.dark .back-btn > a {
 .container[id="404"] {
   text-align: center;
 }
+
