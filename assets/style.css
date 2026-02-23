@@ -347,15 +347,15 @@ footer {
   direction: rtl;
   unicode-bidi: isolate;
   font-feature-settings: "kern", "liga";
-  white-space: nowrap; /* keeps Greek words intact */
+  letter-spacing: 0.05em;
+  white-space: nowrap; /* keeps Hebrew words intact */
 }
 .hebrew-heading {
   font-family: "SBL Hebrew";
   direction: rtl;
   unicode-bidi: isolate;
   font-size: 1.15em;
-  letter-spacing: 0.03em;
-  white-space: nowrap; /* keeps Greek words intact */
+  letter-spacing: 0.05em;
 }
 .hebrew-block {
   font-family: "SBL Hebrew";
@@ -363,17 +363,27 @@ footer {
   text-align: right;
   unicode-bidi: isolate;
   line-height: 1.8;
-  white-space: nowrap; /* keeps Greek words intact */
+  letter-spacing: 0.05em;
 }
-.greek {
+.greek-inline {
   font-family: "SBL Greek";
-  direction: rtl;
-  unicode-bidi: isolate;
   font-feature-settings: "kern", "liga";
-  white-space: nowrap; /* keeps Greek words intact */
+  white-space: nowrap;
+  letter-spacing: 0.03em;
+}
+.greek-heading {
+  font-family: "SBL Greek";
+  font-size: 1.1em;
+  letter-spacing: 0.03em;
+}
+.greek-block {
+  font-family: "SBL Greek";
+  line-height: 1.8;
+  letter-spacing: 0.03em;
 }
 
 /* 404 page */
 .container[id="404"] {
   text-align: center;
 }
+
