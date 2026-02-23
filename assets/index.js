@@ -2,7 +2,7 @@ function initPosts(section) {
   const POSTS_PER_PAGE = 5;
   const MAX_VISIBLE_PAGES = 5;
   const MOBILE_BREAKPOINT = 640;
-  const DEBOUNCE_DELAY = 300;
+  const DEBOUNCE_DELAY = 500;
 
   let currentPage = getPageFromURL();
   let searchTerm = getSearchFromURL();
