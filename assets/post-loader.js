@@ -67,16 +67,15 @@
       const text = textNode.nodeValue;
       const fragment = document.createDocumentFragment();
       let lastIndex = 0;
-      const combinedRegex =
-        /([\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+|[\u0370-\u03FF\u1F00-\u1FFF]+)/g;
-      text.replace(combinedRegex, (match, offset) => {
+      const combinedRegex = /([\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+(?:\s+[\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+)*)|([\u0370-\u03FF\u1F00-\u1FFF]+)/g;
+      text.replace(combinedRegex, (match, hebrewMatch, greekMatch, offset) => {
         if (offset > lastIndex) {
           fragment.appendChild(
             document.createTextNode(text.slice(lastIndex, offset))
           );
         }
         const span = document.createElement("span");
-        if (/[\u0590-\u05FF]/.test(match)) {
+        if (hebrewMatch) {
           span.className = /H[1-6]/.test(parent.nodeName)
             ? "hebrew-heading"
             : "hebrew-inline";
