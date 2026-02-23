@@ -342,12 +342,28 @@ footer {
   opacity: 0.8;
 }
 /* Hebrew and Greek styling */
-.hebrew {
+.hebrew-inline {
   font-family: "SBL Hebrew";
   direction: rtl;
   unicode-bidi: isolate;
   font-feature-settings: "kern", "liga";
-  white-space: nowrap; /* keeps Hebrew words intact */
+  white-space: nowrap; /* keeps Greek words intact */
+}
+.hebrew-heading {
+  font-family: "SBL Hebrew";
+  direction: rtl;
+  unicode-bidi: isolate;
+  font-size: 1.15em;
+  letter-spacing: 0.03em;
+  white-space: nowrap; /* keeps Greek words intact */
+}
+.hebrew-block {
+  font-family: "SBL Hebrew";
+  direction: rtl;
+  text-align: right;
+  unicode-bidi: isolate;
+  line-height: 1.8;
+  white-space: nowrap; /* keeps Greek words intact */
 }
 .greek {
   font-family: "SBL Greek";
