@@ -9,13 +9,32 @@
 
   const backContainer = document.getElementById("back-button");
   if (backContainer) {
-    backContainer.innerHTML = `
-      <a class="back-btn" href="/${section}/">
-        ← Terug naar het overzicht
-      </a>
-    `;
+    // Create back button element
+    const backBtn = document.createElement("a");
+    backBtn.className = "back-btn";
+    backBtn.href = `/${section}/`;
+    backBtn.textContent = "← Terug naar het overzicht";
+
+    // Add dynamic click handler
+    backBtn.addEventListener("click", e => {
+      e.preventDefault();
+
+      // Check if the referrer contains artikelen or preken
+      if (document.referrer) {
+        const ref = document.referrer.toLowerCase();
+        if (ref.includes("/artikelen/") || ref.includes("/preken/")) {
+          history.back(); // preserves page number/search
+          return;
+        }
+      }
+
+      // Fallback: go to section overview
+      window.location.href = `/${section}/`;
+    });
+
+    backContainer.appendChild(backBtn);
   }
-  
+
   async function loadPost() {
     if (!post) return showNotFound();
 
@@ -25,6 +44,7 @@
 
       let md = await res.text();
 
+      // Remove YAML front matter if present
       md = md.replace(/^---\s*[\s\S]*?---\s*/, "");
 
       content.innerHTML = marked.parse(md);
