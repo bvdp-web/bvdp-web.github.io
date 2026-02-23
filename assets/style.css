@@ -17,6 +17,10 @@
   font-family: 'SBL Hebrew';
   src: url(/assets/SBL_Hbrw.ttf);
 }
+@font-face {
+  font-family: 'SBL Greek';
+  src: url(/assets/SBL_grk.ttf);
+}
 
 /* Variables */
 body {
@@ -337,13 +341,20 @@ footer {
 .back-btn:hover {
   opacity: 0.8;
 }
-/* Hebrew styling */
+/* Hebrew and Greek styling */
 .hebrew {
   font-family: "SBL Hebrew";
   direction: rtl;
   unicode-bidi: isolate;
   font-feature-settings: "kern", "liga";
   white-space: nowrap; /* keeps Hebrew words intact */
+}
+.greek {
+  font-family: "SBL Greek";
+  direction: rtl;
+  unicode-bidi: isolate;
+  font-feature-settings: "kern", "liga";
+  white-space: nowrap; /* keeps Greek words intact */
 }
 
 /* 404 page */
