@@ -1,6 +1,8 @@
 function initPosts(section) {
   const POSTS_PER_PAGE = 5;
-  let currentPage = 1;
+  const MAX_VISIBLE_PAGES = 5;
+
+  let currentPage = getPageFromURL();
   let allPosts = [];
   let masterPosts = [];
 
@@ -13,8 +15,27 @@ function initPosts(section) {
     .then(data => {
       masterPosts = data.sort((a, b) => new Date(b.date) - new Date(a.date));
       allPosts = [...masterPosts];
+
+      const totalPages = getTotalPages();
+      if (currentPage > totalPages) currentPage = 1;
+
       renderPage();
     });
+
+  function getTotalPages() {
+    return Math.ceil(allPosts.length / POSTS_PER_PAGE);
+  }
+
+  function getPageFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    return parseInt(params.get("page")) || 1;
+  }
+
+  function updateURL() {
+    const url = new URL(window.location);
+    url.searchParams.set("page", currentPage);
+    window.history.replaceState({}, "", url);
+  }
 
   function renderPage() {
     container.innerHTML = "";
@@ -36,64 +57,101 @@ function initPosts(section) {
       `;
     });
 
+    updateURL();
     renderPagination();
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   function renderPagination() {
-    const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
+    const totalPages = getTotalPages();
     pagination.innerHTML = "";
 
     if (totalPages <= 1) return;
 
     // Previous button
-    const prevBtn = document.createElement("button");
-    prevBtn.textContent = "← Vorige";
-    prevBtn.disabled = currentPage === 1;
-    prevBtn.addEventListener("click", () => {
-      if (currentPage > 1) {
-        currentPage--;
-        renderPage();
-      }
+    const prevBtn = createButton("←", currentPage === 1, () => {
+      currentPage--;
+      renderPage();
     });
     pagination.appendChild(prevBtn);
 
-    // Page numbers
-    for (let i = 1; i <= totalPages; i++) {
-      const btn = document.createElement("button");
-      btn.textContent = i;
+    let startPage = Math.max(1, currentPage - Math.floor(MAX_VISIBLE_PAGES / 2));
+    let endPage = startPage + MAX_VISIBLE_PAGES - 1;
 
-      if (i === currentPage) {
-        btn.classList.add("active");
+    if (endPage > totalPages) {
+      endPage = totalPages;
+      startPage = Math.max(1, endPage - MAX_VISIBLE_PAGES + 1);
+    }
+
+    // First page + dots
+    if (startPage > 1) {
+      pagination.appendChild(createPageButton(1));
+      if (startPage > 2) {
+        pagination.appendChild(createDots());
       }
+    }
 
-      btn.addEventListener("click", () => {
-        currentPage = i;
-        renderPage();
-      });
+    // Visible range
+    for (let i = startPage; i <= endPage; i++) {
+      pagination.appendChild(createPageButton(i));
+    }
 
-      pagination.appendChild(btn);
+    // Last page + dots
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) {
+        pagination.appendChild(createDots());
+      }
+      pagination.appendChild(createPageButton(totalPages));
     }
 
     // Next button
-    const nextBtn = document.createElement("button");
-    nextBtn.textContent = "Volgende →";
-    nextBtn.disabled = currentPage === totalPages;
-    nextBtn.addEventListener("click", () => {
-      if (currentPage < totalPages) {
-        currentPage++;
-        renderPage();
-      }
+    const nextBtn = createButton("→", currentPage === totalPages, () => {
+      currentPage++;
+      renderPage();
     });
     pagination.appendChild(nextBtn);
+  }
+
+  function createButton(text, disabled, onClick) {
+    const btn = document.createElement("button");
+    btn.textContent = text;
+    btn.disabled = disabled;
+    if (!disabled) btn.addEventListener("click", onClick);
+    return btn;
+  }
+
+  function createPageButton(pageNumber) {
+    const btn = document.createElement("button");
+    btn.textContent = pageNumber;
+
+    if (pageNumber === currentPage) {
+      btn.classList.add("active");
+    }
+
+    btn.addEventListener("click", () => {
+      currentPage = pageNumber;
+      renderPage();
+    });
+
+    return btn;
+  }
+
+  function createDots() {
+    const span = document.createElement("span");
+    span.textContent = " … ";
+    span.classList.add("dots");
+    return span;
   }
 
   if (searchInput) {
     searchInput.addEventListener("input", e => {
       const term = e.target.value.toLowerCase();
+
       allPosts = masterPosts.filter(post =>
         post.title.toLowerCase().includes(term) ||
         post.description.toLowerCase().includes(term)
       );
+
       currentPage = 1;
       renderPage();
     });
