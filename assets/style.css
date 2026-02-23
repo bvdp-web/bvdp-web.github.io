@@ -1,5 +1,4 @@
 /* Fonts */
-/* fallback */
 @font-face {
   font-family: 'Playwrite AT';
   font-style: italic;
@@ -7,13 +6,16 @@
   font-display: swap;
   src: url(https://fonts.gstatic.com/s/playwriteat/v6/Gw6jwc7n6kfJN4fVoKON7HIuDDxu.woff2) format('woff2');
 }
-/* fallback */
 @font-face {
   font-family: 'Playwrite AT';
   font-style: normal;
   font-weight: 100 400;
   font-display: swap;
   src: url(https://fonts.gstatic.com/s/playwriteat/v6/Gw69wc7n6kfJN4fVoKON7HIeCw.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'SBL Hebrew';
+  src: url(/assets/SBL_Hbrw.ttf);
 }
 
 /* Variables */
@@ -334,6 +336,14 @@ footer {
 }
 .back-btn:hover {
   opacity: 0.8;
+}
+/* Hebrew styling */
+.hebrew {
+  font-family: "SBL Hebrew";
+  direction: rtl;
+  unicode-bidi: isolate;
+  font-feature-settings: "kern", "liga";
+  white-space: nowrap; /* keeps Hebrew words intact */
 }
 
 /* 404 page */
