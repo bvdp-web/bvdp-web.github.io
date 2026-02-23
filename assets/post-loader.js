@@ -15,11 +15,9 @@
     backBtn.title = "Ga terug naar de vorige pagina";
     backBtn.setAttribute("aria-label", "Ga terug naar de vorige pagina");
     backBtn.textContent = "← Terug naar het overzicht";
-
     // Add dynamic click handler
     backBtn.addEventListener("click", e => {
       e.preventDefault();
-
       // Check if the referrer contains artikelen or preken
       if (document.referrer) {
         const ref = document.referrer.toLowerCase();
@@ -28,123 +26,110 @@
           return;
         }
       }
-
       // Fallback: go to section overview
       window.location.href = `/${section}/`;
     });
-
     backContainer.appendChild(backBtn);
   }
   
-  function applyHebrewSupport(container) {
-    // Full Hebrew range + punctuation
-    const hebrewRegex = /[\u0590-\u05FF\uFB1D-\uFB4F]/;
-    const hebrewWordRegex = /([\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+)/g;
-  
+  function applyBiblicalLanguageSupport(container) {
+    const hebrewChar = /[\u0590-\u05FF\uFB1D-\uFB4F]/;
+    const greekChar = /[\u0370-\u03FF\u1F00-\u1FFF]/;
+    const hebrewWord = /([\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+)/g;
+    const greekWord = /([\u0370-\u03FF\u1F00-\u1FFF]+)/g;
     const skipTags = ["CODE", "PRE", "SCRIPT", "STYLE"];
-  
     const walker = document.createTreeWalker(
       container,
       NodeFilter.SHOW_TEXT,
       {
         acceptNode(node) {
           if (!node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
-  
-          if (!hebrewRegex.test(node.nodeValue))
+          if (skipTags.includes(node.parentNode.nodeName))
             return NodeFilter.FILTER_REJECT;
   
           if (
-            skipTags.includes(node.parentNode.nodeName) ||
-            node.parentNode.classList?.contains("hebrew-inline") ||
-            node.parentNode.classList?.contains("hebrew-heading")
-          )
-            return NodeFilter.FILTER_REJECT;
-  
-          return NodeFilter.FILTER_ACCEPT;
+            hebrewChar.test(node.nodeValue) ||
+            greekChar.test(node.nodeValue)
+          ) {
+            return NodeFilter.FILTER_ACCEPT;
+          }
+          return NodeFilter.FILTER_REJECT;
         }
       }
     );
-  
     const textNodes = [];
     let node;
     while ((node = walker.nextNode())) {
       textNodes.push(node);
     }
-  
     textNodes.forEach(textNode => {
       const parent = textNode.parentNode;
       const text = textNode.nodeValue;
-  
       const fragment = document.createDocumentFragment();
       let lastIndex = 0;
-  
-      text.replace(hebrewWordRegex, (match, _group, offset) => {
+      const combinedRegex =
+        /([\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+|[\u0370-\u03FF\u1F00-\u1FFF]+)/g;
+      text.replace(combinedRegex, (match, offset) => {
         if (offset > lastIndex) {
           fragment.appendChild(
             document.createTextNode(text.slice(lastIndex, offset))
           );
         }
-  
         const span = document.createElement("span");
-  
-        // Heading detection
-        if (/H[1-6]/.test(parent.nodeName)) {
-          span.className = "hebrew-heading";
+        if (/[\u0590-\u05FF]/.test(match)) {
+          span.className = /H[1-6]/.test(parent.nodeName)
+            ? "hebrew-heading"
+            : "hebrew-inline";
         } else {
-          span.className = "hebrew-inline";
+          span.className = /H[1-6]/.test(parent.nodeName)
+            ? "greek-heading"
+            : "greek-inline";
         }
-  
         span.textContent = match;
         fragment.appendChild(span);
-  
         lastIndex = offset + match.length;
       });
-  
       if (lastIndex < text.length) {
         fragment.appendChild(
           document.createTextNode(text.slice(lastIndex))
         );
       }
-  
       parent.replaceChild(fragment, textNode);
     });
-  
-    detectFullHebrewBlocks(container);
+    detectLanguageBlocks(container);
   }
   
-  function detectFullHebrewBlocks(container) {
+  function detectLanguageBlocks(container) {
     const paragraphs = container.querySelectorAll("p, blockquote");
-  
     paragraphs.forEach(p => {
       const text = p.textContent.trim();
       if (!text) return;
-  
-      const hebrewChars = (text.match(/[\u0590-\u05FF]/g) || []).length;
-      const ratio = hebrewChars / text.length;
-  
-      // If > 60% Hebrew → treat as full Hebrew block
+      const hebrewCount =
+        (text.match(/[\u0590-\u05FF]/g) || []).length;
+      const greekCount =
+        (text.match(/[\u0370-\u03FF\u1F00-\u1FFF]/g) || []).length;
+      const ratio = (hebrewCount + greekCount) / text.length;
       if (ratio > 0.6) {
-        p.classList.add("hebrew-block");
+        if (hebrewCount > greekCount) {
+          p.classList.add("hebrew-block");
+        } else {
+          p.classList.add("greek-block");
+        }
       }
     });
   }
-
   
   async function loadPost() {
     if (!post) return showNotFound();
-
     try {
       const res = await fetch(`/${section}/articles/${post}.md`);
       if (!res.ok) throw new Error();
-
       let md = await res.text();
-
       // Remove YAML front matter if present
       md = md.replace(/^---\s*[\s\S]*?---\s*/, "");
-
       content.innerHTML = marked.parse(md);
       requestAnimationFrame(() => {
-        applyHebrewSupport(content);
+        applyBiblicalLanguageSupport(container);
       });
     } catch {
       showNotFound();
