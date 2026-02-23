@@ -383,7 +383,11 @@ footer {
 }
 
 /* 404 page */
+footer.404 {
+  bottom: 0;
+  position: fixed;
+  width: 100%;
+}
 .container[id="404"] {
   text-align: center;
 }
-
