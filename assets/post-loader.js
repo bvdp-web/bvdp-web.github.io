@@ -35,7 +35,101 @@
 
     backContainer.appendChild(backBtn);
   }
+  
+  function applyHebrewSupport(container) {
+    // Full Hebrew range + punctuation
+    const hebrewRegex = /[\u0590-\u05FF\uFB1D-\uFB4F]/;
+    const hebrewWordRegex = /([\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+)/g;
+  
+    const skipTags = ["CODE", "PRE", "SCRIPT", "STYLE"];
+  
+    const walker = document.createTreeWalker(
+      container,
+      NodeFilter.SHOW_TEXT,
+      {
+        acceptNode(node) {
+          if (!node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+  
+          if (!hebrewRegex.test(node.nodeValue))
+            return NodeFilter.FILTER_REJECT;
+  
+          if (
+            skipTags.includes(node.parentNode.nodeName) ||
+            node.parentNode.classList?.contains("hebrew-inline") ||
+            node.parentNode.classList?.contains("hebrew-heading")
+          )
+            return NodeFilter.FILTER_REJECT;
+  
+          return NodeFilter.FILTER_ACCEPT;
+        }
+      }
+    );
+  
+    const textNodes = [];
+    let node;
+    while ((node = walker.nextNode())) {
+      textNodes.push(node);
+    }
+  
+    textNodes.forEach(textNode => {
+      const parent = textNode.parentNode;
+      const text = textNode.nodeValue;
+  
+      const fragment = document.createDocumentFragment();
+      let lastIndex = 0;
+  
+      text.replace(hebrewWordRegex, (match, _group, offset) => {
+        if (offset > lastIndex) {
+          fragment.appendChild(
+            document.createTextNode(text.slice(lastIndex, offset))
+          );
+        }
+  
+        const span = document.createElement("span");
+  
+        // Heading detection
+        if (/H[1-6]/.test(parent.nodeName)) {
+          span.className = "hebrew-heading";
+        } else {
+          span.className = "hebrew-inline";
+        }
+  
+        span.textContent = match;
+        fragment.appendChild(span);
+  
+        lastIndex = offset + match.length;
+      });
+  
+      if (lastIndex < text.length) {
+        fragment.appendChild(
+          document.createTextNode(text.slice(lastIndex))
+        );
+      }
+  
+      parent.replaceChild(fragment, textNode);
+    });
+  
+    detectFullHebrewBlocks(container);
+  }
+  
+  function detectFullHebrewBlocks(container) {
+    const paragraphs = container.querySelectorAll("p, blockquote");
+  
+    paragraphs.forEach(p => {
+      const text = p.textContent.trim();
+      if (!text) return;
+  
+      const hebrewChars = (text.match(/[\u0590-\u05FF]/g) || []).length;
+      const ratio = hebrewChars / text.length;
+  
+      // If > 60% Hebrew → treat as full Hebrew block
+      if (ratio > 0.6) {
+        p.classList.add("hebrew-block");
+      }
+    });
+  }
 
+  
   async function loadPost() {
     if (!post) return showNotFound();
 
@@ -49,6 +143,9 @@
       md = md.replace(/^---\s*[\s\S]*?---\s*/, "");
 
       content.innerHTML = marked.parse(md);
+      requestAnimationFrame(() => {
+        applyHebrewSupport(content);
+      });
     } catch {
       showNotFound();
     }
