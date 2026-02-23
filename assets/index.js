@@ -4,6 +4,10 @@ function initPosts(section) {
   let allPosts = [];
   let masterPosts = [];
 
+  const container = document.getElementById("posts");
+  const pagination = document.getElementById("pagination");
+  const searchInput = document.getElementById("search");
+
   fetch(`/${section}/posts.json`)
     .then(res => res.json())
     .then(data => {
@@ -13,7 +17,6 @@ function initPosts(section) {
     });
 
   function renderPage() {
-    const container = document.getElementById("posts");
     container.innerHTML = "";
 
     const start = (currentPage - 1) * POSTS_PER_PAGE;
@@ -38,22 +41,52 @@ function initPosts(section) {
 
   function renderPagination() {
     const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
-    const pagination = document.getElementById("pagination");
     pagination.innerHTML = "";
 
+    if (totalPages <= 1) return;
+
+    // Previous button
+    const prevBtn = document.createElement("button");
+    prevBtn.textContent = "← Vorige";
+    prevBtn.disabled = currentPage === 1;
+    prevBtn.addEventListener("click", () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderPage();
+      }
+    });
+    pagination.appendChild(prevBtn);
+
+    // Page numbers
     for (let i = 1; i <= totalPages; i++) {
-      pagination.innerHTML += `
-        <button onclick="goToPage(${i})">${i}</button>
-      `;
+      const btn = document.createElement("button");
+      btn.textContent = i;
+
+      if (i === currentPage) {
+        btn.classList.add("active");
+      }
+
+      btn.addEventListener("click", () => {
+        currentPage = i;
+        renderPage();
+      });
+
+      pagination.appendChild(btn);
     }
+
+    // Next button
+    const nextBtn = document.createElement("button");
+    nextBtn.textContent = "Volgende →";
+    nextBtn.disabled = currentPage === totalPages;
+    nextBtn.addEventListener("click", () => {
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderPage();
+      }
+    });
+    pagination.appendChild(nextBtn);
   }
 
-  window.goToPage = function(page) {
-    currentPage = page;
-    renderPage();
-  };
-
-  const searchInput = document.getElementById("search");
   if (searchInput) {
     searchInput.addEventListener("input", e => {
       const term = e.target.value.toLowerCase();
