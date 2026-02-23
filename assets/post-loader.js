@@ -128,7 +128,7 @@
       md = md.replace(/^---\s*[\s\S]*?---\s*/, "");
       content.innerHTML = marked.parse(md);
       requestAnimationFrame(() => {
-        applyBiblicalLanguageSupport(container);
+        applyBiblicalLanguageSupport(content);
       });
     } catch {
       showNotFound();
