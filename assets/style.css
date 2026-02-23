@@ -334,6 +334,7 @@ body.dark .back-btn {
 }
 body.dark .back-btn > a {
   color: #f1f5f9;
+  cursor: pointer;
 }
 .back-btn:hover {
   opacity: 0.8;
