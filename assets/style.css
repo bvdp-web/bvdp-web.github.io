@@ -16,6 +16,40 @@
   src: url(https://fonts.gstatic.com/s/playwriteat/v6/Gw69wc7n6kfJN4fVoKON7HIeCw.woff2) format('woff2');
 }
 
+/* Variables */
+body {
+  --body-bg: #f4f6f9;
+  --body-color: #333; 
+  --nav-bg: #111827;
+  --nav-color: #d1d5db;
+  --nav-active-hover: #ffffff;
+  --card-bg: #ffffff;
+  --footer-bg: #111827;
+  --footer-color: #9ca3af;
+  --dailyverses-bg: #f4ecd8;
+  --dailyverses-color: #d8c9a3;
+  --dailyverses-title: turquoise;
+  --button-bg: #3b82f6;
+  --button-color: #ffffff;
+  --button-bg-active: #333;
+  --back-button-bg: #e2e8f0;
+  --back-button-color: #111827;
+}
+body.dark {
+  --body-bg: #0f172a;
+  --body-color: #e2e8f0;
+  --nav-bg: #020617;
+  --card-bg: #1e293b; 
+  --footer-bg: #0a101d;
+  --dailyverses-bg: #1e1a14;
+  --dailyverses-color: #3a3125;
+  --dailyverses-title: #6ea79e;
+  --button-bg-active: #777;
+  --back-button-bg: #1e293b;
+}
+body.dark .container a {
+  color: lightblue;
+}
 
 /* Reset */
 * {
@@ -25,8 +59,8 @@
 }
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-  background: #f4f6f9;
-  color: #333;
+  background: var(--body-bg);
+  color: var(--body-color);
   line-height: 1.6;
 }
 html, body {
@@ -36,7 +70,6 @@ html, body {
 
 /* Navigation */
 .navbar {
-  --nav-bg: #111827;
   background: var(--nav-bg);
   position: sticky;
   top: 0;
@@ -54,7 +87,7 @@ html, body {
 .logo {
   font-weight: bold;
   text-decoration: none;
-  color: #d1d5db;
+  color: var(--nav-color);
   display: flex;
   align-content: center;
   gap: 8px;
@@ -72,16 +105,16 @@ html, body {
 }
 .nav-links a {
   text-decoration: none;
-  color: #d1d5db;
+  color: var(--nav-color);
   font-weight: 500;
   transition: 0.3s;
 }
 .nav-links a:hover,
 .hamburger {
-  color: #ffffff;
+  color: var(--nav-active-hover);
 }
 .nav-links a.active {
-  color: #ffffff;
+  color: var(--nav-active-hover);
   border-bottom: 2px solid #3b82f6;
   padding-bottom: 4px;
 }
@@ -91,11 +124,22 @@ html, body {
   background: none;
   font-size: 18px;
 }
+#darkToggle {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1rem;
+  min-width: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .hamburger {
   display: none;
   font-size: 26px;
   cursor: pointer;
-  color: #d1d5db;
+  color: var(--nav-color);
 }
 /* 📱 MOBILE */
 @media (max-width: 768px) {
@@ -119,7 +163,7 @@ html, body {
   }
 }
 
-/* Layout */
+/* Layout General */
 .container {
   max-width: 1200px;
   margin: auto;
@@ -136,68 +180,36 @@ p {
   margin: inherit;
 }
 .card {
-  background: white;
+  background: var(--card-bg);
   padding: 25px;
   border-radius: 10px;
   margin-bottom: 20px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
-.button {
-  display: inline-block;
-  padding: 10px 20px;
-  background: #3b82f6;
-  color: white;
-  border-radius: 6px;
-  text-decoration: none;
-  margin-top: 10px;
-}
-.button:hover {
-  background: #2563eb;
-}
+
+/* Footer */
 footer {
   text-align: center;
   padding: 30px;
-  background: #111827;
-  color: #9ca3af;
+  background: var(--footer-bg);
+  color: var(--footer-color);
   margin-top: 60px;
 }
 
+/* Home */
 /* Daily Verses */
 .card.dailyVerses {
-  background: #f4ecd8;
-  border: 1px solid #d8c9a3;
+  background: var(--dailyverses-bg);
+  border: 1px solid var(--dailyverses-color);
 }
 #dailyVersesTitle {
-  color: turquoise;
+  color: var(--dailyverses-title);
   font-family: "Georgia", Times New Roman, serif;
   text-align: center;
 }
 #dailyVersesWrapper {
   text-align: center;
 }
-body.dark .card.dailyVerses {
-  background: #1e1a14;
-  border: 1px solid #3a3125;
-}
-body.dark #dailyVersesTitle {
-  color: #6ea79e
-}
-
-/* Quote Images */
-.quote-images {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  flex-wrap: wrap;
-  margin: 40px 0;
-}
-.quote-images img {
-  width: 75%;
-  max-width: 300px;
-  height: auto;
-}
-
 /* Uitspaak van de Dag */
 #uitspraak {
   text-align: center;
@@ -206,74 +218,6 @@ body.dark #dailyVersesTitle {
   font-style: normal;
   font-size: x-large;
 }
-
-/* Dark Mode*/
-body.dark {
-  background: #0f172a;
-  color: #e2e8f0;
-}
-body.dark .navbar {
-  --nav-bg: #020617;
-  background: var(--nav-bg);
-}
-body.dark .container a {
-  color: lightblue;
-}
-body.dark .card {
-  background: #1e293b;
-}
-body.dark footer {
-  background: #0a101d;
-}
-#darkToggle {
-  background: none;
-  border: none;
-  color: #fff;
-  cursor: pointer;
-  font-size: 1rem;
-  min-width: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Search */
-#search {
-  padding: 10px;
-  width: 100%;
-  margin-bottom: 20px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
-
-/* Pagination */
-#pagination {
-  margin-top: 20px;
-}
-#pagination button {
-  padding: 6px 12px;
-  margin: 4px;
-  border-radius: 5px;
-  border: none;
-  background: #3b82f6;
-  color: white;
-  cursor: pointer;
-}
-#pagination button.active {
-  background: #333;
-  color: white;
-}
-#pagination button:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-#pagination .dots {
-  margin: 0 6px;
-}
-body.dark #pagination button.active {
-  background: #777;
-}
-
 /* YT embeds */
 .youtube {
   display: grid;
@@ -282,7 +226,6 @@ body.dark #pagination button.active {
   margin-top: 40px;
 }
 .youtube > .card {
-  background: white;
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 6px 15px rgba(0,0,0,0.08);
@@ -312,29 +255,82 @@ body.dark #pagination button.active {
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 3rem;
-  color: white;
+  color: var(--button-color);
   text-shadow: 0 0 10px rgba(0,0,0,0.7);
   pointer-events: none;
 }
+/* Quote Images */
+.quote-images {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin: 40px 0;
+}
+.quote-images img {
+  width: 75%;
+  max-width: 300px;
+  height: auto;
+}
 
+/* Artikelen + Preken */
+/* Search */
+#search {
+  padding: 10px;
+  width: 100%;
+  margin-bottom: 20px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+/* Lezen button */
+.button {
+  display: inline-block;
+  padding: 10px 20px;
+  background: var(--button-bg);
+  color: var(--button-color);
+  border-radius: 6px;
+  text-decoration: none;
+  margin-top: 10px;
+}
+.button:hover {
+  background: #2563eb;
+}
+/* Pagination */
+#pagination {
+  margin-top: 20px;
+}
+#pagination button {
+  padding: 6px 12px;
+  margin: 4px;
+  border-radius: 5px;
+  border: none;
+  background: var(--button-bg);
+  color: var(--button-color);
+  cursor: pointer;
+}
+#pagination button.active {
+  background: var(--button-bg-active);
+}
+#pagination button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+#pagination .dots {
+  margin: 0 6px;
+}
 /* Back button*/
 .back-btn {
   display: inline-block;
   margin: 20px 0;
   padding: 8px 14px;
-  background: #e2e8f0;
-  color: #111827;
+  background: var(--back-button-bg);
+  color: var(--back-button-color);
   border-radius: 6px;
   text-decoration: none;
   font-weight: 500;
   transition: 0.2s ease;
   cursor: pointer;
-}
-body.dark .back-btn {
-  background: #1e293b;
-}
-body.dark .back-btn > a {
-  color: #f1f5f9;
 }
 .back-btn:hover {
   opacity: 0.8;
