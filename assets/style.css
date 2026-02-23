@@ -251,30 +251,27 @@ body.dark footer {
   margin-top: 20px;
 }
 #pagination button {
-  /* padding: 6px 12px; */
-  /* margin: 4px; */
+  padding: 6px 12px;
+  margin: 4px;
   border-radius: 5px;
   border: none;
   background: #3b82f6;
-  /* color: white;
-  cursor: pointer; */
-}
-#pagination button {
-  margin: 0 4px;
-  padding: 6px 10px;
+  color: white;
   cursor: pointer;
 }
 #pagination button.active {
   background: #333;
   color: white;
-  font-weight: bold;
 }
 #pagination button:disabled {
-  opacity: 0.4;
+  opacity: 0.7;
   cursor: not-allowed;
 }
 #pagination .dots {
   margin: 0 6px;
+}
+body.dark #pagination button.active {
+  background: #777;
 }
 
 /* YT embeds */
