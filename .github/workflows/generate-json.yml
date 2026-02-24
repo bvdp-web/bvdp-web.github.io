@@ -47,21 +47,22 @@ jobs:
       - name: Generate preken/posts.json
         run: |
           mkdir -p preken
-          jq -n '[inputs]' > preken/posts.json < <(
-            for file in $(ls -t preken/articles/*.md 2>/dev/null); do
-              title=$(grep '^title:' "$file" | sed 's/title: //' | tr -d '\r')
-              date=$(grep '^date:' "$file" | sed 's/date: //' | tr -d '\r')
-              description=$(grep '^description:' "$file" | sed 's/description: //' | tr -d '\r')
-              filename=$(basename "$file" .md)
-
-              jq -n \
-                --arg title "$title" \
-                --arg file "$filename" \
-                --arg date "$date" \
-                --arg description "$description" \
-                '{title:$title,file:$file,date:$date,description:$description}'
-            done
-          )
+          find preken/articles -maxdepth 1 -name "*.md" -print0 2>/dev/null | \
+          sort -zr | \
+          xargs -0 -I{} bash -c '
+            file="{}"
+            title=$(grep "^title:" "$file" | sed "s/title: //" | tr -d "\r")
+            date=$(grep "^date:" "$file" | sed "s/date: //" | tr -d "\r")
+            description=$(grep "^description:" "$file" | sed "s/description: //" | tr -d "\r")
+            filename=$(basename "$file" .md)
+      
+            jq -n \
+              --arg title "$title" \
+              --arg file "$filename" \
+              --arg date "$date" \
+              --arg description "$description" \
+              "{title:\$title,file:\$file,date:\$date,description:\$description}"
+          ' | jq -s '.' > preken/posts.json
 
       # -----------------------------
       # Commit only if changed
