@@ -138,7 +138,6 @@
   function showNotFound() {
     content.innerHTML = `
       <h1>Helaas... Niet gevonden.</h1>
-      <a href="/${section}/">Terug naar het overzicht van de ${section}</a>
     `;
   }
 
