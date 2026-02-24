@@ -1,5 +1,23 @@
 [
   {
+    "title": "Abba Vader",
+    "file": "abbavader",
+    "date": "2024-05-24",
+    "description": "Een gedicht over wat echt van waarde is"
+  },
+  {
+    "title": "God die ons beschermt",
+    "file": "goddieonsbeschermt",
+    "date": "2025-05-22",
+    "description": "Een gedicht over in wiens schaduw we willen staan"
+  },
+  {
+    "title": "Hoe God tot een mens kan spreken",
+    "file": "godsspreken",
+    "date": "2025-11-02",
+    "description": "Over de verschillende manieren van Gods spreken naar de mens"
+  },
+  {
     "title": "Het 'dilemma' van Gods alwetendheid, almacht en barmhartigheid",
     "file": "hetdilemmavangodsbestaan",
     "date": "2026-02-22",
@@ -22,23 +40,5 @@
     "file": "vuurwerk",
     "date": "2025-12-31",
     "description": "Een gedicht over de traditioneel gevierde oudjaarsnacht"
-  },
-  {
-    "title": "Abba Vader",
-    "file": "abbavader",
-    "date": "2024-05-24",
-    "description": "Een gedicht over wat echt van waarde is"
-  },
-  {
-    "title": "God die ons beschermt",
-    "file": "goddieonsbeschermt",
-    "date": "2025-05-22",
-    "description": "Een gedicht over in wiens schaduw we willen staan"
-  },
-  {
-    "title": "Hoe God tot een mens kan spreken",
-    "file": "godsspreken",
-    "date": "2025-11-02",
-    "description": "Over de verschillende manieren van Gods spreken naar de mens"
   }
 ]
