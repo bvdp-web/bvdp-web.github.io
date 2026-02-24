@@ -1,7 +1,7 @@
 ---
 title: Alles is goed - Romeinen 8:28
 date: 2024-04-20
-description: preek 1
+description: En wij weten, dat dengenen, die God liefhebben, alle dingen medewerken ten goede, [namelijk] dengenen, die naar [Zijn] voornemen geroepen zijn.
 ---
 
 # Alles is goed - Romeinen 8:28
