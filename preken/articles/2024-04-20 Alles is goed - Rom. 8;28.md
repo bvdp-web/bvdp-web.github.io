@@ -1,14 +1,10 @@
-\-\--
-
+---
 title: Alles is goed - Romeinen 8:28
-
-date: 2024-06-18
-
+date: 2024-04-20
 description: preek 1
+---
 
-\-\--
-
-Alles is goed - Romeinen 8:28
+# Alles is goed - Romeinen 8:28
 
 Alles is goed als God het doet. Wat een uitspraak. Maar toch zegt Paulus
 het in Romeinen 8:28 "Wij weten, dat dengenen die God liefhebben, alle
