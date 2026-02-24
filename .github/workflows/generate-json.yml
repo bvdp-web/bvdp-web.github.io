@@ -25,21 +25,22 @@ jobs:
       - name: Generate artikelen/posts.json
         run: |
           mkdir -p artikelen
-          jq -n '[inputs]' > artikelen/posts.json < <(
-            for file in $(ls -t artikelen/articles/*.md 2>/dev/null); do
-              title=$(grep '^title:' "$file" | sed 's/title: //' | tr -d '\r')
-              date=$(grep '^date:' "$file" | sed 's/date: //' | tr -d '\r')
-              description=$(grep '^description:' "$file" | sed 's/description: //' | tr -d '\r')
-              filename=$(basename "$file" .md)
-
-              jq -n \
-                --arg title "$title" \
-                --arg file "$filename" \
-                --arg date "$date" \
-                --arg description "$description" \
-                '{title:$title,file:$file,date:$date,description:$description}'
-            done
-          )
+          find artikelen/articles -maxdepth 1 -name "*.md" -print0 2>/dev/null | \
+          sort -zr | \
+          xargs -0 -I{} bash -c '
+            file="{}"
+            title=$(grep "^title:" "$file" | sed "s/title: //" | tr -d "\r")
+            date=$(grep "^date:" "$file" | sed "s/date: //" | tr -d "\r")
+            description=$(grep "^description:" "$file" | sed "s/description: //" | tr -d "\r")
+            filename=$(basename "$file" .md)
+      
+            jq -n \
+              --arg title "$title" \
+              --arg file "$filename" \
+              --arg date "$date" \
+              --arg description "$description" \
+              "{title:\$title,file:\$file,date:\$date,description:\$description}"
+          ' | jq -s '.' > artikelen/posts.json
 
       # -----------------------------
       # Generate preken/posts.json
@@ -69,10 +70,9 @@ jobs:
       # -----------------------------
       - name: Commit changes
         run: |
-          git config user.name "github-actions"
-
+          git config user.name "GitHub-Actions"
+          git config user.email "<>"
           git add artikelen/posts.json preken/posts.json
-
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else
