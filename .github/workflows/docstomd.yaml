@@ -18,6 +18,7 @@ jobs:
 
       - name: Convert DOCX to MD - Artikelen
         run: |
+          shopt -s nullglob
           mkdir -p artikelen/articles/
           for file in artikelen/articles/*.docx; do
             filename=$(basename "$file" .docx)
@@ -26,6 +27,7 @@ jobs:
 
       - name: Convert DOCX to MD - Preken
         run: |
+          shopt -s nullglob
           mkdir -p preken/articles/
           for file in preken/articles/*.docx; do
             filename=$(basename "$file" .docx)
