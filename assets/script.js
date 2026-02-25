@@ -1,38 +1,38 @@
 // Menu
-const links = document.querySelectorAll("nav a");
-const currentPath = window.location.pathname;
-links.forEach(link => {
-  const href = link.getAttribute("href");
-  // Ensure href ends with a slash if it's a directory
-  const normalizedHref = href.endsWith("/") ? href : href + "/";
-  // Normalize current path for comparison
-  const normalizedPath = currentPath.endsWith("/") ? currentPath : currentPath + "/";
-  // Check if current path starts with href
-  if (normalizedPath.startsWith(normalizedHref)) {
-    link.classList.add("active");
+function initNavbar() {
+  const links = document.querySelectorAll("nav a");
+  const currentPath = window.location.pathname;
+  links.forEach(link => {
+    const href = link.getAttribute("href");
+    // Ensure href ends with a slash if it's a directory
+    const normalizedHref = href.endsWith("/") ? href : href + "/";
+    // Normalize current path for comparison
+    const normalizedPath = currentPath.endsWith("/") ? currentPath : currentPath + "/";
+    // Check if current path starts with href
+    if (normalizedPath.startsWith(normalizedHref)) {
+      link.classList.add("active");
+    }
+  });
+  // Hamburger toggle
+  document.getElementById("hamburger")
+    .addEventListener("click", function() {
+      document.querySelector(".nav-links")
+        .classList.toggle("active");
+  });
+  // Dark mode toggle
+  const toggle = document.getElementById("darkToggle");
+  if (localStorage.getItem("theme") === "dark") {
+    document.body.classList.add("dark");
   }
-});
-
-// Hamburger toggle
-document.getElementById("hamburger")
-  .addEventListener("click", function() {
-    document.querySelector(".nav-links")
-      .classList.toggle("active");
-});
-
-// Dark mode toggle
-const toggle = document.getElementById("darkToggle");
-if (localStorage.getItem("theme") === "dark") {
-  document.body.classList.add("dark");
+  toggle?.addEventListener("click", () => {
+    document.body.classList.toggle("dark");
+    if (document.body.classList.contains("dark")) {
+      localStorage.setItem("theme", "dark");
+    } else {
+      localStorage.setItem("theme", "light");
+    }
+  });
 }
-toggle?.addEventListener("click", () => {
-  document.body.classList.toggle("dark");
-  if (document.body.classList.contains("dark")) {
-    localStorage.setItem("theme", "dark");
-  } else {
-    localStorage.setItem("theme", "light");
-  }
-});
 
 // Youtube embeds
 document.querySelectorAll(".youtube .thumbnail").forEach(thumb => {
