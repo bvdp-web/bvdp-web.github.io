@@ -1,5 +1,5 @@
 if (localStorage.getItem("theme") === "dark") {
-  document.body.classList.add("dark");
+  document.documentElement.classList.add("dark");
 }
 function loadPartial(id, file, callback) {
   fetch(file)
@@ -46,12 +46,9 @@ function initNavbar() {
   // Dark mode toggle
   const toggle = document.getElementById("darkToggle");
   toggle?.addEventListener("click", () => {
-    document.body.classList.toggle("dark");
-    if (document.body.classList.contains("dark")) {
-      localStorage.setItem("theme", "dark");
-    } else {
-      localStorage.setItem("theme", "light");
-    }
+    document.documentElement.classList.toggle("dark");
+    const isDark = document.documentElement.classList.contains("dark");
+    localStorage.setItem("theme", isDark ? "dark" : "light");
   });
 }
 
