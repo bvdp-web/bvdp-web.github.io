@@ -399,11 +399,6 @@ footer {
 }
 
 /* 404 page */
-[id="footer"][class="404"] {
-  bottom: 0;
-  position: fixed;
-  width: 100%;
-}
 .container[id="404"] {
   text-align: center;
 }
