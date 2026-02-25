@@ -1,3 +1,21 @@
+function loadPartial(id, file) {
+  fetch(file)
+    .then(response => {
+      if (!response.ok) throw new Error("Network error");
+      return response.text();
+    })
+    .then(data => {
+      document.getElementById(id).innerHTML = data;
+      if (callback) callback();
+    })
+    .catch(error => console.error("Error loading", file, error));
+}
+document.addEventListener("DOMContentLoaded", function() {
+  loadPartial("navbar", "/navfooter/navbar.html", function() {
+    initNavbar();
+  });
+  loadPartial("footer", "/navfooter/footer.html");
+});
 // Menu
 function initNavbar() {
   const links = document.querySelectorAll("nav a");
@@ -34,7 +52,7 @@ function initNavbar() {
   });
 }
 
-// Youtube embeds
+// Youtube embeds on Homepage
 document.querySelectorAll(".youtube .thumbnail").forEach(thumb => {
   thumb.addEventListener("click", () => {
     const card = thumb.closest(".card");
@@ -52,3 +70,4 @@ document.querySelectorAll(".youtube .thumbnail").forEach(thumb => {
     card.classList.add("loaded");
   });
 });
+
