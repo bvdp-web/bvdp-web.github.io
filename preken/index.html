@@ -8,21 +8,7 @@
   <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
-  <nav class="navbar">
-    <div class="nav-container">
-      <a href="/" class="logo"><img src="/images/favicon.png">Home</a>
-      <ul class="nav-links">
-        <li><a href="/artikelen/">Artikelen</a></li>
-        <li><a href="/preken/">Preken</a></li>
-        <li><a target="_blank" href="/gs">Geschiedenis Overzicht</a></li>
-        <li><a href="/about/">Over mij</a></li>
-        <li><button id="darkToggle">🌙</button></li>
-      </ul>
-      <div class="hamburger" id="hamburger">
-        ☰
-      </div>
-    </div>
-  </nav>
+  <div id="navbar"></div>
   <div class="container">
     <h1>Preken</h1>
     <div class="card">
@@ -32,9 +18,8 @@
     <div id="posts"></div>
     <div id="pagination"></div>
   </div>
-  <footer>
-    © 2026 BvdP Website
-  </footer> 
+  <div id="footer"></div>
+  <script src="/assets/nav-and-footer.js"></script>
   <script src="/assets/script.js"></script>
   <script src="/assets/index.js"></script>
   <script>
