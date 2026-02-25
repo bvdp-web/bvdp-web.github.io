@@ -81,6 +81,8 @@ html, body {
 #navbar.visible, #footer.visible {
   visibility: visible;
 }
+#navbar { min-height: 56px; }
+#footer { min-height: 86px; }
 .navbar {
   background: var(--nav-bg);
   position: sticky;
