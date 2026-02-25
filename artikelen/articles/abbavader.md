@@ -12,7 +12,7 @@ Is het de natuur of vrienden?
 lets wat je doet of maakt?  
 Ze hebben allemaal één ding gemeen: het vergaat.  
 
-Op sommige mommenten leer je zien,  
+Tijdens moeilijkheden leer je zien,  
 dat wat van waarde is nooit vergaat  
 en ook altijd voor altijd bestaat.  
 Dat het is wat ik niet verdien.  
@@ -31,5 +31,3 @@ Jezus, Die er altijd is,
 is het Die jou eeuwigheidswaarde geeft,  
 en Die voor eeuwig leeft.  
 Ook al is de rest een gemis.  
-
-
