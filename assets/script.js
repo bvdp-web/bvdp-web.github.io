@@ -16,8 +16,11 @@ function loadPartial(id, file, callback) {
 document.addEventListener("DOMContentLoaded", function() {
   loadPartial("navbar", "/navfooter/navbar.html", function() {
     initNavbar();
+    document.getElementById("navbar").classList.add("visible");
   });
-  loadPartial("footer", "/navfooter/footer.html");
+  loadPartial("footer", "/navfooter/footer.html", function() {
+    document.getElementById("footer").classList.add("visible");
+  });
 });
 // Menu
 function initNavbar() {
