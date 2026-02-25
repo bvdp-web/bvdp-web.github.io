@@ -399,7 +399,7 @@ footer {
 }
 
 /* 404 page */
-footer[class="404"] {
+[id="footer"][class="404"] {
   bottom: 0;
   position: fixed;
   width: 100%;
