@@ -1,4 +1,4 @@
-function loadPartial(id, file) {
+function loadPartial(id, file, callback) {
   fetch(file)
     .then(response => {
       if (!response.ok) throw new Error("Network error");
@@ -70,4 +70,3 @@ document.querySelectorAll(".youtube .thumbnail").forEach(thumb => {
     card.classList.add("loaded");
   });
 });
-
