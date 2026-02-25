@@ -75,6 +75,12 @@ html, body {
 }
 
 /* Navigation */
+#navbar, #footer {
+  visibility: hidden;
+}
+#navbar.visible, #footer.visible {
+  visibility: visible;
+}
 .navbar {
   background: var(--nav-bg);
   position: sticky;
