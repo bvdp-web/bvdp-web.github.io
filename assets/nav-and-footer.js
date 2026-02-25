@@ -11,6 +11,6 @@ function loadPartial(id, file) {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-  loadPartial("navbar", "/navbar.html");
-  loadPartial("footer", "/footer.html");
+  loadPartial("navbar", "/navfooter/navbar.html");
+  loadPartial("footer", "/navfooter/footer.html");
 });
