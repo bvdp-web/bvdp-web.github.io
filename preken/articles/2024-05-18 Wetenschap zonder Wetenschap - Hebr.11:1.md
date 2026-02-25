@@ -4,7 +4,8 @@ date: 2024-05-18
 description: Het geloof nu is een vaste grond der dingen, die men hoopt, [en] een bewijs der zaken, die men niet ziet.
 ---
 
-Wetenschap zonder Wetenschap
+# Wetenschap zonder Wetenschap  
+
 Een veel gestelde vraag die we al als kind stellen, is de ‘waarom’-vraag. Het begint bij hele simpele vragen en naarmate we ouder worden, worden die steeds moeilijker. Het lijkt zowat in de aard van de mens te zitten steeds alles te weten en te kunnen verklaren. Een wetenschapper is pas tevreden als hij binnen de grenzen van het menselijke beredeneren een verklaring voor het probleem of een antwoord op de vraag heeft kunnen formuleren.  
 Echter lijkt de Hebreeënschrijver een antwoord te hebben op allerlei menselijke vragen zonder dat bij het antwoord menselijke redenatie van pas komt. Als we naar Hebreeën 11:1 kijken, vallen er drie dingen op: geloof, hoop en niet zien. Deze drie vormen de vaste grond en het bewijs voor het geloof. “Het geloof nu is een vaste grond der dingen, die men hoopt, [en] een bewijs der zaken, die men niet ziet.” Dit is niet zozeer bedoelt als een woordenboek definitief van geloof, maar als benadrukking en ten toonstelling naar de praktijk van het geloof. Dit wordt duidelijk uit het feit dat “door het geloof” zo’n veertig keer verhaald wordt in het hoofdstuk. Geloof en wat het inhoud is geen dood iets. Het is actueel; het is leven. Het is bewijs alsof het gebaseerd is op argumenten of discussies, van de waarheid of realiteit van iets. Geloof is de verificatie van de onzichtbare dingen. Ik zou graag deze drie nader willen uitwerken, namelijk: ten eerste: geloof, ten tweede: hoop, en tot slot: niet zien.  
 
