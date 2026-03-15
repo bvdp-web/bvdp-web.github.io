@@ -7,82 +7,82 @@
   <link rel="icon" type="image/png" href="/images/favicon.png">
   <link rel="stylesheet" href="/assets/style.css">
   <style>
-.container{
-  max-width:1100px;
-  margin:auto;
-  padding:20px;
-}
-.repo-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:20px;
-  margin-top:15px;
-}
-.card{
-  padding:15px;
-  transition:.2s;
-}
-.card:hover{
-  transform:translateY(-3px);
-  box-shadow:0 5px 15px rgba(0,0,0,0.1);
-}
-.card a{
-  text-decoration:none !important;
-  color:inherit !important;
-  display:block;
-}
-.meta{
-  font-size:.8em;
-  color:#666;
-  margin-top:8px;
-}
-.meta.release{
-  display:inline-flex;
-}
-.topics{
-  margin-top:8px;
-}
-.topic-badge{
-  display:inline-block;
-  background:#e1ecf4;
-  color:#0366d6;
-  padding:2px 6px;
-  margin:2px;
-  border-radius:3px;
-  font-size:0.75em;
-  font-weight:500;
-}
-.stats{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
-  gap:15px;
-  margin-bottom:30px;
-}
-.stat{
-  background:var(--card-bg);
-  padding:15px;
-  border-radius:8px;
-  text-align:center;
-}
-.stat strong{
-  font-size:1.4em;
-  display:block;
-}
-.section{
-  margin-top:40px;
-}
-.lang-chart{
-  margin-top:20px;
-}
-.lang-bar{
-  height:20px;
-  margin-bottom:5px;
-  border-radius:5px;
-  color:white;
-  font-size:0.75em;
-  padding-left:5px;
-  line-height:20px;
-}  
+    .container{
+      max-width:1100px;
+      margin:auto;
+      padding:20px;
+    }
+    .repo-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+      gap:20px;
+      margin-top:15px;
+    }
+    .card{
+      padding:15px;
+      transition:.2s;
+    }
+    .card:hover{
+      transform:translateY(-3px);
+      box-shadow:0 5px 15px rgba(0,0,0,0.1);
+    }
+    a.card{
+      text-decoration:none !important;
+      color:inherit !important;
+      display:block;
+    }
+    .meta{
+      font-size:.8em;
+      color:#666;
+      margin-top:8px;
+    }
+    .meta.release{
+      display:inline-flex;
+    }
+    .topics{
+      margin-top:8px;
+    }
+    .topic-badge{
+      display:inline-block;
+      background:#e1ecf4;
+      color:#0366d6;
+      padding:2px 6px;
+      margin:2px;
+      border-radius:3px;
+      font-size:0.75em;
+      font-weight:500;
+    }
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+      gap:15px;
+      margin-bottom:30px;
+    }
+    .stat{
+      background:var(--card-bg);
+      padding:15px;
+      border-radius:8px;
+      text-align:center;
+    }
+    .stat strong{
+      font-size:1.4em;
+      display:block;
+    }
+    .section{
+      margin-top:40px;
+    }
+    .lang-chart{
+      margin-top:20px;
+    }
+    .lang-bar{
+      height:20px;
+      margin-bottom:5px;
+      border-radius:5px;
+      color:white;
+      font-size:0.75em;
+      padding-left:5px;
+      line-height:20px;
+    }  
   </style>
 </head>
 <body>
@@ -127,13 +127,13 @@
         releaseHtml = `
           <div class="meta release">
             <span>🚀 Latest Release: </span>
-            <a target="_blank" rel="noopener noreferrer" href="${latestRelease.releases_url}">${latestRelease.name}</a>
+            <a target="_blank" rel="noopener noreferrer" href="${latestRelease.html_url}">${latestRelease.name}</a>
             <span> - ${new Date(latestRelease.published_at).toLocaleDateString()}</span>
           </div>
         `;
       }
       return `
-        <div class="card" href="${repo.html_url}" target="_blank" rel="noopener noreferrer">
+        <a class="card" href="${repo.html_url}" target="_blank" rel="noopener noreferrer">
             <h3>${repo.full_name}</h3>
             <p>${repo.description ?? "No description available"}</p>
             <div class="meta">
@@ -141,7 +141,7 @@
             </div>
             ${topicsHtml}
             ${releaseHtml}
-        </div>
+        </a>
       `;
     }
     async function getLatestRelease(repo) {
