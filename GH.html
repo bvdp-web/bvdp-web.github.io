@@ -165,12 +165,12 @@
         <div class="card">
           <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer">
             <h3>${repo.full_name}</h3>
-            <p>${repo.description ?? "No description available"}</p>
-            <div class="meta">
-              ⭐ ${repo.stargazers_count} | 🍴 ${repo.forks_count} | 💻 ${repo.language ?? "Unknown"} | 🕒 ${date}
-            </div>
-            ${topicsHtml}
           </a>
+          <p>${repo.description ?? "No description available"}</p>
+          <div class="meta">
+            ⭐ ${repo.stargazers_count} | 🍴 ${repo.forks_count} | 💻 ${repo.language ?? "Unknown"} | 🕒 ${date}
+          </div>
+          ${topicsHtml}
           ${releaseHtml}
         </div>
       `;
