@@ -126,13 +126,15 @@
       if (latestRelease) {
         releaseHtml = `
           <div class="meta release">
-            🚀 Latest Release: <a href="${latestRelease.html_url}" target="_blank" rel="noopener noreferrer">${latestRelease.name}</a> - ${new Date(latestRelease.published_at).toLocaleDateString()}
+            🚀 Latest Release:  
+            <a href="${latestRelease.releases_url}" target="_blank" rel="noopener noreferrer">${latestRelease.name}</a>
+             - 
+            ${new Date(latestRelease.published_at).toLocaleDateString()}
           </div>
         `;
       }
       return `
-        <div class="card">
-          <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer">
+        <div class="card" href="${repo.html_url}" target="_blank" rel="noopener noreferrer">
             <h3>${repo.full_name}</h3>
             <p>${repo.description ?? "No description available"}</p>
             <div class="meta">
@@ -140,7 +142,6 @@
             </div>
             ${topicsHtml}
             ${releaseHtml}
-          </a>
         </div>
       `;
     }
