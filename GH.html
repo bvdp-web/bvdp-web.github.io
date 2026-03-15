@@ -109,7 +109,7 @@
   <script src="/assets/script.js"></script>
   <script>
     const CACHE_KEY="github_dashboard_cache"
-    const CACHE_TIME=30*60*1000
+    const CACHE_TIME=60*60*1000
     function repoCard(repo, latestRelease) {
       let date = new Date(repo.pushed_at).toLocaleDateString();
       let topicsHtml = "";
