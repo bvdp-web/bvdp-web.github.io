@@ -186,21 +186,25 @@
       renderStats(allRepos, totalStars, totalForks, Object.keys(languages).length);
       renderLangChart(languages);
     }
-    function renderStats(repos,stars,forks,langCount) { 
-      document.getElementById("stats").innerHTML= 
+    function renderStats(repos,stars,forks,langCount){
+      document.getElementById("stats").innerHTML=`
         <div class="stat"><strong>${repos.length}</strong> Repositories</div>
         <div class="stat"><strong>${stars}</strong> Stars</div>
         <div class="stat"><strong>${forks}</strong> Forks</div>
         <div class="stat"><strong>${langCount}</strong> Languages</div>
+      `
     }
-    function renderLangChart(languages) {
-      let container=document.getElementById("langChart") container.innerHTML=""
+    function renderLangChart(languages){
+      let container=document.getElementById("langChart")
+      container.innerHTML=""
       let total = Object.values(languages).reduce((a,b)=>a+b,0)
       const colors=["#f1e05a","#3572A5","#563d7c","#c6538c","#f34b7d","#2b7489","#701516","#b07219"]
-      let i=0 for(let lang in languages) {
+      let i=0
+      for(let lang in languages){
         let perc = Math.round(languages[lang]/total*100)
         let color = colors[i % colors.length]
-        container.innerHTML += <div class="lang-bar" style="width:${perc}%; background:${color}">${lang} ${perc}%</div> i++ 
+        container.innerHTML += `<div class="lang-bar" style="width:${perc}%; background:${color}">${lang} ${perc}%</div>`
+        i++
       }
     }
     // Load data from GitHub API and render the dashboard
