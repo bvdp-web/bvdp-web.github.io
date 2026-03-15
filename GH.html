@@ -36,6 +36,9 @@
   color:#666;
   margin-top:8px;
 }
+.meta.release{
+  display:inline-flex;
+}
 .topics{
   margin-top:8px;
 }
@@ -122,7 +125,7 @@
       let releaseHtml = "";
       if (latestRelease) {
         releaseHtml = `
-          <div class="meta">
+          <div class="meta release">
             🚀 Latest Release: <a href="${latestRelease.html_url}" target="_blank" rel="noopener noreferrer">${latestRelease.name}</a> - ${new Date(latestRelease.published_at).toLocaleDateString()}
           </div>
         `;
