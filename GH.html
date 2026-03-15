@@ -198,7 +198,7 @@
       let container=document.getElementById("langChart")
       container.innerHTML=""
       let total = Object.values(languages).reduce((a,b)=>a+b,0)
-      const colors=["#f1e05a","#3572A5","#563d7c","#c6538c","#f34b7d","#2b7489","#701516","#b07219"]
+      const colors=["#c3b01e","#3572A5","#563d7c","#c6538c","#f34b7d","#2b7489","#701516","#b07219"]
       let i=0
       for(let lang in languages){
         let perc = Math.round(languages[lang]/total*100)
