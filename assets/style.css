@@ -256,6 +256,13 @@ footer {
 .youtube > .card:hover {
   transform: translateY(-5px);
 }
+.youtube > .card > h2 a,
+.youtube > .card > h2 a:visited,
+.youtube > .card > h2 a:hover,
+.youtube > .card > h2 a:active {
+  text-decoration: none;
+  color: inherit;
+}
 .youtube > .card > .thumbnail {
   position: relative;
   width: 100%;
