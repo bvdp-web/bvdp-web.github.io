@@ -27,8 +27,8 @@
   box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
 .card a{
-  text-decoration:none;
-  color:inherit;
+  text-decoration:none !important;
+  color:inherit !important;
   display:block;
 }
 .meta{
@@ -105,93 +105,113 @@
   <div id="footer"></div>
   <script src="/assets/script.js"></script>
   <script>
-const CACHE_KEY="github_dashboard_cache"
-const CACHE_TIME=30*60*1000
-function repoCard(repo){
-  let date=new Date(repo.pushed_at).toLocaleDateString()
-  let topicsHtml = ""
-  if(repo.topics && repo.topics.length){
-    topicsHtml = '<div class="topics">'+
-      repo.topics.map(t=>`<span class="topic-badge">${t}</span>`).join('')+
-      '</div>'
-  }
-  return `
-  <div class="card">
-    <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer">
-      <h3>${repo.full_name}</h3>
-      <p>${repo.description ?? "No description available"}</p>
-      <div class="meta">
-        ⭐ ${repo.stargazers_count} | 🍴 ${repo.forks_count} | 💻 ${repo.language ?? "Unknown"} | 🕒 ${date}
-      </div>
-      ${topicsHtml}
-    </a>
-  </div>
-  `
-}
-function render(allRepos){
-  let userContainer=document.getElementById("userRepos")
-  let orgContainer=document.getElementById("orgRepos")
-  let archContainer=document.getElementById("archivedRepos")
-  let totalStars=0
-  let totalForks=0
-  let languages={}
-  allRepos.forEach(repo=>{
-    totalStars+=repo.stargazers_count
-    totalForks+=repo.forks_count
-    if(repo.language) languages[repo.language]=(languages[repo.language]||0)+1
-    let html=repoCard(repo)
-    if(repo.archived) archContainer.innerHTML+=html
-    else if(repo.owner.login==="Ignotum77") userContainer.innerHTML+=html
-    else orgContainer.innerHTML+=html
-  })
-  renderStats(allRepos,totalStars,totalForks,Object.keys(languages).length)
-  renderLangChart(languages)
-}
-function renderStats(repos,stars,forks,langCount){
-  document.getElementById("stats").innerHTML=`
-    <div class="stat"><strong>${repos.length}</strong> Repositories</div>
-    <div class="stat"><strong>${stars}</strong> Stars</div>
-    <div class="stat"><strong>${forks}</strong> Forks</div>
-    <div class="stat"><strong>${langCount}</strong> Languages</div>
-  `
-}
-function renderLangChart(languages){
-  let container=document.getElementById("langChart")
-  container.innerHTML=""
-  let total = Object.values(languages).reduce((a,b)=>a+b,0)
-  const colors=["#f1e05a","#3572A5","#563d7c","#c6538c","#f34b7d","#2b7489","#701516","#b07219"]
-  let i=0
-  for(let lang in languages){
-    let perc = Math.round(languages[lang]/total*100)
-    let color = colors[i % colors.length]
-    container.innerHTML += `<div class="lang-bar" style="width:${perc}%; background:${color}">${lang} ${perc}%</div>`
-    i++
-  }
-}
-/* LOAD DATA */
-async function loadRepos(){
-  let cached=localStorage.getItem(CACHE_KEY)
-  if(cached){
-    let obj=JSON.parse(cached)
-    if(Date.now()-obj.time<CACHE_TIME){
-      render(obj.data)
-      return
+  function repoCard(repo, latestRelease) {
+    let date = new Date(repo.pushed_at).toLocaleDateString();
+    let topicsHtml = "";
+    if (repo.topics && repo.topics.length) {
+      topicsHtml =
+        '<div class="topics">' +
+        repo.topics
+          .map((t) => `<span class="topic-badge">${t}</span>`)
+          .join("") +
+        "</div>";
     }
+    // Latest release HTML section
+    let releaseHtml = "";
+    if (latestRelease) {
+      releaseHtml = `
+        <div class="meta">
+          🚀 Latest Release: <a href="${latestRelease.html_url}" target="_blank" rel="noopener noreferrer">${latestRelease.name}</a> - ${new Date(latestRelease.published_at).toLocaleDateString()}
+        </div>
+      `;
+    }
+    return `
+      <div class="card">
+        <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer">
+          <h3>${repo.full_name}</h3>
+          <p>${repo.description ?? "No description available"}</p>
+          <div class="meta">
+            ⭐ ${repo.stargazers_count} | 🍴 ${repo.forks_count} | 💻 ${repo.language ?? "Unknown"} | 🕒 ${date}
+          </div>
+          ${topicsHtml}
+          ${releaseHtml}
+        </a>
+      </div>
+    `;
   }
-  let userReposFetch = fetch("https://api.github.com/users/Ignotum77/repos?per_page=100",{headers:{Accept:"application/vnd.github.mercy-preview+json"}}).then(r=>r.json())
-  let orgsFetch = fetch("https://api.github.com/users/Ignotum77/orgs").then(r=>r.json())
-  let [userRepos,orgs] = await Promise.all([userReposFetch,orgsFetch])
-  let orgRepoPromises = orgs.map(org=>
-    fetch(`https://api.github.com/orgs/${org.login}/repos?per_page=100`,{headers:{Accept:"application/vnd.github.mercy-preview+json"}})
-    .then(r=>r.json())
-  )
-  let orgRepos = (await Promise.all(orgRepoPromises)).flat()
-  let allRepos=[...userRepos,...orgRepos]
-  allRepos.sort((a,b)=>new Date(b.pushed_at)-new Date(a.pushed_at))
-  localStorage.setItem(CACHE_KEY,JSON.stringify({time:Date.now(),data:allRepos}))
-  render(allRepos)
-}
-loadRepos()
-  </script
+  async function getLatestRelease(repo) {
+    try {
+      const response = await fetch(`${repo.url}/releases/latest`, {
+        headers: {
+          Accept: "application/vnd.github.v3+json",
+        },
+      });
+      if (response.ok) {
+        const release = await response.json();
+        return release;
+      }
+    } catch (error) {
+      console.error(`Failed to fetch latest release for ${repo.full_name}`, error);
+    }
+    return null; // Return null if no release or error occurs
+  }
+  async function render(allRepos) {
+    let userContainer = document.getElementById("userRepos");
+    let orgContainer = document.getElementById("orgRepos");
+    let archContainer = document.getElementById("archivedRepos");
+    let totalStars = 0;
+    let totalForks = 0;
+    let languages = {};
+    // Fetch the latest release for each repo
+    const releasePromises = allRepos.map(async (repo) => {
+      const latestRelease = await getLatestRelease(repo);
+      return { repo, latestRelease };
+    });
+    const reposWithReleases = await Promise.all(releasePromises);
+    reposWithReleases.forEach(({ repo, latestRelease }) => {
+      totalStars += repo.stargazers_count;
+      totalForks += repo.forks_count;
+      if (repo.language) languages[repo.language] = (languages[repo.language] || 0) + 1;
+      let html = repoCard(repo, latestRelease);
+      if (repo.archived) {
+        archContainer.innerHTML += html;
+      } else if (repo.owner.login === "Ignotum77") {
+        userContainer.innerHTML += html;
+      } else {
+        orgContainer.innerHTML += html;
+      }
+    });
+    renderStats(allRepos, totalStars, totalForks, Object.keys(languages).length);
+    renderLangChart(languages);
+  }
+  // Load data from GitHub API and render the dashboard
+  async function loadRepos() {
+    let cached = localStorage.getItem(CACHE_KEY);
+    if (cached) {
+      let obj = JSON.parse(cached);
+      if (Date.now() - obj.time < CACHE_TIME) {
+        render(obj.data);
+        return;
+      }
+    }
+    let userReposFetch = fetch(
+      "https://api.github.com/users/Ignotum77/repos?per_page=100",
+      { headers: { Accept: "application/vnd.github.mercy-preview+json" } }
+    ).then((r) => r.json());
+    let orgsFetch = fetch("https://api.github.com/users/Ignotum77/orgs").then((r) => r.json());
+    let [userRepos, orgs] = await Promise.all([userReposFetch, orgsFetch]);
+    let orgRepoPromises = orgs.map((org) =>
+      fetch(`https://api.github.com/orgs/${org.login}/repos?per_page=100`, {
+        headers: { Accept: "application/vnd.github.mercy-preview+json" },
+      }).then((r) => r.json())
+    );
+    let orgRepos = (await Promise.all(orgRepoPromises)).flat();
+    let allRepos = [...userRepos, ...orgRepos];
+    allRepos.sort((a, b) => new Date(b.pushed_at) - new Date(a.pushed_at));
+    localStorage.setItem(CACHE_KEY, JSON.stringify({ time: Date.now(), data: allRepos }));
+    render(allRepos);
+  }
+  loadRepos();
+  </script>
 </body>
 </html>
