@@ -26,7 +26,7 @@
       transform:translateY(-3px);
       box-shadow:0 5px 15px rgba(0,0,0,0.1);
     }
-    a.card{
+    .card a{
       text-decoration:none !important;
       color:inherit !important;
       display:block;
@@ -133,7 +133,8 @@
         `;
       }
       return `
-        <a class="card" href="${repo.html_url}" target="_blank" rel="noopener noreferrer">
+        <div class="card">
+          <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer">
             <h3>${repo.full_name}</h3>
             <p>${repo.description ?? "No description available"}</p>
             <div class="meta">
@@ -141,7 +142,8 @@
             </div>
             ${topicsHtml}
             ${releaseHtml}
-        </a>
+          </a>
+        </div>
       `;
     }
     async function getLatestRelease(repo) {
