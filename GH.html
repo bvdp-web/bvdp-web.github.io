@@ -108,8 +108,37 @@
   <div id="footer"></div>
   <script src="/assets/script.js"></script>
   <script>
-    const CACHE_KEY="github_dashboard_cache"
-    const CACHE_TIME=60*60*1000
+    const CACHE_KEY = "github_dashboard_cache";
+    const CACHE_TIME = 60 * 60 * 1000; // 1 hour in milliseconds
+    const API_REQUEST_TIMESTAMP_KEY = "api_request_timestamps"; // Store timestamps for rate-limiting
+    // Function to get the current timestamp
+    function getCurrentTimestamp() {
+      return Date.now();
+    }
+    // Check if the request is allowed based on the last 5 API request timestamps
+    function canMakeApiRequest() {
+      const requestTimestamps = JSON.parse(localStorage.getItem(API_REQUEST_TIMESTAMP_KEY)) || [];
+      // Remove timestamps older than 1 hour
+      const oneHourAgo = getCurrentTimestamp() - CACHE_TIME;
+      const recentRequests = requestTimestamps.filter(timestamp => timestamp > oneHourAgo);
+      // If there are fewer than 40 recent requests, allow the new request
+      if (recentRequests.length < 40) {
+        return true;
+      }
+      // If there are 40 or more requests in the last hour, deny the request
+      return false;
+    }
+    // Store the timestamp of the API request
+    function storeApiRequestTimestamp() {
+      const requestTimestamps = JSON.parse(localStorage.getItem(API_REQUEST_TIMESTAMP_KEY)) || [];
+      requestTimestamps.push(getCurrentTimestamp());
+      // Keep only the last 5 timestamps
+      if (requestTimestamps.length > 5) {
+        requestTimestamps.shift(); // Remove the oldest timestamp
+      }
+      localStorage.setItem(API_REQUEST_TIMESTAMP_KEY, JSON.stringify(requestTimestamps));
+    }
+    // Repo card rendering logic
     function repoCard(repo, latestRelease) {
       let date = new Date(repo.pushed_at).toLocaleDateString();
       let topicsHtml = "";
@@ -126,9 +155,9 @@
       if (latestRelease) {
         releaseHtml = `
           <div class="meta release">
-            <span>🚀 Latest Release: </span>
+            <span style="white-space: pre;">🚀 Latest Release: </span>
             <a target="_blank" rel="noopener noreferrer" href="${latestRelease.html_url}">${latestRelease.name}</a>
-            <span> - ${new Date(latestRelease.published_at).toLocaleDateString()}</span>
+            <span style="white-space: pre;"> - ${new Date(latestRelease.published_at).toLocaleDateString()}</span>
           </div>
         `;
       }
@@ -146,7 +175,14 @@
         </div>
       `;
     }
+    // Function to fetch the latest release data
     async function getLatestRelease(repo) {
+      if (!canMakeApiRequest()) {
+        console.log("You have exceeded the 5 requests per hour limit. Skipping API call.");
+        return null;
+      }
+      // Store the timestamp of the current request to prevent future requests within the same hour
+      storeApiRequestTimestamp();
       try {
         const response = await fetch(`${repo.url}/releases/latest`, {
           headers: {
@@ -162,6 +198,7 @@
       }
       return null; // Return null if no release or error occurs
     }
+    // Rendering function for repositories and stats
     async function render(allRepos) {
       let userContainer = document.getElementById("userRepos");
       let orgContainer = document.getElementById("orgRepos");
@@ -191,25 +228,27 @@
       renderStats(allRepos, totalStars, totalForks, Object.keys(languages).length);
       renderLangChart(languages);
     }
-    function renderStats(repos,stars,forks,langCount){
-      document.getElementById("stats").innerHTML=`
+    // Rendering statistics
+    function renderStats(repos, stars, forks, langCount) {
+      document.getElementById("stats").innerHTML = `
         <div class="stat"><strong>${repos.length}</strong> Repositories</div>
         <div class="stat"><strong>${stars}</strong> Stars</div>
         <div class="stat"><strong>${forks}</strong> Forks</div>
         <div class="stat"><strong>${langCount}</strong> Languages</div>
-      `
+      `;
     }
-    function renderLangChart(languages){
-      let container=document.getElementById("langChart")
-      container.innerHTML=""
-      let total = Object.values(languages).reduce((a,b)=>a+b,0)
-      const colors=["#c3b01e","#3572A5","#563d7c","#c6538c","#f34b7d","#2b7489","#701516","#b07219"]
-      let i=0
-      for(let lang in languages){
-        let perc = Math.round(languages[lang]/total*100)
-        let color = colors[i % colors.length]
-        container.innerHTML += `<div class="lang-bar" style="width:${perc}%; background:${color}">${lang} ${perc}%</div>`
-        i++
+    // Rendering language chart
+    function renderLangChart(languages) {
+      let container = document.getElementById("langChart");
+      container.innerHTML = "";
+      let total = Object.values(languages).reduce((a, b) => a + b, 0);
+      const colors = ["#c3b01e", "#3572A5", "#563d7c", "#c6538c", "#f34b7d", "#2b7489", "#701516", "#b07219"];
+      let i = 0;
+      for (let lang in languages) {
+        let perc = Math.round(languages[lang] / total * 100);
+        let color = colors[i % colors.length];
+        container.innerHTML += `<div class="lang-bar" style="width:${perc}%; background:${color}">${lang} ${perc}%</div>`;
+        i++;
       }
     }
     // Load data from GitHub API and render the dashboard
@@ -218,10 +257,13 @@
       if (cached) {
         let obj = JSON.parse(cached);
         if (Date.now() - obj.time < CACHE_TIME) {
+          // If cached data is still valid, use it
+          console.log("Using cached data");
           render(obj.data);
           return;
         }
       }
+      // If no cache or cache expired, attempt to fetch new data
       let userReposFetch = fetch(
         "https://api.github.com/users/Ignotum77/repos?per_page=100",
         { headers: { Accept: "application/vnd.github.mercy-preview+json" } }
@@ -236,6 +278,7 @@
       let orgRepos = (await Promise.all(orgRepoPromises)).flat();
       let allRepos = [...userRepos, ...orgRepos];
       allRepos.sort((a, b) => new Date(b.pushed_at) - new Date(a.pushed_at));
+      // Cache the fetched data for future use
       localStorage.setItem(CACHE_KEY, JSON.stringify({ time: Date.now(), data: allRepos }));
       render(allRepos);
     }
