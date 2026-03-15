@@ -126,10 +126,9 @@
       if (latestRelease) {
         releaseHtml = `
           <div class="meta release">
-            🚀 Latest Release:  
-            <a href="${latestRelease.releases_url}" target="_blank" rel="noopener noreferrer">${latestRelease.name}</a>
-             - 
-            ${new Date(latestRelease.published_at).toLocaleDateString()}
+            <a target="_blank" rel="noopener noreferrer" href="${latestRelease.html_url}"🚀 Latest Release: </a>
+            <a target="_blank" rel="noopener noreferrer" href="${latestRelease.name}" </a>
+            - ${new Date(latestRelease.published_at).toLocaleDateString()}
           </div>
         `;
       }
