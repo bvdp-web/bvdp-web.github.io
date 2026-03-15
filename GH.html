@@ -1,454 +1,175 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>GitHub Dashboard</title>
-
-<link rel="stylesheet" href="/assets/style.css">
-
-<style>
-
-.container{
-max-width:1100px;
-margin:auto;
-padding:20px;
-}
-
-.repo-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:20px;
-margin-top:15px;
-}
-
-.card{
-border:1px solid #ddd;
-padding:15px;
-border-radius:8px;
-background:white;
-transition:.2s;
-}
-
-.card:hover{
-transform:translateY(-3px);
-box-shadow:0 5px 15px rgba(0,0,0,0.1);
-}
-
-.card a{
-text-decoration:none;
-color:inherit;
-display:block;
-}
-
-.meta{
-font-size:.8em;
-color:#666;
-margin-top:8px;
-}
-
-/* stats panel */
-
-.stats{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
-gap:15px;
-margin-bottom:30px;
-}
-
-.stat{
-background:#f5f5f5;
-padding:15px;
-border-radius:8px;
-text-align:center;
-}
-
-.stat strong{
-font-size:1.4em;
-display:block;
-}
-
-.section{
-margin-top:40px;
-}
-
-</style>
-
-</head>
-
-<body>
-
-<div id="navbar"></div>
-
-<div class="container">
-
-<h1>GitHub Dashboard</h1>
-
-<div id="stats" class="stats"></div>
-
-<div class="section">
-<h2>👤 User Repositories</h2>
-<div id="userRepos" class="repo-grid"></div>
-</div>
-
-<div class="section">
-<h2>🏢 Organization Repositories</h2>
-<div id="orgRepos" class="repo-grid"></div>
-</div>
-
-<div class="section">
-<h2>📦 Archived</h2>
-<div id="archivedRepos" class="repo-grid"></div>
-</div>
-
-</div>
-
-<script>
-
-/* navbar */
-
-fetch("/navfooter/navbar.html")
-.then(r=>r.text())
-.then(html=>{
-document.getElementById("navbar").innerHTML=html
-})
-
-const CACHE_KEY="github_dashboard_cache"
-const CACHE_TIME=30*60*1000
-
-
-function repoCard(repo){
-
-let date=new Date(repo.pushed_at).toLocaleDateString()
-
-return `
-<div class="card">
-
-<a href="${repo.html_url}" target="_blank" rel="noopener noreferrer">
-
-<h3>${repo.full_name}</h3>
-
-<p>${repo.description ?? "No description available"}</p>
-
-<div class="meta">
-⭐ ${repo.stargazers_count}
-|
-🍴 ${repo.forks_count}
-|
-💻 ${repo.language ?? "Unknown"}
-|
-🕒 ${date}
-</div>
-
-</a>
-
-</div>
-`
-}
-
-
-/* render */
-
-function render(allRepos,userRepos){
-
-let userContainer=document.getElementById("userRepos")
-let orgContainer=document.getElementById("orgRepos")
-let archContainer=document.getElementById("archivedRepos")
-
-let totalStars=0
-let totalForks=0
-let languages={}
-
-allRepos.forEach(repo=>{
-
-totalStars+=repo.stargazers_count
-totalForks+=repo.forks_count
-
-if(repo.language){
-languages[repo.language]=(languages[repo.language]||0)+1
-}
-
-let html=repoCard(repo)
-
-if(repo.archived){
-
-archContainer.innerHTML+=html
-
-}else if(repo.owner.login==="Ignotum77"){
-
-userContainer.innerHTML+=html
-
-}else{
-
-orgContainer.innerHTML+=html
-
-}
-
-})
-
-renderStats(allRepos,totalStars,totalForks,languages)
-
-}
-
-
-function renderStats(repos,stars,forks,languages){
-
-let langCount=Object.keys(languages).length
-
-document.getElementById("stats").innerHTML=`
-
-<div class="stat">
-<strong>${repos.length}</strong>
-Repositories
-</div>
-
-<div class="stat">
-<strong>${stars}</strong>
-Stars
-</div>
-
-<div class="stat">
-<strong>${forks}</strong>
-Forks
-</div>
-
-<div class="stat">
-<strong>${langCount}</strong>
-Languages
-</div>
-
-`
-
-}
-
-
-/* load repos */
-
-async function loadRepos(){
-
-let cached=localStorage.getItem(CACHE_KEY)
-
-if(cached){
-
-let obj=JSON.parse(cached)
-
-if(Date.now()-obj.time<CACHE_TIME){
-render(obj.data)
-return
-}
-
-}
-
-let userReposFetch=
-fetch("https://api.github.com/users/Ignotum77/repos?per_page=100")
-.then(r=>r.json())
-
-let orgsFetch=
-fetch("https://api.github.com/users/Ignotum77/orgs")
-.then(r=>r.json())
-
-let [userRepos,orgs]=await Promise.all([userReposFetch,orgsFetch])
-
-let orgRepoPromises=orgs.map(org=>
-fetch(`https://api.github.com/orgs/${org.login}/repos?per_page=100`)
-.then(r=>r.json())
-)
-
-let orgRepos=(await Promise.all(orgRepoPromises)).flat()
-
-let allRepos=[...userRepos,...orgRepos]
-
-allRepos.sort((a,b)=>
-new Date(b.pushed_at)-new Date(a.pushed_at)
-)
-
-localStorage.setItem(
-CACHE_KEY,
-JSON.stringify({
-time:Date.now(),
-data:allRepos
-})
-)
-
-render(allRepos,userRepos)
-
-}
-
-loadRepos()
-
-</script>
-
-</body>
-</html><!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>GitHub Projects</title>
-
-<link rel="stylesheet" href="/assets/style.css">
-
-<style>
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>GitHub Dashboard</title>
+  <link rel="icon" type="image/png" href="/images/favicon.png">
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
 .container{
-max-width:1100px;
-margin:auto;
-padding:20px;
+  max-width:1100px;
+  margin:auto;
+  padding:20px;
 }
-
 .repo-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:20px;
-margin-top:20px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:20px;
+  margin-top:15px;
 }
-
-.repo-card{
-border:1px solid #ddd;
-padding:15px;
-border-radius:8px;
-background:white;
-transition:0.2s;
+.meta{
+  font-size:.8em;
+  color:#666;
+  margin-top:8px;
 }
-
-.repo-card:hover{
-transform:translateY(-3px);
-box-shadow:0 5px 15px rgba(0,0,0,0.1);
+/* stats panel */
+.stats{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:15px;
+  margin-bottom:30px;
 }
-
-.repo-card h2{
-font-size:1.2em;
-margin:0 0 10px 0;
+.stat{
+  background:#f5f5f5;
+  padding:15px;
+  border-radius:8px;
+  text-align:center;
 }
-
-.repo-card a{
-text-decoration:none;
-color:inherit;
-display:block;
+.stat strong{
+  font-size:1.4em;
+  display:block;
 }
-
-.repo-card p{
-font-size:0.9em;
-min-height:40px;
+.section{
+  margin-top:40px;
 }
-
-.repo-meta{
-font-size:0.8em;
-color:#666;
-margin-top:10px;
-}
-
-.orgs{
-margin-top:40px;
-}
-
-.org-list{
-display:flex;
-flex-wrap:wrap;
-gap:10px;
-margin-top:10px;
-}
-
-.org{
-padding:6px 10px;
-border:1px solid #ccc;
-border-radius:6px;
-font-size:0.85em;
-background:#f5f5f5;
-}
-
-</style>
-
+  </style>
 </head>
-
 <body>
-
-<div id="navbar"></div>
-
-<div class="container">
-
-<h1>GitHub Projects</h1>
-
-<p>
-Overview of projects from
-<a href="https://github.com/Ignotum77" target="_blank" rel="noopener noreferrer">
-Ignotum77
-</a>
-</p>
-
-<div id="repos" class="repo-grid"></div>
-
-<div class="orgs">
-<h2>Organizations</h2>
-<div id="orgs" class="org-list"></div>
-</div>
-
-</div>
-
-<script>
-
-/* navbar */
-fetch("/navfooter/navbar.html")
-.then(r => r.text())
-.then(data => {
-document.getElementById("navbar").innerHTML = data
-})
-
-/* repositories */
-fetch("https://api.github.com/users/Ignotum77/repos?sort=updated&per_page=100")
-.then(res => res.json())
-.then(repos => {
-
-let container=document.getElementById("repos")
-
-repos.forEach(repo=>{
-
-let card=`
-<div class="repo-card">
-
-<a href="${repo.html_url}" target="_blank" rel="noopener noreferrer">
-
-<h2>${repo.name}</h2>
-
-<p>${repo.description ?? "No description available"}</p>
-
-<div class="repo-meta">
-⭐ ${repo.stargazers_count}  
-🍴 ${repo.forks_count}  
-💻 ${repo.language ?? "Unknown"}
-</div>
-
-</a>
-
-</div>
-`
-
-container.innerHTML+=card
-
-})
-
-})
-
-/* organizations */
-fetch("https://api.github.com/users/Ignotum77/orgs")
-.then(res => res.json())
-.then(orgs => {
-
-let container=document.getElementById("orgs")
-
-orgs.forEach(org=>{
-
-let item=`
-<a class="org" href="${org.html_url}" target="_blank" rel="noopener noreferrer">
-${org.login}
-</a>
-`
-
-container.innerHTML+=item
-
-})
-
-})
-
-</script>
-
+  <div id="navbar"></div>
+  <div class="container">
+    <h1>GitHub Dashboard</h1>
+    <div id="stats" class="stats"></div>
+    <div class="section">
+    <h2>👤 User Repositories</h2>
+    <div id="userRepos" class="repo-grid"></div>
+    </div>
+    <div class="section">
+    <h2>🏢 Organization Repositories</h2>
+    <div id="orgRepos" class="repo-grid"></div>
+    </div>
+    <div class="section">
+    <h2>📦 Archived</h2>
+    <div id="archivedRepos" class="repo-grid"></div>
+    </div>
+  </div>
+  <div id="footer"></div>
+  <script src="/assets/script.js"></script>
+  <script>
+const CACHE_KEY="github_dashboard_cache"
+const CACHE_TIME=30*60*1000
+function repoCard(repo){
+  let date=new Date(repo.pushed_at).toLocaleDateString()
+  return `
+    <div class="card">
+      <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer">
+      <h3>${repo.full_name}</h3>
+      <p>${repo.description ?? "No description available"}</p>
+      <div class="meta">
+        ⭐ ${repo.stargazers_count}
+        |
+        🍴 ${repo.forks_count}
+        |
+        💻 ${repo.language ?? "Unknown"}
+        |
+        🕒 ${date}
+      </div>
+      </a>
+    </div>
+  `
+}
+/* render */
+function render(allRepos,userRepos){
+  let userContainer=document.getElementById("userRepos")
+  let orgContainer=document.getElementById("orgRepos")
+  let archContainer=document.getElementById("archivedRepos")
+  let totalStars=0
+  let totalForks=0
+  let languages={}
+  allRepos.forEach(repo=>{
+  totalStars+=repo.stargazers_count
+  totalForks+=repo.forks_count
+  if(repo.language){
+    languages[repo.language]=(languages[repo.language]||0)+1
+  }
+  let html=repoCard(repo)
+  if(repo.archived){
+    archContainer.innerHTML+=html
+    }else if(repo.owner.login==="Ignotum77"){
+    userContainer.innerHTML+=html
+    }else{
+    orgContainer.innerHTML+=html
+    }
+  })
+renderStats(allRepos,totalStars,totalForks,languages)
+}
+function renderStats(repos,stars,forks,languages){
+  let langCount=Object.keys(languages).length
+  document.getElementById("stats").innerHTML=`
+    <div class="stat">
+      <strong>${repos.length}</strong>
+      Repositories
+    </div>
+    <div class="stat">
+      <strong>${stars}</strong>
+      Stars
+    </div>
+    <div class="stat">
+      <strong>${forks}</strong>
+      Forks
+    </div>
+    <div class="stat">
+      <strong>${langCount}</strong>
+      Languages
+    </div>
+  `
+}
+/* load repos */
+async function loadRepos(){
+  let cached=localStorage.getItem(CACHE_KEY)
+  if(cached){
+    let obj=JSON.parse(cached)
+    if(Date.now()-obj.time<CACHE_TIME){
+      render(obj.data)
+      return
+    }
+  }
+  let userReposFetch=
+    fetch("https://api.github.com/users/Ignotum77/repos?per_page=100")
+    .then(r=>r.json())
+  let orgsFetch=
+    fetch("https://api.github.com/users/Ignotum77/orgs")
+    .then(r=>r.json())
+  let [userRepos,orgs]=await Promise.all([userReposFetch,orgsFetch])
+  let orgRepoPromises=orgs.map(org=>
+    fetch(`https://api.github.com/orgs/${org.login}/repos?per_page=100`)
+    .then(r=>r.json())
+  )
+  let orgRepos=(await Promise.all(orgRepoPromises)).flat()
+  let allRepos=[...userRepos,...orgRepos]
+  allRepos.sort((a,b)=>
+    new Date(b.pushed_at)-new Date(a.pushed_at)
+  )
+  localStorage.setItem(
+    CACHE_KEY,
+    JSON.stringify({
+      time:Date.now(),
+      data:allRepos
+    })
+  )
+  render(allRepos,userRepos)
+}
+loadRepos()
+  </script
 </body>
 </html>
