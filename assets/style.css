@@ -288,20 +288,6 @@ footer {
   text-shadow: 0 0 10px rgba(0,0,0,0.7);
   pointer-events: none;
 }
-/* Quote Images */
-.quote-images {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  flex-wrap: wrap;
-  margin: 40px 0;
-}
-.quote-images img {
-  width: 75%;
-  max-width: 300px;
-  height: auto;
-}
 
 /* Artikelen + Preken */
 /* Search */
