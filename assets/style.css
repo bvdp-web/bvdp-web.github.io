@@ -310,14 +310,14 @@ footer {
   display: flex;
   flex-direction: column;
 }
+.yt-info > a {
+  text-decoration: none;
+}
 .yt-channel-name {
   font-size: 16px;
   font-weight: 600;
   margin: 0;
   color: #111;
-}
-.yt-channel-name > a {
-  text-decoration: none;
 }
 .yt-subscribe-btn {
   margin-top: 8px;
