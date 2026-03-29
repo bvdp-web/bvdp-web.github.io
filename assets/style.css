@@ -289,6 +289,15 @@ footer {
   pointer-events: none;
 }
 
+.card.kanaal {
+  max-width: fit-content;
+  margin: auto;
+  background-image: url("/images/yt-kanaal.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 /* Artikelen + Preken */
 /* Search */
 #search {
