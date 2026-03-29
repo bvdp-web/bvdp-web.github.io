@@ -1,0 +1,7 @@
+body{min-width:1920px}
+@media (min-width:1200px) and (max-width:1919px){body{min-width:1200px}}
+@media (min-width:960px) and (max-width:1199px){body{min-width:960px}}
+@media (min-width:768px) and (max-width:959px){body{min-width:768px}}
+@media (min-width:480px) and (max-width:767px){body{min-width:480px}}
+@media (max-width:479px){body{min-width:320px}}
+/* Background pattern from Toptal Subtle Patterns subtlepatterns.com */
