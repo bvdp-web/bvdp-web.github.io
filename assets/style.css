@@ -297,6 +297,40 @@ footer {
   background-position: center;
   background-repeat: no-repeat;
 }
+.yt-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.yt-info {
+  display: flex;
+  flex-direction: column;
+}
+.yt-channel-name {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  color: #111;
+}
+.yt-subscribe-btn {
+  margin-top: 8px;
+  background-color: #ff0000;
+  color: white;
+  font-weight: 600;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.yt-subscribe-btn:hover {
+  background-color: #cc0000;
+}
+.yt-subscribe-btn:active {
+  background-color: #990000;
+}
 
 /* Artikelen + Preken */
 /* Search */
