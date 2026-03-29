@@ -316,6 +316,9 @@ footer {
   margin: 0;
   color: #111;
 }
+.yt-channel-name > a {
+  text-decoration: none;
+}
 .yt-subscribe-btn {
   margin-top: 8px;
   background-color: #ff0000;
