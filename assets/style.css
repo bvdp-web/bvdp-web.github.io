@@ -290,6 +290,7 @@ footer {
 }
 
 .card.kanaal {
+  display: flex;
   max-width: fit-content;
   margin: auto;
   background-image: url("/images/yt-kanaal.jpg");
@@ -300,8 +301,10 @@ footer {
 .yt-avatar {
   width: 48px;
   height: 48px;
-  border-radius: 50%;
   object-fit: cover;
+  margin-right: 10px;
+  margin-bottom: auto;
+  margin-top: auto;
 }
 .yt-info {
   display: flex;
