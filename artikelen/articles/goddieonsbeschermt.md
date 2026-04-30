@@ -1,7 +1,7 @@
 ---
 title: God die ons beschermt
 date: 2025-05-22
-description: Een gedicht over in wiens schaduw we willen staan
+description: Een gedicht over Gods bescherming over Zijn kinderen
 ---
 
 # God Die ons beschermt
