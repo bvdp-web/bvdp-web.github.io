@@ -26,8 +26,7 @@ html.dark .station-card {
   transform: translateY(-4px);
 }
 .station-card.active {
-    border: 3px solid #4caf50;
-    transform: scale(1.02);
+  box-shadow: inset 0 0 0 3px #4caf50;
 }
 .station-card img {
   width: 90px;
