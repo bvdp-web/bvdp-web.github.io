@@ -76,7 +76,7 @@ async function updateNowPlaying() {
 }
 let metadataInterval = null;
 function shouldUpdate() {
-  return !document.hidden && document.hasFocus();
+  return !document.hidden;
 }
 function startMetadataUpdates() {
   updateNowPlaying();
@@ -100,3 +100,5 @@ document.addEventListener("visibilitychange", () => {
     stopMetadataUpdates();
   }
 });
+window.addEventListener("focus", startMetadataUpdates);
+window.addEventListener("blur", stopMetadataUpdates);
