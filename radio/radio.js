@@ -1,27 +1,66 @@
 const player = document.getElementById("radioPlayer");
-const volume = document.getElementById("volume");
-const nowPlaying = document.getElementById("nowPlaying");
-document.querySelectorAll(".play-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-        document
-            .querySelectorAll(".station-card")
-            .forEach(card => card.classList.remove("active"));
-        const card = btn.closest(".station-card");
-        card.classList.add("active");
+
+const cards = document.querySelectorAll(".station-card");
+const buttons = document.querySelectorAll(".play-btn");
+
+let currentCard = null;
+
+buttons.forEach(button => {
+
+    button.addEventListener("click", async () => {
+
+        const card = button.closest(".station-card");
         const stream = card.dataset.stream;
-        const name = card.dataset.name;
+
+        // Same station clicked
+        if (currentCard === card) {
+
+            if (!player.paused) {
+                player.pause();
+
+                card.classList.remove("active");
+                button.textContent = "▶ Play";
+            } else {
+                await player.play();
+
+                card.classList.add("active");
+                button.textContent = "⏸ Pause";
+            }
+
+            return;
+        }
+
+        // Reset all stations
+        cards.forEach(c => c.classList.remove("active"));
+        buttons.forEach(b => b.textContent = "▶ Play");
+
+        // Start new station
         player.src = stream;
-        player.play();
-        nowPlaying.textContent =
-            "Now playing: " + name;
+
+        try {
+            await player.play();
+
+            card.classList.add("active");
+            button.textContent = "⏸ Pause";
+
+            currentCard = card;
+
+        } catch (err) {
+            console.error(err);
+        }
     });
+
 });
-document
-    .getElementById("pauseBtn")
-    .addEventListener("click", () => {
-        player.pause();
-    });
-volume.addEventListener("input", () => {
-    player.volume = volume.value;
+
+// If stream stops unexpectedly
+player.addEventListener("pause", () => {
+    if (currentCard) {
+        currentCard.querySelector(".play-btn").textContent = "▶ Play";
+    }
 });
-player.volume = 0.8;
+
+player.addEventListener("play", () => {
+    if (currentCard) {
+        currentCard.querySelector(".play-btn").textContent = "⏸ Pause";
+    }
+});
