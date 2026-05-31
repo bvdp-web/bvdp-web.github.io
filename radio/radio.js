@@ -58,10 +58,10 @@ player.addEventListener("error", () => {
 let metadataInterval = null;
 let lastMetadataFetch = 0;
 const METADATA_INTERVAL = 30000;
-async function updateNowPlaying(force = false) {
+async function updateNowPlaying() {
   if (!shouldUpdate()) return;
   const now = Date.now();
-  if (!force && now - lastMetadataFetch < METADATA_INTERVAL) {
+  if (now - lastMetadataFetch < METADATA_INTERVAL) {
     return;
   }
   lastMetadataFetch = now;
