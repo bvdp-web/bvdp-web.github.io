@@ -55,11 +55,20 @@ player.addEventListener("error", () => {
 
 
 
-async function updateNowPlaying() {
+let metadataInterval = null;
+let lastMetadataFetch = 0;
+const METADATA_INTERVAL = 30000;
+async function updateNowPlaying(force = false) {
   if (!shouldUpdate()) return;
+  const now = Date.now();
+  if (!force && now - lastMetadataFetch < METADATA_INTERVAL) {
+    return;
+  }
+  lastMetadataFetch = now;
   try {
     const res = await fetch("https://radio.bvdp.workers.dev/");
     const data = await res.json();
+    lastMetadataFetch = Date.now();
     const stations = data.stations;
     for (const s of stations) {
       const el = document.getElementById(`${s.id}-now-playing`);
@@ -74,14 +83,13 @@ async function updateNowPlaying() {
     console.error("Now Playing error:", err);
   }
 }
-let metadataInterval = null;
 function shouldUpdate() {
   return !document.hidden;
 }
 function startMetadataUpdates() {
   updateNowPlaying();
   if (!metadataInterval) {
-    metadataInterval = setInterval(updateNowPlaying, 30000);
+    metadataInterval = setInterval(updateNowPlaying, METADATA_INTERVAL);
   }
 }
 function stopMetadataUpdates() {
