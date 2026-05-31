@@ -41,8 +41,18 @@ function isBetween(date, start, end) {
 }
 function showCard(id) {
   document.querySelectorAll(".youtube .card").forEach(card => {
-    card.style.display =
-      card.dataset.id === id ? "" : "none";
+    // Always visible cards
+    if (card.dataset.type === "always") {
+      card.style.display = "";
+      return;
+    }
+    const cardId = card.dataset.id;
+    // Seasonal slot
+    if (id) {
+      card.style.display = cardId === id ? "" : "none";
+    } else {
+      card.style.display = cardId === "default" ? "" : "none";
+    }
   });
 }
 
@@ -74,42 +84,27 @@ pentecostEnd.setDate(pentecost.getDate() + 7);
 const month = today.getMonth();
 const day = today.getDate();
 // New Year: Dec 30 → Jan 7
-if (
-  (month === 11 && day >= 30) ||
-  (month === 0 && day <= 7)
-) {
+if ((month === 11 && day >= 30) || (month === 0 && day <= 7)) {
   showCard("on");
 }
 // Christmas: Dec 1 → Dec 29
-else if (
-  month === 11 &&
-  day >= 1 &&
-  day <= 29
-) {
+else if (month === 11 && day >= 1 && day <= 29) {
   showCard("kerst");
 }
 // Easter season
-else if (
-  isBetween(today, easter, easterEnd)
-) {
+else if (isBetween(today, easter, easterEnd)) {
   showCard("pasen");
 }
 // Good Friday
-else if (
-  isBetween(today, palmSunday, easter)
-) {
+else if (isBetween(today, palmSunday, easter)) {
   showCard("gv");
 }
 // Pentecost week
-else if (
-  isBetween(today, pentecost, pentecostEnd)
-) {
+else if (isBetween(today, pentecost, pentecostEnd)) {
   showCard("pinkst");
 }
 // Ascension week
-else if (
-  isBetween(today, beforeAscension, ascensionEnd)
-) {
+else if (isBetween(today, beforeAscension, ascensionEnd)) {
   showCard("hemelv");
 }
 else {
