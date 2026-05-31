@@ -9,20 +9,24 @@
 }
 .stations {
   display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 20px;
-}
-html.dark .station-card {
-  background: #1d1f23;
-  color: white;
+  align-items: stretch;
 }
 .station-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   background: #f5f5f5;
   color: black;
   border-radius: 16px;
   padding: 20px;
   text-align: center;
   transition: .3s;
+}
+html.dark .station-card {
+  background: #1d1f23;
+  color: white;
 }
 .station-card:hover {
   transform: translateY(-4px);
@@ -37,13 +41,15 @@ html.dark .station-card {
   object-fit: contain;
 }
 .play-btn {
-  margin-top: 10px;
+  margin-top: auto;
   padding: 10px 18px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
 }
-#volume {
-  width: 100%;
-  margin-top: 15px;
+.now-playing {
+  font-size: 0.9rem;
+  margin: 8px 0;
+  min-height: 2.5em;
+  overflow-wrap: break-word;
 }
