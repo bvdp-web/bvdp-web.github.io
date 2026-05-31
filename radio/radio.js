@@ -95,7 +95,7 @@ if (shouldUpdate()) {
 }
 document.addEventListener("visibilitychange", () => {
   if (shouldUpdate()) {
-    startMetadataUpdates();;
+    startMetadataUpdates();
   } else {
     stopMetadataUpdates();
   }
