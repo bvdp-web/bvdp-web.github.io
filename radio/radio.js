@@ -57,25 +57,17 @@ player.addEventListener("error", () => {
 
 async function updateNowPlaying() {
   try {
-    // Groot Nieuws Radio
-    const response = await fetch("https://api.grootnieuwsradio.nl/static/now-playing.json");
-    const data = await response.json();
-    const gnr = data.stations["groot-nieuws-radio"];
-    const nonstop = data.stations["non-stop"];
-    const blijdeKlanken = data.stations["blijde-klanken"];
-    document.getElementById("gnr-now-playing").textContent = `${gnr.title} — ${gnr.artist}`;
-    document.getElementById("gnr-ns-now-playing").textContent = `${nonstop.title} — ${nonstop.artist}`;
-    document.getElementById("gnr-bk-now-playing").textContent = `${blijdeKlanken.title} — ${blijdeKlanken.artist}`;
-    // Christelijke Omroep
-    const coResponse = await fetch("https://christelijkeomroep.nl/custom/ajax/getnextplaying.ajax.php");
-    const coText = (await coResponse.text()).trim();
-    const parts = coText.split(" - ");
-    if (parts.length >= 2) {
-      const artist = parts[0];
-      const title = parts.slice(1).join(" - ");
-      document.getElementById("co-now-playing").textContent = `${title} — ${artist}`;
-    } else {
-      document.getElementById("co-now-playing").textContent = coText;
+    const res = await fetch("https://radio.bvdp.workers.dev/");
+    const data = await res.json();
+    const stations = data.stations;
+    for (const s of stations) {
+      const el = document.getElementById(`${s.id}-now-playing`);
+      if (!el) continue;
+      if (s.error) {
+        el.textContent = "Niet beschikbaar";
+        continue;
+      }
+      el.textContent = `${s.title} — ${s.artist}`;
     }
   } catch (err) {
     console.error("Now Playing error:", err);
