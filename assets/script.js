@@ -51,22 +51,3 @@ function initNavbar() {
     localStorage.setItem("theme", isDark ? "dark" : "light");
   });
 }
-
-// Youtube embeds on Homepage
-document.querySelectorAll(".youtube .thumbnail").forEach(thumb => {
-  thumb.addEventListener("click", () => {
-    const card = thumb.closest(".card");
-    const videoUrl = card.dataset.video;
-    if (card.classList.contains("loaded")) return;
-    const iframe = document.createElement("iframe");
-    iframe.src = videoUrl + "&autoplay=1&shuffle=1&loop=1";
-    iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
-    iframe.allowFullscreen = true;
-    iframe.style.width = "100%";
-    iframe.style.aspectRatio = "16/9";
-    iframe.style.borderRadius = "10px";
-    iframe.style.border = "0";
-    thumb.replaceWith(iframe);
-    card.classList.add("loaded");
-  });
-});
