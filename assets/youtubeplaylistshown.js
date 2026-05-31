@@ -41,12 +41,12 @@ function isBetween(date, start, end) {
 }
 function showCard(id) {
   document.querySelectorAll(".youtube .card").forEach(card => {
+    const cardId = card.dataset.id;
     // Always visible cards
-    if (card.dataset.type === "always") {
+    if (cardId === "always") {
       card.style.display = "";
       return;
     }
-    const cardId = card.dataset.id;
     // Seasonal slot
     if (id) {
       card.style.display = cardId === id ? "" : "none";
