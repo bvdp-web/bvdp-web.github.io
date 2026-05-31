@@ -6,6 +6,7 @@
   <title>BvdP Website</title>
   <link rel="icon" type="image/png" href="/images/favicon.png">
   <link rel="stylesheet" href="/assets/style.css">
+  <link rel="stylesheet" href="/radio/style.css">
 </head>
 <body>
   <div id="navbar"></div>
@@ -26,6 +27,66 @@
       <div id="uitspraak"></div>
       <script src="/assets/uitspraken.js"></script>
     </div>
+    <section class="radio-section">
+      <h2>📻 Radio luisteren</h2>
+      <div class="stations">
+        <div class="station-card" data-name="RO Radio 2" data-stream="http://ro2.reformatorischeomroep.nl:8020/live">
+          <img src="images/ro-logo2.png" alt="RO">
+          <h3>RO Psalmen</h3>
+          <button class="play-btn">Play</button>
+        </div>
+        <div class="station-card" data-name="RO Radio 3" data-stream="http://ro3.reformatorischeomroep.nl:8072/live">
+          <img src="images/ro-logo3.png" alt="RO">
+          <h3>RO Klassiek</h3>
+          <button class="play-btn">Play</button>
+        </div>
+        <div class="station-card" data-name="RO Radio 5" data-stream="http://ro5.reformatorischeomroep.nl:8150/live">
+          <img src="images/ro-logo5.png" alt="RO">
+          <h3>RO Orgel</h3>
+          <button class="play-btn">Play</button>
+        </div>
+        <div class="station-card" data-name="RO Radio 6" data-stream="http://ro6.reformatorischeomroep.nl:8006/live">
+          <img src="images/ro-logo6.png" alt="RO">
+          <h3>RO Psalms and Hymns</h3>
+          <button class="play-btn">Play</button>
+        </div>
+      </div>
+      <div class="player-panel">
+        <div id="nowPlaying">Nothing playing</div>
+        <button id="pauseBtn">Pause</button>
+        <input type="range" id="volume" min="0" max="1" step="0.01" value="0.8">
+      </div>
+      <audio id="radioPlayer"></audio>
+      <script>
+        const player = document.getElementById("radioPlayer");
+        const volume = document.getElementById("volume");
+        const nowPlaying = document.getElementById("nowPlaying");
+        document.querySelectorAll(".play-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                document
+                    .querySelectorAll(".station-card")
+                    .forEach(card => card.classList.remove("active"));
+                const card = btn.closest(".station-card");
+                card.classList.add("active");
+                const stream = card.dataset.stream;
+                const name = card.dataset.name;
+                player.src = stream;
+                player.play();
+                nowPlaying.textContent =
+                    "Now playing: " + name;
+            });
+        });
+        document
+            .getElementById("pauseBtn")
+            .addEventListener("click", () => {
+                player.pause();
+            });
+        volume.addEventListener("input", () => {
+            player.volume = volume.value;
+        });
+        player.volume = 0.8;
+      </script>
+    </section>
     <div class="youtube">
       <div class="card" data-video="https://www.youtube-nocookie.com/embed?list=PLnf3Ea4QTFe1XYOaaxSm1GpkDFFi1BWLJ">
         <div class="thumbnail">
