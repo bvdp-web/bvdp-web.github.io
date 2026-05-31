@@ -51,3 +51,30 @@ player.addEventListener("error", () => {
     }, 500);
   }
 });
+
+
+
+
+async function updateNowPlaying() {
+  try {
+    const response = await fetch("https://api.grootnieuwsradio.nl/static/now-playing.json");
+    const data = await response.json();
+    const gnr = data.stations["groot-nieuws-radio"];
+    const nonstop = data.stations["non-stop"];
+    const blijdeKlanken = data.stations["blijde-klanken"];
+    document.getElementById("gnr-now-playing").textContent = `${gnr.artist} — ${gnr.title}`;
+    document.getElementById("gnr-ns-now-playing").textContent = `${nonstop.artist} — ${nonstop.title}`;
+    document.getElementById("gnr-bk-now-playing").textContent = `${blijdeKlanken.artist} — ${blijdeKlanken.title}`;
+    // Optional album art
+    const gnrCover = document.getElementById("gnr-cover");
+    if (gnrCover) gnrCover.src = gnr.album_art;
+    const nsCover = document.getElementById("gnr-ns-cover");
+    if (nsCover) nsCover.src = nonstop.album_art;
+    const bkCover = document.getElementById("gnr-bk-cover");
+    if (bkCover) bkCover.src = blijdeKlanken.album_art;
+  } catch (err) {
+    console.error("Now Playing error:", err);
+  }
+}
+updateNowPlaying();
+setInterval(updateNowPlaying, 30000);
