@@ -56,7 +56,7 @@ player.addEventListener("error", () => {
 
 
 async function updateNowPlaying() {
-  if (document.hidden) return;
+  if (!shouldUpdate()) return;
   try {
     const res = await fetch("https://radio.bvdp.workers.dev/");
     const data = await res.json();
@@ -74,5 +74,32 @@ async function updateNowPlaying() {
     console.error("Now Playing error:", err);
   }
 }
-updateNowPlaying();
-setInterval(updateNowPlaying, 30000);
+
+let metadataInterval = null;
+function shouldUpdate() {
+  return !document.hidden && document.hasFocus();
+}
+function startMetadataUpdates() {
+  updateNowPlaying();
+  if (!metadataInterval) {
+    metadataInterval = setInterval(updateNowPlaying, 30000);
+  }
+}
+function stopMetadataUpdates() {
+  if (metadataInterval) {
+    clearInterval(metadataInterval);
+    metadataInterval = null;
+  }
+}
+if (!document.hidden) {
+  startMetadataUpdates();
+}
+document.addEventListener("visibilitychange", () => {
+  if (shouldUpdate()) {
+    stopMetadataUpdates();
+  } else {
+    startMetadataUpdates();
+  }
+});
+window.addEventListener("focus", startMetadataUpdates);
+window.addEventListener("blur", stopMetadataUpdates);
