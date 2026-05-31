@@ -12,9 +12,13 @@
   grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
   gap: 20px;
 }
-.station-card {
+html.dark .station-card {
   background: #1d1f23;
   color: white;
+}
+.station-card {
+  background: #f5f5f5;
+  color: black;
   border-radius: 16px;
   padding: 20px;
   text-align: center;
@@ -24,7 +28,8 @@
   transform: translateY(-4px);
 }
 .station-card.active {
-  border: 3px solid #4caf50;
+    border: 3px solid #4caf50;
+    transform: scale(1.02);
 }
 .station-card img {
   width: 90px;
@@ -38,24 +43,7 @@
   border-radius: 8px;
   cursor: pointer;
 }
-.player-panel {
-  margin-top: 30px;
-  background: #222;
-  color: white;
-  padding: 20px;
-  border-radius: 16px;
-}
 #volume {
   width: 100%;
   margin-top: 15px;
-}
-@media (prefers-color-scheme: light) {
-  .station-card {
-    background: #f5f5f5;
-    color: black;
-  }
-  .player-panel {
-    background: #ececec;
-    color: black;
-  }
 }
