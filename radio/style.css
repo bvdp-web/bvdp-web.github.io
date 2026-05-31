@@ -23,7 +23,7 @@ html.dark .station-card {
   background: #1d1f23;
 }
 .station-card:hover {
-  transform: translateY(-4px);
+  transform: var(--transform-hover);
 }
 .station-card.active {
   box-shadow: inset 0 0 0 3px #4caf50;
