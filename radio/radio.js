@@ -2,19 +2,16 @@ const player = document.getElementById("radioPlayer");
 const cards = document.querySelectorAll(".station-card");
 const buttons = document.querySelectorAll(".play-btn");
 let currentCard = null;
-
 function resetStations() {
   cards.forEach(card => card.classList.remove("active"));
   buttons.forEach(button => {
     button.textContent = "▶ Play";
   });
 }
-
 buttons.forEach(button => {
   button.addEventListener("click", async () => {
     const card = button.closest(".station-card");
     const stream = card.dataset.stream;
-
     // Stop current station
     if (currentCard === card) {
       player.pause();
@@ -22,11 +19,8 @@ buttons.forEach(button => {
       player.load();
       resetStations();
       currentCard = null;
-      currentStationId = null;
-      updateActiveCardMetadata();
       return;
     }
-
     // Stop previous station
     player.pause();
     player.src = "";
@@ -38,14 +32,11 @@ buttons.forEach(button => {
       card.classList.add("active");
       button.textContent = "⏹ Stop";
       currentCard = card;
-      currentStationId = card.dataset.id;
-      updateActiveCardMetadata();
     } catch (err) {
       console.error(err);
     }
   });
 });
-
 // Handle cases where playback errors
 player.addEventListener("error", () => {
   if (currentCard) {
@@ -63,33 +54,25 @@ player.addEventListener("error", () => {
 
 
 
-let metadataCache = {};
-let currentStationId = null;
 
 async function updateNowPlaying() {
+  if (document.hidden) return;
   try {
     const res = await fetch("https://radio.bvdp.workers.dev/");
     const data = await res.json();
-    metadataCache = {};
-    data.stations.forEach(station => {
-      metadataCache[station.id] = station;
-    });
-    updateActiveCardMetadata();
+    const stations = data.stations;
+    for (const s of stations) {
+      const el = document.getElementById(`${s.id}-now-playing`);
+      if (!el) continue;
+      if (s.error) {
+        el.textContent = "Niet beschikbaar";
+        continue;
+      }
+      el.textContent = `${s.title} — ${s.artist}`;
+    }
   } catch (err) {
-    console.error(err);
- }
+    console.error("Now Playing error:", err);
+  }
 }
 updateNowPlaying();
 setInterval(updateNowPlaying, 30000);
-
-function updateActiveCardMetadata() {
-  document.querySelectorAll(".now-playing").forEach(el => {
-    el.textContent = "";
-  });
-  if (!currentStationId) return;
-  const station = metadataCache[currentStationId];
-  if (!station || station.error) return;
-  const element = document.getElementById(`${currentStationId}-now-playing`);
-  if (!element) return;
-  element.textContent = `${station.title} — ${station.artist}`;
-}
