@@ -24,6 +24,7 @@
 
 /* Variables */
 :root {
+  --transform-hover: translateY(-4px);
   --body-bg: #f4f6f9;
   --body-color: #333; 
   --nav-bg: #111827;
@@ -254,7 +255,7 @@ footer {
   transition: transform 0.2s;
 }
 .youtube > .card:hover {
-  transform: translateY(-5px);
+  transform: var(--transform-hover);
 }
 .youtube > .card > h2 a,
 .youtube > .card > h2 a:visited,
