@@ -60,14 +60,14 @@ export async function onRequest(context) {
   // -------------------------
   try {
     const coRes = await fetch("https://christelijkeomroep.nl/custom/ajax/getnowplaying.ajax.php");
-    const text = (await coRes.text()).trim();
-    const parts = text.split(" - ");
+    const coText = (await coRes.text()).trim();
+    const coParts = coText.split(" - ");
 
     result.stations.push({
       id: "co",
       name: "Christelijke Omroep",
-      artist: parts[0] || "",
-      title: parts.slice(1).join(" - ")
+      artist: coParts[0] || "",
+      title: coParts.slice(1).join(" - ")
     });
 
   } catch {
