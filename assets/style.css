@@ -294,7 +294,7 @@ footer {
   display: flex;
   max-width: fit-content;
   margin: auto;
-  background-image: url("/images/yt-kanaal.jpg");
+  background-image: url("/assets/images/yt-kanaal.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
