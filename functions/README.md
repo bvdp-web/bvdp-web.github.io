@@ -41,6 +41,13 @@ should be replace with
     document.getElementById("gnr-now-playing").textContent = `${gnr.title} — ${gnr.artist}`;
     document.getElementById("gnr-ns-now-playing").textContent = `${nonstop.title} — ${nonstop.artist}`;
     document.getElementById("gnr-bk-now-playing").textContent = `${bk.title} — ${bk.artist}`;
+  } catch (err) {
+    console.error("GNR metadata error:", err);
+    document.getElementById("gnr-now-playing").textContent = "Niet beschikbaar";
+    document.getElementById("gnr-ns-now-playing").textContent = "Niet beschikbaar";
+    document.getElementById("gnr-bk-now-playing").textContent = "Niet beschikbaar";
+   }
+  try {
     // Christelijke Omroep
     const coRes = await fetch("https://christelijkeomroep.nl/custom/ajax/getnowplaying.ajax.php");
     const coText = (await coRes.text()).trim();
@@ -53,10 +60,7 @@ should be replace with
       document.getElementById("co-now-playing").textContent = coText;
     }
   } catch (err) {
-    console.error("Now Playing error:", err);
-    document.getElementById("gnr-now-playing").textContent = "Niet beschikbaar";
-    document.getElementById("gnr-ns-now-playing").textContent = "Niet beschikbaar";
-    document.getElementById("gnr-bk-now-playing").textContent = "Niet beschikbaar";
+    console.error("CO metadata error:", err);
     document.getElementById("co-now-playing").textContent = "Niet beschikbaar";
   }
 ```
