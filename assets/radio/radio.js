@@ -64,9 +64,11 @@ async function updateNowPlaying() {
   if (now - lastMetadataFetch < METADATA_INTERVAL) {
     return;
   }
-  lastMetadataFetch = now;
   try {
-    const res = await fetch("https://radio.bvdp.workers.dev/");
+    const res = await fetch("/api/radio");
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}`);
+    }
     const data = await res.json();
     lastMetadataFetch = Date.now();
     const stations = data.stations;
