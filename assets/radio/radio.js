@@ -1,30 +1,58 @@
 const player = document.getElementById("radioPlayer");
 const cards = document.querySelectorAll(".station-card");
 const buttons = document.querySelectorAll(".play-btn");
+
 let currentCard = null;
+let reconnectTimer = null;
+let userStopped = false;
+
+// --- UI helpers ---
 function resetStations() {
   cards.forEach(card => card.classList.remove("active"));
   buttons.forEach(button => {
     button.textContent = "▶ Play";
   });
 }
+
+// --- Reconnect logic ---
+async function reconnect() {
+  if (!currentCard || userStopped) return;
+  const stream = currentCard.dataset.stream;
+  try {
+    player.pause();
+    player.src = stream;
+    await player.play();
+    console.log("Reconnected");
+  } catch (err) {
+    console.error("Reconnect failed:", err);
+  }
+}
+function scheduleReconnect(delay = 1000) {
+  if (!currentCard || userStopped) return;
+  if (reconnectTimer) return; // already scheduled
+  reconnectTimer = setTimeout(async () => {
+    reconnectTimer = null;
+    await reconnect();
+  }, delay);
+}
+
+// --- Button click handler ---
 buttons.forEach(button => {
   button.addEventListener("click", async () => {
     const card = button.closest(".station-card");
     const stream = card.dataset.stream;
     // Stop current station
     if (currentCard === card) {
+      userStopped = true;
       player.pause();
-      player.src = "";
-      player.load();
+      player.removeAttribute("src");
       resetStations();
       currentCard = null;
       return;
     }
     // Stop previous station
+    userStopped = false;
     player.pause();
-    player.src = "";
-    player.load();
     resetStations();
     player.src = stream;
     try {
@@ -33,33 +61,50 @@ buttons.forEach(button => {
       button.textContent = "⏹ Stop";
       currentCard = card;
     } catch (err) {
-      console.error(err);
+      console.error("Playback failed:", err.name, err.message);
     }
   });
 });
-// Handle cases where playback errors
+
+// --- Event listeners for unexpected pauses/errors ---
 player.addEventListener("error", () => {
-  if (currentCard) {
-    const stream = currentCard.dataset.stream;
-    setTimeout(async () => {
-      try {
-        player.src = stream;
-        await player.play();
-      } catch (err) {
-        console.error("Reconnect failed:", err);
-      }
-    }, 500);
-  }
+  console.warn("Audio error, checking stream...");
+  scheduleReconnect(1000);
+});
+player.addEventListener("stalled", () => {
+  console.warn("Audio stalled, checking stream...");
+  scheduleReconnect(1000);
+});
+player.addEventListener("suspend", () => {
+  console.warn("Audio suspended, checking stream...");
+  scheduleReconnect(1000);
+});
+player.addEventListener("waiting", () => {
+  console.warn("Audio waiting, checking stream...");
+});
+player.addEventListener("ended", () => {
+  console.warn("Audio ended, checking stream...");
+  scheduleReconnect(1000);
 });
 
+// --- Optional watchdog for silent mobile pauses ---
+setInterval(() => {
+  if (currentCard && !userStopped && player.paused && player.readyState > 0) {
+    console.warn("Player paused unexpectedly");
+    scheduleReconnect(1000);
+  }
+}, 5000);
 
 
 
+
+// --- Set Metadata ---
 let metadataInterval = null;
 let lastMetadataFetch = 0;
 const METADATA_INTERVAL = 30000;
 async function updateNowPlaying() {
   if (!shouldUpdate()) return;
+  if (!navigator.onLine) return;
   const now = Date.now();
   if (now - lastMetadataFetch < METADATA_INTERVAL) {
     return;
