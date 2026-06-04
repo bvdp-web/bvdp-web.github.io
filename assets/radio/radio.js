@@ -13,6 +13,11 @@ function resetStations() {
     button.textContent = "▶ Play";
   });
 }
+function updateCurrentButton() {
+  if (!currentCard) return;
+  const button = currentCard.querySelector(".play-btn");
+  button.textContent = player.paused ? "▶ Play" : "⏹ Stop";
+}
 
 // --- Reconnect logic ---
 async function reconnect() {
@@ -41,30 +46,47 @@ buttons.forEach(button => {
   button.addEventListener("click", async () => {
     const card = button.closest(".station-card");
     const stream = card.dataset.stream;
-    // Stop current station
+    // Current station clicked
     if (currentCard === card) {
+      // Resume if paused intentionally
+      if (player.paused) {
+        userStopped = false;
+        player.pause();
+        player.src = "";
+        player.load();
+        player.src = stream;
+        try {
+          await player.play();
+        } catch (err) {
+          console.error("Resume failed:", err);
+        }
+        return;
+      }
+      // Pause intentionally
       userStopped = true;
       player.pause();
-      player.removeAttribute("src");
-      resetStations();
-      currentCard = null;
       return;
     }
     // Stop previous station
     userStopped = false;
     player.pause();
     resetStations();
+    currentCard = card;
+    card.classList.add("active");
     player.src = stream;
     try {
       await player.play();
-      card.classList.add("active");
-      button.textContent = "⏹ Stop";
-      currentCard = card;
     } catch (err) {
       console.error("Playback failed:", err.name, err.message);
+      resetStations();
+      currentCard = null;
     }
   });
 });
+
+// --- Event listeners for intended pauses ---
+player.addEventListener("play", updateCurrentButton);
+player.addEventListener("pause", updateCurrentButton);
 
 // --- Event listeners for unexpected pauses/errors ---
 player.addEventListener("error", () => {
@@ -82,22 +104,6 @@ player.addEventListener("suspend", () => {
 player.addEventListener("ended", () => {
   console.warn("Audio ended, checking stream...");
   scheduleReconnect(1000);
-});
-let waitingTimer = null;
-player.addEventListener("waiting", () => {
-  if (player.paused) return;
-  waitingTimer = setTimeout(() => {
-    console.warn("Waiting too long, reconnecting...");
-    scheduleReconnect(1000);
-  }, 2000);
-});
-player.addEventListener("playing", () => {
-  clearTimeout(waitingTimer);
-  waitingTimer = null;
-});
-player.addEventListener("pause", () => {
-  clearTimeout(waitingTimer);
-  waitingTimer = null;
 });
 
 
