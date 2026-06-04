@@ -3,9 +3,8 @@ const cards = document.querySelectorAll(".station-card");
 const buttons = document.querySelectorAll(".play-btn");
 
 let currentCard = null;
-let restarting = false;
-let wasPaused = false;
 let reconnectTimer = null;
+let restarting = false;
 let userStopped = false;
 let changingStation = false;
 
@@ -34,7 +33,7 @@ async function restartCurrentStream() {
     player.src = stream;
     await player.play();
   } catch (err) {
-    console.error("Playing/Restarting failed:", err);
+    console.error("Restarting failed:", err);
   } finally {
     restarting = false;
   }
@@ -52,7 +51,7 @@ buttons.forEach(button => {
         player.pause();
       } else {
         userStopped = false;
-        await restartCurrentStream();
+        await player.play();
       }
       return;
     }
@@ -77,30 +76,21 @@ buttons.forEach(button => {
 // --- If anything starts playback after a pause,
 // force a reconnect to the live stream ---
 player.addEventListener("play", async () => {
-  if (changingStation) {
-    updateCurrentButton();
-    return;
-  }
-  if (wasPaused && !restarting) {
-    wasPaused = false;
+  if (!changingStation && !restarting) {
     await restartCurrentStream();
     return;
   }
   updateCurrentButton();
 });
 player.addEventListener("pause", () => {
-  if (!restarting) {
-    wasPaused = true;
-  }
   updateCurrentButton();
 });
 
 // --- Reconnect logic ---
 async function reconnect() {
-  if (!currentCard || userStopped) return;
   await restartCurrentStream();
 }
-function scheduleReconnect(delay = 200) {
+function scheduleReconnect(delay = 2000) {
   if (!currentCard || userStopped) return;
   if (reconnectTimer) return; // already scheduled
   reconnectTimer = setTimeout(async () => {
