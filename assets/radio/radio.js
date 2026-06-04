@@ -79,21 +79,26 @@ player.addEventListener("suspend", () => {
   console.warn("Audio suspended, checking stream...");
   scheduleReconnect(1000);
 });
-player.addEventListener("waiting", () => {
-  console.warn("Audio waiting, checking stream...");
-});
 player.addEventListener("ended", () => {
   console.warn("Audio ended, checking stream...");
   scheduleReconnect(1000);
 });
-
-// --- Optional watchdog for silent mobile pauses ---
-setInterval(() => {
-  if (currentCard && !userStopped && player.paused && player.readyState > 0) {
-    console.warn("Player paused unexpectedly");
+let waitingTimer = null;
+player.addEventListener("waiting", () => {
+  if (player.paused) return;
+  waitingTimer = setTimeout(() => {
+    console.warn("Waiting too long, reconnecting...");
     scheduleReconnect(1000);
-  }
-}, 5000);
+  }, 2000);
+});
+player.addEventListener("playing", () => {
+  clearTimeout(waitingTimer);
+  waitingTimer = null;
+});
+player.addEventListener("pause", () => {
+  clearTimeout(waitingTimer);
+  waitingTimer = null;
+});
 
 
 
