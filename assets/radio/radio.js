@@ -101,15 +101,15 @@ function scheduleReconnect(delay = 2000) {
 // --- Event listeners for unexpected pauses/errors ---
 player.addEventListener("error", () => {
   console.warn("Audio error, checking stream...");
-  scheduleReconnect(1000);
+  scheduleReconnect();
 });
 player.addEventListener("stalled", () => {
   console.warn("Audio stalled, checking stream...");
-  scheduleReconnect(1000);
+  scheduleReconnect();
 });
 player.addEventListener("ended", () => {
   console.warn("Audio ended, checking stream...");
-  scheduleReconnect(1000);
+  scheduleReconnect();
 });
 
 
