@@ -4,7 +4,7 @@ const buttons = document.querySelectorAll(".play-btn");
 
 let currentCard = null;
 let reconnectTimer = null;
-let restarting = false;
+let restartLock = false;
 let userStopped = false;
 let changingStation = false;
 
@@ -22,9 +22,9 @@ function updateCurrentButton() {
 }
 
 // --- Always restart stream from live position ---
-async function restartCurrentStream() {
-  if (!currentCard || restarting) return;
-  restarting = true;
+async function PlayStream() {
+  if (!currentCard || restartLock) return;
+  restartLock = true;
   try {
     const stream = currentCard.dataset.stream;
     player.pause();
@@ -33,9 +33,9 @@ async function restartCurrentStream() {
     player.src = stream;
     await player.play();
   } catch (err) {
-    console.error("Restarting failed:", err);
+    console.error("Playing failed:", err);
   } finally {
-    restarting = false;
+    restartLock = false;
   }
 }
 
@@ -51,7 +51,7 @@ buttons.forEach(button => {
         player.pause();
       } else {
         userStopped = false;
-        await player.play();
+        await PlayStream();
       }
       return;
     }
@@ -61,10 +61,9 @@ buttons.forEach(button => {
     resetStations();
     currentCard = card;
     card.classList.add("active");
-    player.src = stream;
     try {
       userStopped = false;
-      await player.play();
+      await PlayStream();
     } catch (err) {
       console.error(err);
     } finally {
@@ -76,8 +75,8 @@ buttons.forEach(button => {
 // --- If anything starts playback after a pause,
 // force a reconnect to the live stream ---
 player.addEventListener("play", async () => {
-  if (!changingStation && !restarting) {
-    await restartCurrentStream();
+  if (!changingStation && !restartLock) {
+    await PlayStream();
     return;
   }
   updateCurrentButton();
@@ -88,7 +87,7 @@ player.addEventListener("pause", () => {
 
 // --- Reconnect logic ---
 async function reconnect() {
-  await restartCurrentStream();
+  await PlayStream();
 }
 function scheduleReconnect(delay = 2000) {
   if (!currentCard || userStopped) return;
