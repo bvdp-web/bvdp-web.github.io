@@ -3,6 +3,8 @@ const cards = document.querySelectorAll(".station-card");
 const buttons = document.querySelectorAll(".play-btn");
 
 let currentCard = null;
+let restarting = false;
+let wasPaused = false;
 let reconnectTimer = null;
 let userStopped = false;
 
@@ -19,18 +21,77 @@ function updateCurrentButton() {
   button.textContent = player.paused ? "▶ Play" : "⏹ Stop";
 }
 
+// --- Always restart stream from live position ---
+async function restartCurrentStream() {
+  if (!currentCard || restarting) return;
+  restarting = true;
+  try {
+    const stream = currentCard.dataset.stream;
+    player.pause();
+    player.src = "";
+    player.load();
+    player.src = stream;
+    await player.play();
+  } catch (err) {
+    console.error("Restart failed:", err);
+  } finally {
+    restarting = false;
+  }
+}
+
+// --- Button clicks ---
+buttons.forEach(button => {
+  button.addEventListener("click", async () => {
+    const card = button.closest(".station-card");
+    const stream = card.dataset.stream;
+    // Same station
+    if (currentCard === card) {
+      if (!player.paused) {
+        userStopped = true;
+        player.pause();
+      } else {
+        userStopped = false;
+        await restartCurrentStream();
+      }
+      return;
+    }
+    // New station
+    player.pause();
+    resetStations();
+    currentCard = card;
+    card.classList.add("active");
+    player.src = stream;
+    try {
+      userStopped = false;
+      await player.play();
+    } catch (err) {
+      console.error(err);
+    }
+  });
+});
+
+// --- If anything starts playback after a pause,
+// force a reconnect to the live stream ---
+player.addEventListener("play", async () => {
+  if (wasPaused && !restarting) {
+    wasPaused = false;
+    await restartCurrentStream();
+    return;
+  }
+  updateCurrentButton();
+});
+player.addEventListener("pause", () => {
+  if (!restarting) {
+    wasPaused = true;
+  }
+  updateCurrentButton();
+});
+
 // --- Reconnect logic ---
 async function reconnect() {
   if (!currentCard || userStopped) return;
-  const stream = currentCard.dataset.stream;
-  try {
-    player.pause();
-    player.src = stream;
-    await player.play();
-    console.log("Reconnected");
-  } catch (err) {
-    console.error("Reconnect failed:", err);
-  }
+  console.log("Reconnecting stream...");
+  await restartCurrentStream();
 }
 function scheduleReconnect(delay = 1000) {
   if (!currentCard || userStopped) return;
@@ -41,53 +102,6 @@ function scheduleReconnect(delay = 1000) {
   }, delay);
 }
 
-// --- Button click handler ---
-buttons.forEach(button => {
-  button.addEventListener("click", async () => {
-    const card = button.closest(".station-card");
-    const stream = card.dataset.stream;
-    // Current station clicked
-    if (currentCard === card) {
-      // Resume if paused intentionally
-      if (player.paused) {
-        userStopped = false;
-        player.pause();
-        player.src = "";
-        player.load();
-        player.src = stream;
-        try {
-          await player.play();
-        } catch (err) {
-          console.error("Resume failed:", err);
-        }
-        return;
-      }
-      // Pause intentionally
-      userStopped = true;
-      player.pause();
-      return;
-    }
-    // Stop previous station
-    userStopped = false;
-    player.pause();
-    resetStations();
-    currentCard = card;
-    card.classList.add("active");
-    player.src = stream;
-    try {
-      await player.play();
-    } catch (err) {
-      console.error("Playback failed:", err.name, err.message);
-      resetStations();
-      currentCard = null;
-    }
-  });
-});
-
-// --- Event listeners for intended pauses ---
-player.addEventListener("play", updateCurrentButton);
-player.addEventListener("pause", updateCurrentButton);
-
 // --- Event listeners for unexpected pauses/errors ---
 player.addEventListener("error", () => {
   console.warn("Audio error, checking stream...");
@@ -95,10 +109,6 @@ player.addEventListener("error", () => {
 });
 player.addEventListener("stalled", () => {
   console.warn("Audio stalled, checking stream...");
-  scheduleReconnect(1000);
-});
-player.addEventListener("suspend", () => {
-  console.warn("Audio suspended, checking stream...");
   scheduleReconnect(1000);
 });
 player.addEventListener("ended", () => {
