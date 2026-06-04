@@ -7,6 +7,7 @@ let restarting = false;
 let wasPaused = false;
 let reconnectTimer = null;
 let userStopped = false;
+let changingStation = false;
 
 // --- UI helpers ---
 function resetStations() {
@@ -14,13 +15,11 @@ function resetStations() {
   buttons.forEach(button => {
     button.textContent = "▶ Play";
   });
-  console.log("Reset previous station");
 }
 function updateCurrentButton() {
   if (!currentCard) return;
   const button = currentCard.querySelector(".play-btn");
   button.textContent = player.paused ? "▶ Play" : "⏹ Stop";
-  console.log("Updated button");
 }
 
 // --- Always restart stream from live position ---
@@ -33,7 +32,6 @@ async function restartCurrentStream() {
     player.src = "";
     player.load();
     player.src = stream;
-    console.log("Playing/Restarting stream...");
     await player.play();
   } catch (err) {
     console.error("Playing/Restarting failed:", err);
@@ -51,16 +49,15 @@ buttons.forEach(button => {
     if (currentCard === card) {
       if (!player.paused) {
         userStopped = true;
-        console.log("Button detected PAUSE");
         player.pause();
       } else {
         userStopped = false;
-        console.log("Button detected PLAY");
         await restartCurrentStream();
       }
       return;
     }
     // New station
+    changingStation = true;
     player.pause();
     resetStations();
     currentCard = card;
@@ -68,10 +65,11 @@ buttons.forEach(button => {
     player.src = stream;
     try {
       userStopped = false;
-      console.log("Selected and play new station");
       await player.play();
     } catch (err) {
       console.error(err);
+    } finally {
+      changingStation = false;
     }
   });
 });
@@ -79,31 +77,30 @@ buttons.forEach(button => {
 // --- If anything starts playback after a pause,
 // force a reconnect to the live stream ---
 player.addEventListener("play", async () => {
+  if (changingStation) {
+    updateCurrentButton();
+    return;
+  }
   if (wasPaused && !restarting) {
     wasPaused = false;
-    console.log("wasPaused = False");
     await restartCurrentStream();
     return;
   }
-  console.log("EventListener detected PLAY");
   updateCurrentButton();
 });
 player.addEventListener("pause", () => {
   if (!restarting) {
     wasPaused = true;
-    console.log("wasPaused = True");
   }
-  console.log("EventListener detected PAUSE");
   updateCurrentButton();
 });
 
 // --- Reconnect logic ---
 async function reconnect() {
   if (!currentCard || userStopped) return;
-  console.log("Reconnecting stream after error/stalling/ending...");
   await restartCurrentStream();
 }
-function scheduleReconnect(delay = 1500) {
+function scheduleReconnect(delay = 200) {
   if (!currentCard || userStopped) return;
   if (reconnectTimer) return; // already scheduled
   reconnectTimer = setTimeout(async () => {
