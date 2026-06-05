@@ -131,6 +131,7 @@ async function updateNowPlaying() {
       throw new Error(`HTTP ${res.status}`);
       console.error("Metadata fetch error:", err);
     }
+    const data = await res.json();
     const stations = data.stations;
     for (const s of stations) {
       const el = document.getElementById(`${s.id}-now-playing`);
