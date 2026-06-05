@@ -33,12 +33,6 @@ async function PlayStream() {
     player.src = stream;
     await player.play();
     console.log("Playing stream");
-    // --- Media Session API ---
-    if ('mediaSession' in navigator) {
-      navigator.mediaSession.metadata = new MediaMetadata({
-        title: currentCard.dataset.title || 'Radio',
-      });
-    }
   } catch (err) {
     console.error("Playing failed:", err);
   } finally {
@@ -129,24 +123,14 @@ player.addEventListener("ended", () => {
 
 
 // --- Set Metadata ---
-let metadataInterval = null;
-let lastMetadataFetch = 0;
-const METADATA_INTERVAL = 30000;
 async function updateNowPlaying() {
-  if (!shouldUpdate()) return;
   if (!navigator.onLine) return;
-  const now = Date.now();
-  if (now - lastMetadataFetch < METADATA_INTERVAL) {
-    return;
-  }
   try {
     const res = await fetch("/api/radio");
     if (!res.ok) {
       throw new Error(`HTTP ${res.status}`);
       console.error("Metadata fetch error:", err);
     }
-    const data = await res.json();
-    lastMetadataFetch = Date.now();
     const stations = data.stations;
     for (const s of stations) {
       const el = document.getElementById(`${s.id}-now-playing`);
@@ -156,37 +140,18 @@ async function updateNowPlaying() {
         continue;
       }
       el.textContent = `${s.title} — ${s.artist}`;
+      // Update Media Session only for current station
+      if (currentCard && currentCard.dataset.stationId === s.id) {
+        if ("mediaSession" in navigator) {
+          navigator.mediaSession.metadata = new MediaMetadata({
+            title: s.title || currentCard.dataset.title,
+            artist: s.artist || "",
+            album: currentCard.dataset.title || "Radio"
+          });
+        }
+      }
     }
   } catch (err) {
     console.error("Now Playing error:", err);
   }
 }
-function shouldUpdate() {
-  return !document.hidden;
-}
-function startMetadataUpdates() {
-  console.log("Started metadata update");
-  updateNowPlaying();
-  if (!metadataInterval) {
-    metadataInterval = setInterval(updateNowPlaying, METADATA_INTERVAL);
-  }
-}
-function stopMetadataUpdates() {
-  if (metadataInterval) {
-    clearInterval(metadataInterval);
-    metadataInterval = null;
-  }
-  console.log("Stopped metadata update");
-}
-if (shouldUpdate()) {
-  startMetadataUpdates();
-}
-document.addEventListener("visibilitychange", () => {
-  if (shouldUpdate()) {
-    startMetadataUpdates();
-  } else {
-    stopMetadataUpdates();
-  }
-});
-window.addEventListener("focus", startMetadataUpdates);
-window.addEventListener("blur", stopMetadataUpdates);
