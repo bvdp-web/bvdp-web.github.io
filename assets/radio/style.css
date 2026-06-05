@@ -33,6 +33,9 @@ html.dark .station-card {
   height: 90px;
   object-fit: contain;
 }
+html:not(.dark) .station-card img {
+  filter: invert(1);
+}
 .station-card h3 {
   margin-bottom: 15px;
 }
