@@ -14,11 +14,13 @@ function resetStations() {
   buttons.forEach(button => {
     button.textContent = "▶ Play";
   });
+  console.log("Reset station");
 }
 function updateCurrentButton() {
   if (!currentCard) return;
   const button = currentCard.querySelector(".play-btn");
   button.textContent = player.paused ? "▶ Play" : "⏹ Stop";
+  console.log("Updated buttons");
 }
 
 // --- Always restart stream from live position ---
@@ -32,6 +34,7 @@ async function PlayStream() {
     player.load();
     player.src = stream;
     await player.play();
+    console.log("Playing stream");
   } catch (err) {
     console.error("Playing failed:", err);
   } finally {
@@ -49,6 +52,7 @@ buttons.forEach(button => {
       if (!player.paused) {
         userStopped = true;
         player.pause();
+        console.log("Button eventListener: paused currrent station");
       } else {
         userStopped = false;
         await PlayStream();
@@ -64,6 +68,7 @@ buttons.forEach(button => {
     try {
       userStopped = false;
       await PlayStream();
+      console.log("Button eventListener: selected new station");
     } catch (err) {
       console.error(err);
     } finally {
@@ -77,16 +82,19 @@ buttons.forEach(button => {
 player.addEventListener("play", async () => {
   if (!changingStation && !restartLock) {
     await PlayStream();
+    console.log("Play eventListener: play station");
     return;
   }
   updateCurrentButton();
 });
 player.addEventListener("pause", () => {
+  console.log("Play eventListener: pause station");
   updateCurrentButton();
 });
 
 // --- Reconnect logic ---
 async function reconnect() {
+  console.log("Reconnect station");
   await PlayStream();
 }
 function scheduleReconnect(delay = 2000) {
