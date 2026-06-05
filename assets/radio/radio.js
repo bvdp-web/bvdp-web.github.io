@@ -33,6 +33,12 @@ async function PlayStream() {
     player.src = stream;
     await player.play();
     console.log("Playing stream");
+    // --- Media Session API ---
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: currentCard.dataset.title || 'Radio',
+      });
+    }
   } catch (err) {
     console.error("Playing failed:", err);
   } finally {
