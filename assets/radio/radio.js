@@ -14,13 +14,11 @@ function resetStations() {
   buttons.forEach(button => {
     button.textContent = "▶ Play";
   });
-  console.log("Reset station");
 }
 function updateCurrentButton() {
   if (!currentCard) return;
   const button = currentCard.querySelector(".play-btn");
   button.textContent = player.paused ? "▶ Play" : "⏹ Stop";
-  console.log("Updated buttons");
 }
 
 // --- Always restart stream from live position ---
@@ -56,6 +54,7 @@ buttons.forEach(button => {
       } else {
         userStopped = false;
         await PlayStream();
+        console.log("Button eventListener: play current station");
       }
       return;
     }
