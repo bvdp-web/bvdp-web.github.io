@@ -145,22 +145,23 @@ async function updateNowPlaying() {
   if (metadataRunning) return;
   metadataRunning = true;
   try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => {
+      controller.abort();
+      console.warn("Metadata fetch timeout, aborted");
+    }, 10000);
     const res = await fetch("/api/radio", {
-      cache: "no-store"
+      cache: "no-store",
+      signal: controller.signal
     });
-    if (!res.ok) {
-      throw new Error(`HTTP ${res.status}`);
-    }
+    clearTimeout(timeout);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     const stations = data.stations;
     for (const s of stations) {
       const el = document.getElementById(`${s.id}-now-playing`);
       if (!el) continue;
-      if (s.error) {
-        el.textContent = "Niet beschikbaar";
-        continue;
-      }
-      el.textContent = `${s.title} — ${s.artist}`;
+      el.textContent = s.error ? "Niet beschikbaar" : `${s.title} — ${s.artist}`;
       // Update Media Session only for current station
       if (currentCard && currentCard.dataset.stationId === s.id && "mediaSession" in navigator) {
         navigator.mediaSession.metadata = new MediaMetadata({
@@ -171,20 +172,19 @@ async function updateNowPlaying() {
       }
     }
   } catch (err) {
-    console.error("Now Playing error:", err);
+    if (err.name === "AbortError") {
+      console.warn("Metadata fetch aborted due to timeout");
+    } else {
+      console.error("Now Playing error:", err);
+    }
   } finally {
     metadataRunning = false;
+    metadataTimer = setTimeout(updateNowPlaying, METADATA_INTERVAL);
   }
 }
 function startMetadataUpdates() {
-  console.log("Started metadata update");
-  updateNowPlaying();
-  if (metadataInterval) return;
-  metadataInterval = setInterval(updateNowPlaying, METADATA_INTERVAL);
+  if (metadataTimer) return;
+  console.log("Started metadata updates");
+  updateNowPlaying(); // immediate first tick
 }
-function stopMetadataUpdates() {
-  if (!metadataInterval) return;
-  clearInterval(metadataInterval);
-  metadataInterval = null;
-  console.log("Stopped metadata update");
-}
+document.addEventListener("DOMContentLoaded", startMetadataUpdates);
