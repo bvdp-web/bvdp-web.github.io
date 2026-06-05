@@ -99,7 +99,7 @@ function scheduleReconnect() {
         console.log("Reconnect attempts reset after 60s");
         reconnectAttempts = 0;
         reconnectResetTimer = null;
-        scheduleReconnect(); // try reconnecting again
+        PlayStream();
       }, 60000);
     }
     return;
