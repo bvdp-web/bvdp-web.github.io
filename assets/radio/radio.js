@@ -159,7 +159,7 @@ function shouldUpdate() {
   return !document.hidden;
 }
 function startMetadataUpdates() {
-  console.log("Started metadata update);
+  console.log("Started metadata update");
   updateNowPlaying();
   if (!metadataInterval) {
     metadataInterval = setInterval(updateNowPlaying, METADATA_INTERVAL);
@@ -170,7 +170,7 @@ function stopMetadataUpdates() {
     clearInterval(metadataInterval);
     metadataInterval = null;
   }
-  console.log("Stopped metadata update);
+  console.log("Stopped metadata update");
 }
 if (shouldUpdate()) {
   startMetadataUpdates();
