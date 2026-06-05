@@ -112,7 +112,7 @@ function scheduleReconnect() {
 document.addEventListener("visibilitychange", () => {
   if (!document.hidden && currentCard && player.paused && reconnectAttempts > 0) {
     console.log("Tab visible, trying to resume playback");
-    await PlayStream();
+    PlayStream();
   }
 });
 
