@@ -123,13 +123,19 @@ player.addEventListener("ended", () => {
 
 
 // --- Set Metadata ---
+let metadataInterval = null;
+let metadataRunning = false;
+const METADATA_INTERVAL = 30000;
 async function updateNowPlaying() {
   if (!navigator.onLine) return;
+  if (metadataRunning) return;
+  metadataRunning = true;
   try {
-    const res = await fetch("/api/radio");
+    const res = await fetch("/api/radio", {
+      cache: "no-store"
+    });
     if (!res.ok) {
       throw new Error(`HTTP ${res.status}`);
-      console.error("Metadata fetch error:", err);
     }
     const data = await res.json();
     const stations = data.stations;
@@ -142,17 +148,29 @@ async function updateNowPlaying() {
       }
       el.textContent = `${s.title} — ${s.artist}`;
       // Update Media Session only for current station
-      if (currentCard && currentCard.dataset.stationId === s.id) {
-        if ("mediaSession" in navigator) {
-          navigator.mediaSession.metadata = new MediaMetadata({
-            title: s.title || currentCard.dataset.title,
-            artist: s.artist || "",
-            album: currentCard.dataset.title || "Radio"
-          });
-        }
+      if (currentCard && currentCard.dataset.stationId === s.id && "mediaSession" in navigator) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: s.title || currentCard.dataset.title,
+          artist: s.artist || "",
+          album: currentCard.dataset.title || "Radio"
+        });
       }
     }
   } catch (err) {
     console.error("Now Playing error:", err);
+  } finally {
+    metadataRunning = false;
   }
+}
+function startMetadataUpdates() {
+  console.log("Started metadata update");
+  updateNowPlaying();
+  if (metadataInterval) return;
+  metadataInterval = setInterval(updateNowPlaying, METADATA_INTERVAL);
+}
+function stopMetadataUpdates() {
+  if (!metadataInterval) return;
+  clearInterval(metadataInterval);
+  metadataInterval = null;
+  console.log("Stopped metadata update");
 }
