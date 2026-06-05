@@ -7,9 +7,6 @@ let reconnectTimer = null;
 let restartLock = false;
 let userStopped = false;
 let changingStation = false;
-let streamState = "idle"; // idle | connecting | playing | failed
-let reconnectAttempts = 0;
-let streamDead = false;
 
 // --- UI helpers ---
 function resetStations() {
@@ -28,7 +25,6 @@ function updateCurrentButton() {
 async function PlayStream() {
   if (!currentCard || restartLock) return;
   restartLock = true;
-  streamState = "connecting";
   try {
     const stream = currentCard.dataset.stream;
     player.pause();
@@ -37,12 +33,8 @@ async function PlayStream() {
     player.src = stream;
     await player.play();
     console.log("Playing stream");
-    reconnectAttempts = 0;
-    streamDead = false;
-    streamState = "playing";
   } catch (err) {
     console.error("Playing failed:", err);
-    streamState = "failed";
     throw err;
   } finally {
     restartLock = false;
@@ -102,27 +94,12 @@ player.addEventListener("pause", () => {
 
 // --- Reconnect logic ---
 async function reconnect() {
-  // if (streamDead || !currentCard || userStopped) return;
-  console.log("Attempting reconnect...", reconnectAttempts + 1);
-  try {
-    await PlayStream();
-  } catch (err) {
-    reconnectAttempts++;
-    console.warn(`Reconnect attempt ${reconnectAttempts} failed`);
-    if (reconnectAttempts > 3) {
-      streamDead = true;
-      streamState = "failed";
-      console.warn("Stream marked as dead temporarily");
-      return; // stop further reconnects
-    }
-  }
-  // const delay = Math.min(2000 * Math.pow(2, reconnectAttempts), 30000);
-  // setTimeout(reconnect, delay);
+  console.log("Attempting reconnect...");
+  await PlayStream();
 }
-function scheduleReconnect() {
-  if (streamDead || !currentCard || userStopped) return;
+function scheduleReconnect(delay = 2000) {
+  if (!currentCard || userStopped) return;
   if (reconnectTimer) return;
-  const delay = Math.min(2000 * Math.pow(2, reconnectAttempts), 30000);
   reconnectTimer = setTimeout(async () => {
     reconnectTimer = null;
     await reconnect();
