@@ -30,8 +30,8 @@ async function PlayStream() {
   restartLock = true;
   const stream = currentCard.dataset.stream;
   player.pause();
-  player.src = "";
-  player.src = stream;
+  player.removeAttribute("src");
+  player.src = `${stream}?t=${Date.now()}`;
   player.load();
   await player.play();
   console.log("Playing stream");
@@ -92,6 +92,7 @@ function scheduleReconnect() {
   if (!currentCard || userStopped) return;
   if (reconnectTimer) return;
   if (reconnectAttempts >= MAX_RETRIES) {
+    player.pause();
     console.warn("Stream temporarily unavailable, giving up");
     return;
   }
@@ -102,9 +103,9 @@ function scheduleReconnect() {
     await PlayStream();
     if (reconnectResetTimer) clearTimeout(reconnectResetTimer);
     reconnectResetTimer = setTimeout(() => {
-      console.log("Reconnect attempts reset after 120s");
+      console.log("Reconnect attempts reset after 60s");
       reconnectAttempts = 0;
-    }, 120000);
+    }, 60000);
   }, delay);
 }
 
