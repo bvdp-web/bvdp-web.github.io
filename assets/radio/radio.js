@@ -7,6 +7,8 @@ let reconnectTimer = null;
 let restartLock = false;
 let userStopped = false;
 let changingStation = false;
+let reconnectAttempts = 0;
+const MAX_RETRIES = 5;
 
 // --- UI helpers ---
 function resetStations() {
@@ -25,20 +27,16 @@ function updateCurrentButton() {
 async function PlayStream() {
   if (!currentCard || restartLock) return;
   restartLock = true;
-  try {
-    const stream = currentCard.dataset.stream;
-    player.pause();
-    player.src = "";
-    player.load();
+  const stream = currentCard.dataset.stream;
+  player.pause();
+  player.src = "";
+  if (player.src !== stream) {
     player.src = stream;
-    await player.play();
-    console.log("Playing stream");
-  } catch (err) {
-    console.error("Playing failed:", err);
-    throw err;
-  } finally {
-    restartLock = false;
+    player.load();
   }
+  await player.play();
+  console.log("Playing stream");
+  restartLock = false;
 }
 
 // --- Button clicks ---
@@ -54,6 +52,7 @@ buttons.forEach(button => {
         console.log("Button eventListener: pause current station");
       } else {
         userStopped = false;
+        reconnectAttempts = 0;
         await PlayStream();
         console.log("Button eventListener: play current station");
       }
@@ -65,15 +64,11 @@ buttons.forEach(button => {
     resetStations();
     currentCard = card;
     card.classList.add("active");
-    try {
-      userStopped = false;
-      await PlayStream();
-      console.log("Button eventListener: selected new station");
-    } catch (err) {
-      console.error(err);
-    } finally {
-      changingStation = false;
-    }
+    userStopped = false;
+    reconnectAttempts = 0;
+    await PlayStream();
+    console.log("Button eventListener: selected new station");
+    changingStation = false;
   });
 });
 
@@ -81,6 +76,7 @@ buttons.forEach(button => {
 // force a reconnect to the live stream ---
 player.addEventListener("play", async () => {
   if (!changingStation && !restartLock) {
+    reconnectAttempts = 0;
     await PlayStream();
     console.log("Play eventListener: play station");
     return;
@@ -93,16 +89,18 @@ player.addEventListener("pause", () => {
 });
 
 // --- Reconnect logic ---
-async function reconnect() {
-  console.log("Attempting reconnect...");
-  await PlayStream();
-}
-function scheduleReconnect(delay = 2000) {
+function scheduleReconnect() {
   if (!currentCard || userStopped) return;
   if (reconnectTimer) return;
+  if (reconnectAttempts >= MAX_RETRIES) {
+    console.warn("Stream temporarily unavailable, giving up");
+    return;
+  }
+  const delay = Math.min(2000 * Math.pow(2, reconnectAttempts), 30000);
   reconnectTimer = setTimeout(async () => {
     reconnectTimer = null;
-    await reconnect();
+    reconnectAttempts++;
+    await PlayStream();
   }, delay);
 }
 
