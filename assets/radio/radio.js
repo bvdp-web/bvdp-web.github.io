@@ -8,7 +8,7 @@ let restartLock = false;
 let userStopped = false;
 let changingStation = false;
 let reconnectAttempts = 0;
-const MAX_RETRIES = 5;
+const MAX_RETRIES = 3;
 
 // --- UI helpers ---
 function resetStations() {
