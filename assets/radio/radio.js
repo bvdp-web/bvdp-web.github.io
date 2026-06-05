@@ -30,10 +30,8 @@ async function PlayStream() {
   const stream = currentCard.dataset.stream;
   player.pause();
   player.src = "";
-  if (player.src !== stream) {
-    player.src = stream;
-    player.load();
-  }
+  player.src = stream;
+  player.load();
   await player.play();
   console.log("Playing stream");
   restartLock = false;
