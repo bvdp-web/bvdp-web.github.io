@@ -52,7 +52,7 @@ buttons.forEach(button => {
       if (!player.paused) {
         userStopped = true;
         player.pause();
-        console.log("Button eventListener: paused currrent station");
+        console.log("Button eventListener: pause current station");
       } else {
         userStopped = false;
         await PlayStream();
