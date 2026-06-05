@@ -96,7 +96,6 @@ function scheduleReconnect() {
     console.warn("Stream temporarily unavailable, giving up");
     return;
   }
-  const delay = Math.min(1500 * Math.pow(2, reconnectAttempts), 30000);
   reconnectTimer = setTimeout(async () => {
     reconnectTimer = null;
     reconnectAttempts++;
@@ -106,13 +105,14 @@ function scheduleReconnect() {
       console.log("Reconnect attempts reset after 60s");
       reconnectAttempts = 0;
     }, 60000);
-  }, delay);
+  }, 2500);
 }
 
 // --- Resume playback on visibility/focus ---
 document.addEventListener("visibilitychange", () => {
   if (!document.hidden && currentCard && player.paused && reconnectAttempts > 0) {
     console.log("Tab visible, trying to resume playback");
+    reconnectAttempts = 0
     PlayStream();
   }
 });
