@@ -137,7 +137,7 @@ player.addEventListener("ended", () => {
 
 
 // --- Set Metadata ---
-let metadataInterval = null;
+let metadataTimer = null;
 let metadataRunning = false;
 const METADATA_INTERVAL = 30000;
 async function updateNowPlaying() {
