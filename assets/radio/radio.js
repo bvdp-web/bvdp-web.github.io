@@ -3,11 +3,12 @@ const cards = document.querySelectorAll(".station-card");
 const buttons = document.querySelectorAll(".play-btn");
 
 let currentCard = null;
-let reconnectTimer = null;
 let restartLock = false;
 let userStopped = false;
 let changingStation = false;
 let reconnectAttempts = 0;
+let reconnectTimer = null;
+let reconnectResetTimer = null;
 const MAX_RETRIES = 3;
 
 // --- UI helpers ---
@@ -94,27 +95,34 @@ function scheduleReconnect() {
     console.warn("Stream temporarily unavailable, giving up");
     return;
   }
-  const delay = Math.min(2000 * Math.pow(2, reconnectAttempts), 30000);
+  const delay = Math.min(1500 * Math.pow(2, reconnectAttempts), 30000);
   reconnectTimer = setTimeout(async () => {
     reconnectTimer = null;
     reconnectAttempts++;
     await PlayStream();
+    if (reconnectResetTimer) clearTimeout(reconnectResetTimer);
+    reconnectResetTimer = setTimeout(() => {
+      console.log("Reconnect attempts reset after 120s");
+      reconnectAttempts = 0;
+    }, 120000);
   }, delay);
 }
 
+// --- Resume playback on visibility/focus ---
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden && currentCard && player.paused && reconnectAttempts > 0) {
+    console.log("Tab visible, trying to resume playback");
+    await PlayStream();
+  }
+});
+
 // --- Event listeners for unexpected pauses/errors ---
-player.addEventListener("error", () => {
-  console.warn("Audio error, checking stream...");
-  scheduleReconnect();
-});
-player.addEventListener("stalled", () => {
-  console.warn("Audio stalled, checking stream...");
-  scheduleReconnect();
-});
-player.addEventListener("ended", () => {
-  console.warn("Audio ended, checking stream...");
-  scheduleReconnect();
-});
+["error", "stalled", "ended"].forEach(evt =>
+  player.addEventListener(evt, () => {
+    console.warn(`Player event: ${evt}, checking stream...`);
+    scheduleReconnect();
+  })
+);
 
 
 
