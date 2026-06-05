@@ -137,6 +137,7 @@ async function updateNowPlaying() {
     const res = await fetch("/api/radio");
     if (!res.ok) {
       throw new Error(`HTTP ${res.status}`);
+      console.error("Metadata fetch error:", err);
     }
     const data = await res.json();
     lastMetadataFetch = Date.now();
@@ -158,6 +159,7 @@ function shouldUpdate() {
   return !document.hidden;
 }
 function startMetadataUpdates() {
+  console.log("Started metadata update);
   updateNowPlaying();
   if (!metadataInterval) {
     metadataInterval = setInterval(updateNowPlaying, METADATA_INTERVAL);
@@ -168,6 +170,7 @@ function stopMetadataUpdates() {
     clearInterval(metadataInterval);
     metadataInterval = null;
   }
+  console.log("Stopped metadata update);
 }
 if (shouldUpdate()) {
   startMetadataUpdates();
