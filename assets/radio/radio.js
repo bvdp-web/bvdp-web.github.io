@@ -94,14 +94,6 @@ function scheduleReconnect() {
   if (reconnectAttempts >= MAX_RETRIES) {
     player.pause();
     console.warn("Stream temporarily unavailable, giving up");
-    if (!reconnectResetTimer) {
-      reconnectResetTimer = setTimeout(() => {
-        console.log("Reconnect attempts reset after 60s");
-        reconnectAttempts = 0;
-        reconnectResetTimer = null;
-        PlayStream();
-      }, 60000);
-    }
     return;
   }
   reconnectTimer = setTimeout(async () => {
@@ -112,6 +104,7 @@ function scheduleReconnect() {
     reconnectResetTimer = setTimeout(() => {
       console.log("Reconnect attempts reset after 60s");
       reconnectAttempts = 0;
+      PlayStream();
     }, 60000);
   }, 2500);
 }
