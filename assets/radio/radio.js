@@ -7,6 +7,8 @@ let reconnectTimer = null;
 let restartLock = false;
 let userStopped = false;
 let changingStation = false;
+let reconnectAttempts = 0;
+let streamDead = false;
 
 // --- UI helpers ---
 function resetStations() {
@@ -33,6 +35,8 @@ async function PlayStream() {
     player.src = stream;
     await player.play();
     console.log("Playing stream");
+    reconnectAttempts = 0;
+    streamDead = false;
   } catch (err) {
     console.error("Playing failed:", err);
   } finally {
@@ -93,16 +97,26 @@ player.addEventListener("pause", () => {
 
 // --- Reconnect logic ---
 async function reconnect() {
-  console.log("Reconnect station");
-  await PlayStream();
+  try {
+    console.log("Reconnect station");
+    await PlayStream();
+  } catch (err) {
+    console.error(err);
+    if (reconnectAttempts > 3) {
+      streamDead = true;
+      console.warn("Stream marked as dead temporarily");
+    }
+  }
 }
-function scheduleReconnect(delay = 2000) {
+function scheduleReconnect() {
   if (!currentCard || userStopped) return;
-  if (reconnectTimer) return; // already scheduled
+  if (reconnectTimer || streamDead) return;
+  const delay = Math.min(2000 * Math.pow(2, reconnectAttempts), 30000);
   reconnectTimer = setTimeout(async () => {
     reconnectTimer = null;
     await reconnect();
   }, delay);
+  reconnectAttempts++;
 }
 
 // --- Event listeners for unexpected pauses/errors ---
