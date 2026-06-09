@@ -178,6 +178,10 @@ function onVisibilityChange() {
       lastImmediateFetch = now;
       console.log("Visibility change");
       updateNowPlaying();
+      if (metadataIntervalId) {
+        clearInterval(metadataIntervalId);
+        metadataIntervalId = setInterval(updateNowPlaying, METADATA_INTERVAL);
+      }
     }
   }
 }
