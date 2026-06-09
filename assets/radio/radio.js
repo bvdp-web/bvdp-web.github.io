@@ -171,6 +171,13 @@ function startMetadataUpdates() {
   updateNowPlaying();
   metadataIntervalId = setInterval(updateNowPlaying, METADATA_INTERVAL);
 }
+function stopMetadataUpdates() {
+  if (metadataIntervalId) {
+    clearInterval(metadataIntervalId);
+    metadataIntervalId = null;
+    console.log("Stopped metadata updates");
+  }
+}
 function onVisibilityChange() {
   if (!document.hidden) {
     const now = Date.now();
@@ -185,5 +192,7 @@ function onVisibilityChange() {
     }
   }
 }
-document.addEventListener("DOMContentLoaded", startMetadataUpdates);
+document.addEventListener("DOMContentLoaded", updateNowPlaying);
+audio.addEventListener("play", startMetadataUpdates);
+audio.addEventListener("pause", stopMetadataUpdates);
 document.addEventListener("visibilitychange", onVisibilityChange);
