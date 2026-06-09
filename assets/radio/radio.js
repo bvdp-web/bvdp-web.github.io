@@ -193,6 +193,6 @@ function onVisibilityChange() {
   }
 }
 document.addEventListener("DOMContentLoaded", updateNowPlaying);
-audio.addEventListener("play", startMetadataUpdates);
-audio.addEventListener("pause", stopMetadataUpdates);
+document.addEventListener("play", startMetadataUpdates);
+document.addEventListener("pause", stopMetadataUpdates);
 document.addEventListener("visibilitychange", onVisibilityChange);
