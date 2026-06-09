@@ -156,6 +156,7 @@ async function updateNowPlaying() {
         });
       }
     }
+    console.log("Metadata updated");
   } catch (err) {
     if (err.name === "AbortError") {
       console.warn("Metadata fetch aborted due to timeout");
@@ -175,6 +176,7 @@ function onVisibilityChange() {
     const now = Date.now();
     if (now - lastImmediateFetch > VISIBILITY_COOLDOWN) {
       lastImmediateFetch = now;
+      console.log("Visibility change");
       updateNowPlaying();
     }
   }
