@@ -130,23 +130,16 @@ document.addEventListener("visibilitychange", () => {
 
 
 // --- Set Metadata ---
-let metadataTimer = null;
-let metadataRunning = false;
+let metadataIntervalId = null;
+let lastImmediateFetch = 0; 
 const METADATA_INTERVAL = 30000;
+const VISIBILITY_COOLDOWN = 30000;
 async function updateNowPlaying() {
   if (!navigator.onLine) return;
-  if (metadataRunning) return;
-  metadataRunning = true;
   try {
     const controller = new AbortController();
-    const timeout = setTimeout(() => {
-      controller.abort();
-      console.warn("Metadata fetch timeout, aborted");
-    }, 10000);
-    const res = await fetch("/api/radio", {
-      cache: "no-store",
-      signal: controller.signal
-    });
+    const timeout = setTimeout(() => controller.abort(), 10000);
+    const res = await fetch("/api/radio", { cache: "no-store", signal: controller.signal });
     clearTimeout(timeout);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
@@ -155,7 +148,6 @@ async function updateNowPlaying() {
       const el = document.getElementById(`${s.id}-now-playing`);
       if (!el) continue;
       el.textContent = s.error ? "Niet beschikbaar" : `${s.title} — ${s.artist}`;
-      // Update Media Session only for current station
       if (currentCard && currentCard.dataset.stationId === s.id && "mediaSession" in navigator) {
         navigator.mediaSession.metadata = new MediaMetadata({
           title: s.title || currentCard.dataset.title,
@@ -170,14 +162,22 @@ async function updateNowPlaying() {
     } else {
       console.error("Now Playing error:", err);
     }
-  } finally {
-    metadataRunning = false;
-    metadataTimer = setTimeout(updateNowPlaying, METADATA_INTERVAL);
   }
 }
 function startMetadataUpdates() {
-  if (metadataTimer) return;
+  if (metadataIntervalId) return;
   console.log("Started metadata updates");
-  updateNowPlaying(); // immediate first tick
+  updateNowPlaying();
+  metadataIntervalId = setInterval(updateNowPlaying, METADATA_INTERVAL);
+}
+function onVisibilityChange() {
+  if (!document.hidden) {
+    const now = Date.now();
+    if (now - lastImmediateFetch > VISIBILITY_COOLDOWN) {
+      lastImmediateFetch = now;
+      updateNowPlaying();
+    }
+  }
 }
 document.addEventListener("DOMContentLoaded", startMetadataUpdates);
+document.addEventListener("visibilitychange", onVisibilityChange);
