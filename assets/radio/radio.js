@@ -196,3 +196,4 @@ document.addEventListener("DOMContentLoaded", updateNowPlaying);
 player.addEventListener("play", startMetadataUpdates);
 player.addEventListener("pause", stopMetadataUpdates);
 document.addEventListener("visibilitychange", onVisibilityChange);
+window.addEventListener("focus", onVisibilityChange);
