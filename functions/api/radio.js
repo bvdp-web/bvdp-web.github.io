@@ -89,23 +89,21 @@ export async function onRequest(context) {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify([
-          {
-            query: `
-              {
-                playlists {
-                  id
-                  playlist {
-                    title
-                    author
-                    start
-                    end
-                  }
+        body: JSON.stringify({
+          query: `
+            {
+              playlists {
+                id
+                playlist {
+                  title
+                  author
+                  start
+                  end
                 }
               }
-            `
-          }
-        ])
+            }
+          `
+        })
       }
     );
     const roData = await roRes.json();
