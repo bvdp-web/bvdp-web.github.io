@@ -153,7 +153,8 @@ export async function onRequest(context) {
   const response = new Response(JSON.stringify(result), {
     headers: {
       "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Credentials": "true",
+      "Access-Control-Allow-Origin": "null",
       "Cache-Control": "public, max-age=30"
     }
   });
