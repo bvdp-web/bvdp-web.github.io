@@ -119,7 +119,7 @@ document.addEventListener("visibilitychange", () => {
 });
 
 // --- Event listeners for unexpected pauses/errors ---
-["error", "stalled", "ended"].forEach(evt =>
+["error", "ended"].forEach(evt =>
   player.addEventListener(evt, () => {
     console.warn(`Player event: ${evt}, checking stream...`);
     scheduleReconnect();
