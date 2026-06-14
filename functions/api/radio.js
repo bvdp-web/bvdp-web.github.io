@@ -128,26 +128,9 @@ export async function onRequest(context) {
       if (!t) return NaN;
       /* return new Date(t.replace(" ", "T") + "+02:00").getTime(); */
       const [date, time] = t.split(" ");
-      const dt = new Date(`${date}T${time}`);
-      const parts = new Intl.DateTimeFormat("en-US", {
-        timeZone: "Europe/Amsterdam",
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: false
-      }).formatToParts(dt);
-      const p = Object.fromEntries(parts.map(x => [x.type, x.value]));
-      return Date.UTC(
-        Number(p.year),
-        Number(p.month) - 1,
-        Number(p.day),
-        Number(p.hour),
-        Number(p.minute),
-        Number(p.second)
-      );
+      const [year, month, day] = date.split("-").map(Number);
+      const [hour, minute, second] = time.split(":").map(Number);
+      return Date.UTC(year, month - 1, day, hour, minute, second);
     };
     for (const station of playlists) {
       const name = stationNames[station.id];
