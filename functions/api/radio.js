@@ -127,10 +127,9 @@ export async function onRequest(context) {
     const parseTime = (t) => {
       if (!t) return NaN;
       /* return new Date(t.replace(" ", "T") + "+02:00").getTime(); */
-      const [date, time] = t.split(" ");
-      const [year, month, day] = date.split("-").map(Number);
-      const [hour, minute, second] = time.split(":").map(Number);
-      return Date.UTC(year, month - 1, day, hour, minute, second);
+      const iso = t.replace(" ", "T");
+      const dt = new Date(iso + "Z"); 
+      return dt.getTime();
     };
     for (const station of playlists) {
       const name = stationNames[station.id];
