@@ -136,7 +136,8 @@ export async function onRequest(context) {
         title: current?.title ?? ""
       });
     }
-  } catch {
+  } catch (err) {
+    result.roDebug = String(err);
     for (const [id, name] of Object.entries({
       2: "RO Psalmen",
       3: "RO Klassiek",
