@@ -106,8 +106,8 @@ export async function onRequest(context) {
         })
       }
     );
-    const roRaw = await roRes.text(); // keep raw response for debugging
-    const roData = await roRes.json();
+    const roRaw = await roRes.text();
+    const roData = JSON.parse(roRaw);
     if (roData?.errors?.length) {
       throw new Error(roData.errors[0].message);
     }
