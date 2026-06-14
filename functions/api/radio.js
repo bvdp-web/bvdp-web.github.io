@@ -126,7 +126,27 @@ export async function onRequest(context) {
     };
     const parseTime = (t) => {
       if (!t) return NaN;
-      return Date.parse(t.replace(" ", "T"));
+      const [date, time] = t.split(" ");
+      const dt = new Date(`${date}T${time}:00`);
+      const parts = new Intl.DateTimeFormat("en-US", {
+        timeZone: "Europe/Amsterdam",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false
+      }).formatToParts(dt);
+      const p = Object.fromEntries(parts.map(x => [x.type, x.value]));
+      return Date.UTC(
+        Number(p.year),
+        Number(p.month) - 1,
+        Number(p.day),
+        Number(p.hour),
+        Number(p.minute),
+        Number(p.second)
+      );
     };
     for (const station of playlists) {
       const name = stationNames[station.id];
