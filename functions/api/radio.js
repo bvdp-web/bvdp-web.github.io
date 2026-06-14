@@ -128,13 +128,13 @@ export async function onRequest(context) {
       if (!t) return NaN;
       return new Date(t.replace(" ", "T") + "+02:00").getTime();
     };
-    for (const track of tracks.slice(0, 3)) {
-      console.log(track.start, track.end, parseTime(track.start));
-    }
     for (const station of playlists) {
       const name = stationNames[station.id];
       if (!name) continue;
       const tracks = station.playlist ?? [];
+      for (const track of tracks.slice(0, 3)) {
+        console.log(track.start, track.end, parseTime(track.start));
+      }
       const current = tracks.find(track => {
         const start = parseTime(track.start);
         const end = parseTime(track.end);
