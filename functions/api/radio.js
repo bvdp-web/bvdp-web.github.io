@@ -82,7 +82,6 @@ export async function onRequest(context) {
   // Reformatorische Omroep
   // -------------------------
   let roRaw = null;
-
   try {
     const roRes = await fetch(
       "https://beheer.reformatorischeomroep.nl/graphql",
@@ -127,8 +126,11 @@ export async function onRequest(context) {
     };
     const parseTime = (t) => {
       if (!t) return NaN;
-      return new Date(t.replace(" ", "T")).getTime();
+      return new Date(t.replace(" ", "T") + "+02:00").getTime();
     };
+    for (const track of tracks.slice(0, 3)) {
+      console.log(track.start, track.end, parseTime(track.start));
+    }
     for (const station of playlists) {
       const name = stationNames[station.id];
       if (!name) continue;
