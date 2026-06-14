@@ -106,6 +106,7 @@ export async function onRequest(context) {
         })
       }
     );
+    roRaw = await roRes.text(); // keep raw response for debugging
     const roData = await roRes.json();
     const playlists = roData?.data?.playlists ?? [];
     if (!Array.isArray(playlists)) {
@@ -135,7 +136,10 @@ export async function onRequest(context) {
       });
     }
   } catch (err) {
-    result.roDebug = String(err);
+    result.roDebug = {
+      error: String(err),
+      rawResponse: roRaw
+    };
     for (const [id, name] of Object.entries({
       2: "RO Psalmen",
       3: "RO Klassiek",
