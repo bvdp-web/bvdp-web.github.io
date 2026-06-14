@@ -107,7 +107,7 @@ export async function onRequest(context) {
       }
     );
     const roData = await roRes.json();
-    const playlists = roData?.[0]?.data?.playlists ?? [];
+    const playlists = roData?.data?.playlists ?? [];
     if (!Array.isArray(playlists)) {
       throw new Error("Invalid RO response shape");
     }
