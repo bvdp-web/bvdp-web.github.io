@@ -78,6 +78,94 @@ export async function onRequest(context) {
     });
   }
 
+  // -------------------------
+  // Reformatorische Omroep
+  // -------------------------
+  let roRaw = null;
+
+  try {
+    const roRes = await fetch(
+      "https://beheer.reformatorischeomroep.nl/graphql",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          query: `
+            {
+              playlists {
+                id
+                playlist {
+                  title
+                  author
+                  date
+                  start
+                  end
+                }
+              }
+            }
+          `
+        })
+      }
+    );
+    roRaw = await roRes.text();
+    const roData = JSON.parse(roRaw);
+    if (roData?.errors?.length) {
+      throw new Error(roData.errors[0].message);
+    }
+    const playlists = roData?.data?.playlists;
+    if (!Array.isArray(playlists)) {
+      throw new Error("Invalid RO response shape");
+    }
+    const now = Date.now();
+    const stationNames = {
+      2: "RO Psalmen",
+      3: "RO Klassiek",
+      5: "RO Orgel",
+      6: "RO Psalms and Hymns"
+    };
+    const parseTime = (t) => {
+      if (!t) return NaN;
+      return new Date(t.replace(" ", "T")).getTime();
+    };
+    for (const station of playlists) {
+      const name = stationNames[station.id];
+      if (!name) continue;
+      const tracks = station.playlist ?? [];
+      const current = tracks.find(track => {
+        const start = parseTime(track.start);
+        const end = parseTime(track.end);
+        if (Number.isNaN(start) || Number.isNaN(end)) return false;
+        return start <= now && now < end;
+      });
+      result.stations.push({
+        id: `ro-${station.id}`,
+        name,
+        artist: current?.author ?? null,
+        title: current?.title ?? null
+      });
+    }
+  } catch (err) {
+    result.roDebug = {
+      error: String(err),
+      rawResponse: roRaw
+    };
+    const stationNames = {
+      2: "RO Psalmen",
+      3: "RO Klassiek",
+      5: "RO Orgel",
+      6: "RO Psalms and Hymns"
+    };
+    for (const [id, name] of Object.entries(stationNames)) {
+      result.stations.push({
+        id: `ro-${id}`,
+        name,
+        error: true
+      });
+    }
+  }
+
   const response = new Response(JSON.stringify(result), {
     headers: {
       "Content-Type": "application/json",
