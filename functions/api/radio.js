@@ -78,90 +78,10 @@ export async function onRequest(context) {
     });
   }
 
-  // -------------------------
-  // Reformatorische Omroep
-  // -------------------------
-  try {
-    const roRes = await fetch(
-      "https://beheer.reformatorischeomroep.nl/graphql",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          query: `
-            {
-              playlists {
-                id
-                playlist {
-                  title
-                  author
-                  start
-                  end
-                }
-              }
-            }
-          `
-        })
-      }
-    );
-    const roRaw = await roRes.text();
-    const roData = JSON.parse(roRaw);
-    if (roData?.errors?.length) {
-      throw new Error(roData.errors[0].message);
-    }
-    const playlists = roData?.data?.playlists ?? [];
-    if (!Array.isArray(playlists)) {
-      throw new Error("Invalid RO response shape");
-    }
-    const now = Date.now();
-    const stationNames = {
-      2: "RO Psalmen",
-      3: "RO Klassiek",
-      5: "RO Orgel",
-      6: "RO Psalms and Hymns"
-    };
-    for (const station of playlists) {
-      if (!stationNames[station.id]) {
-        continue;
-      }
-      const current = station.playlist.find(track => {
-        const start = new Date(track.start.replace(" ", "T")).getTime();
-        const end = new Date(track.end.replace(" ", "T")).getTime();
-        return start <= now && now < end;
-      });
-      result.stations.push({
-        id: `ro-${station.id}`,
-        name: stationNames[station.id],
-        artist: current?.author ?? "",
-        title: current?.title ?? ""
-      });
-    }
-  } catch (err) {
-    result.roDebug = {
-      error: String(err),
-      rawResponse: roRaw
-    };
-    for (const [id, name] of Object.entries({
-      2: "RO Psalmen",
-      3: "RO Klassiek",
-      5: "RO Orgel",
-      6: "RO Psalms and Hymns"
-    })) {
-      result.stations.push({
-        id: `ro-${id}`,
-        name,
-        error: true
-      });
-    }
-  }
-
   const response = new Response(JSON.stringify(result), {
     headers: {
       "Content-Type": "application/json",
-      "Access-Control-Allow-Credentials": "true",
-      "Access-Control-Allow-Origin": "null",
+      "Access-Control-Allow-Origin": "*",
       "Cache-Control": "public, max-age=30"
     }
   });
