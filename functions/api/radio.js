@@ -78,6 +78,79 @@ export async function onRequest(context) {
     });
   }
 
+  // -------------------------
+  // Reformatorische Omroep
+  // -------------------------
+  try {
+    const roRes = await fetch(
+      "https://beheer.reformatorischeomroep.nl/graphql",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify([
+          {
+            query: `
+              {
+                playlists {
+                  id
+                  playlist {
+                    title
+                    author
+                    start
+                    end
+                  }
+                }
+              }
+            `
+          }
+        ])
+      }
+    );
+    const roData = await roRes.json();
+    const playlists = roData?.[0]?.data?.playlists ?? [];
+    if (!Array.isArray(playlists)) {
+      throw new Error("Invalid RO response shape");
+    }
+    const now = Date.now();
+    const stationNames = {
+      2: "RO Psalmen",
+      3: "RO Klassiek",
+      5: "RO Orgel",
+      6: "RO Psalms and Hymns"
+    };
+    for (const station of playlists) {
+      if (!stationNames[station.id]) {
+        continue;
+      }
+      const current = station.playlist.find(track => {
+        const start = new Date(track.start.replace(" ", "T")).getTime();
+        const end = new Date(track.end.replace(" ", "T")).getTime();
+        return start <= now && now < end;
+      });
+      result.stations.push({
+        id: `ro-${station.id}`,
+        name: stationNames[station.id],
+        artist: current?.author ?? "",
+        title: current?.title ?? ""
+      });
+    }
+  } catch {
+    for (const [id, name] of Object.entries({
+      2: "RO Psalmen",
+      3: "RO Klassiek",
+      5: "RO Orgel",
+      6: "RO Psalms and Hymns"
+    })) {
+      result.stations.push({
+        id: `ro-${id}`,
+        name,
+        error: true
+      });
+    }
+  }
+
   const response = new Response(JSON.stringify(result), {
     headers: {
       "Content-Type": "application/json",
