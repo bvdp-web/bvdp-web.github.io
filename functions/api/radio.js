@@ -106,8 +106,11 @@ export async function onRequest(context) {
         })
       }
     );
-    roRaw = await roRes.text(); // keep raw response for debugging
+    const roRaw = await roRes.text(); // keep raw response for debugging
     const roData = await roRes.json();
+    if (roData?.errors?.length) {
+      throw new Error(roData.errors[0].message);
+    }
     const playlists = roData?.data?.playlists ?? [];
     if (!Array.isArray(playlists)) {
       throw new Error("Invalid RO response shape");
