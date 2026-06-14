@@ -127,7 +127,7 @@ export async function onRequest(context) {
     const parseTime = (t) => {
       if (!t) return NaN;
       const [date, time] = t.split(" ");
-      const dt = new Date(`${date}T${time}:00`);
+      const dt = new Date(`${date}T${time}`);
       const parts = new Intl.DateTimeFormat("en-CA", {
         timeZone: "Europe/Amsterdam",
         year: "numeric",
