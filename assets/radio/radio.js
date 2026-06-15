@@ -144,24 +144,25 @@ async function updateNowPlaying() {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     const map = new Map(data.stations.map(s => [s.name, s]));
+    const valid = s && !s.error;
     document.querySelectorAll(".station-card").forEach(card => {
       const name = card.dataset.stationId;
       const el = card.querySelector(".now-playing");
       if (!el) return;
       const s = map.get(name);
       let text = "Niet beschikbaar";
-      if (s && !s.error) {
+      if (valid) {
         text = [s.title, s.artist].filter(Boolean).join(" — ");
       }
       el.textContent = text || "Niet beschikbaar";
-      if (window.currentCard && window.currentCard === card && "mediaSession" in navigator) {
+      if (valid && window.currentCard && window.currentCard === card && "mediaSession" in navigator) {
         navigator.mediaSession.metadata = new MediaMetadata({
           title: s.title || "",
           artist: s.artist || "",
           album: card.querySelector("h3")?.textContent || "Radio"
         });
       }
-    }
+    })
     console.log("Metadata updated");
   } catch (err) {
     if (err.name === "AbortError") {
