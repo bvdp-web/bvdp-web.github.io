@@ -68,8 +68,6 @@ function parseCO(raw) {
   const parts = raw.trim().split(" - ");
   const out = [];
   for (const [id, name] of Object.entries(coStations)) {
-    const name = coStations[id];
-    if (!name) continue;
     out.push({
       name,
       artist: station?.artist ?? null,
