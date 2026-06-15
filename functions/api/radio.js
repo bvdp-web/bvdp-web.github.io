@@ -1,7 +1,6 @@
 export async function onRequest(context) {
 
   const request = context.request;
-  const env = context.env;
   const ctx = context;
 
   const url = new URL(request.url);
@@ -19,111 +18,122 @@ export async function onRequest(context) {
   // -------------------------
   // GNR (JSON API)
   // -------------------------
+  const gnrStations = {
+    "gnr": {
+      name: "Groot Nieuws Radio",
+      sourceKey: ["gnr", "groot-nieuws-radio"]
+    },
+    "gnr-ns": {
+      name: "GNR Non-Stop",
+      sourceKey: ["non-stop"]
+    },
+    "gnr-bk": {
+      name: "GNR Blijde Klanken",
+      sourceKey: ["blijde-klanken"]
+    }
+  };
+  let gnrRaw = null;
   try {
     const gnrRes = await fetch("https://api.grootnieuwsradio.nl/static/now-playing.json");
-    const gnrData = await gnrRes.json();
-
-    const gnr = gnrData.stations["gnr"] ?? gnrData.stations["groot-nieuws-radio"];
-    result.stations.push({
-      id: "gnr",
-      name: "Groot Nieuws Radio",
-      artist: gnr.artist,
-      title: gnr.title
-    });
-
-    const nonstop = gnrData.stations["non-stop"];
-    result.stations.push({
-      id: "gnr-ns",
-      name: "GNR Non-Stop",
-      artist: nonstop.artist,
-      title: nonstop.title
-    });
-
-    const bk = gnrData.stations["blijde-klanken"];
-    result.stations.push({
-      id: "gnr-bk",
-      name: "GNR Blijde Klanken",
-      artist: bk.artist,
-      title: bk.title
-    });
-
-  } catch {
-    result.stations.push({
-      id: "gnr",
-      name: "GNR",
-      error: true
-    });
+    gnrRaw = await gnrRes.text();
+    const gnrData = JSON.parse(gnrRaw);
+    const gnrStationsError = gnrData?.stations;
+    if (!gnrStationsError || typeof gnrStationsError !== "object" || Array.isArray(gnrStationsError)) {
+      throw new Error("Invalid GNR response shape");
+    }
+    for (const [id, config] of Object.entries(gnrStations)) {
+      let station;
+      for (const key of config.sourceKey) {
+        station = gnrData.stations[key];
+        if (station) break;
+      }
+      result.stations.push({
+        id,
+        name: config.name,
+        artist: station?.artist ?? null,
+        title: station?.title ?? null
+      });
+    }
+  } catch (err) {
+    result.gnrDebug = {
+      error: String(err),
+      rawResponse: gnrRaw
+    };
+    for (const [id, config] of Object.entries(gnrStations)) {
+      result.stations.push({
+        id,
+        name: config.name,
+        error: true
+      });
+    }
   }
 
   // -------------------------
   // Christelijke Omroep (plain text)
   // -------------------------
+  const coStation = {
+    id: "co",
+    name: "Christelijke Omroep"
+  };
+  let coRaw = null;
   try {
     const coRes = await fetch("https://christelijkeomroep.nl/custom/ajax/getnowplaying.ajax.php");
+    coRaw = await coRes.text();
     const coText = (await coRes.text()).trim();
     const coParts = coText.split(" - ");
-
     result.stations.push({
-      id: "co",
-      name: "Christelijke Omroep",
+      ...coStation,
       artist: coParts[0] || "",
       title: coParts.slice(1).join(" - ")
     });
-
-  } catch {
+  } catch (err) {
+    result.coDebug = {
+      error: String(err),
+      rawResponse: coRaw
+    };
     result.stations.push({
-      id: "co",
-      name: "Christelijke Omroep",
+      ...coStation,
       error: true
     });
   }
 
   // -------------------------
-  // Reformatorische Omroep
+  // Reformatorische Omroep (JSON API)
   // -------------------------
+  const roStations = {
+    2: "RO Psalmen",
+    3: "RO Klassiek",
+    5: "RO Orgel",
+    6: "RO Psalms and Hymns"
+  };
   let roRaw = null;
   try {
-    const roRes = await fetch(
-      "https://beheer.reformatorischeomroep.nl/graphql",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          query: `
-            {
-              playlists {
-                id
-                playlist {
-                  title
-                  author
-                  date
-                  start
-                  end
-                }
+    const roRes = await fetch("https://beheer.reformatorischeomroep.nl/graphql", {
+      method: "POST",
+      body: JSON.stringify({
+        query: `
+          {
+            playlists {
+              id
+              playlist {
+                title
+                author
+                date
+                start
+                end
               }
             }
-          `
-        })
-      }
-    );
+          }
+        `
+      })
+    });
     roRaw = await roRes.text();
     const roData = JSON.parse(roRaw);
-    if (roData?.errors?.length) {
-      throw new Error(roData.errors[0].message);
-    }
-    const playlists = roData?.data?.playlists;
-    if (!Array.isArray(playlists)) {
+    const roStationsError = roData?.data?.playlists;
+    if (!Array.isArray(roStationsError)) {
       throw new Error("Invalid RO response shape");
     }
     const now = Date.now();
-    const stationNames = {
-      2: "RO Psalmen",
-      3: "RO Klassiek",
-      5: "RO Orgel",
-      6: "RO Psalms and Hymns"
-    };
     function lastSunday(year, month) {
       const d = new Date(Date.UTC(year, month + 1, 0));
       const day = d.getUTCDay();
@@ -142,7 +152,6 @@ export async function onRequest(context) {
     }
     const parseTime = (t) => {
       if (!t) return NaN;
-      /* return new Date(t.replace(" ", "T") + "+02:00").getTime(); */
       const [date, time] = t.split(" ");
       const [y, m, d] = date.split("-").map(Number);
       const [hh, mm, ss] = time.split(":").map(Number);
@@ -172,13 +181,7 @@ export async function onRequest(context) {
       error: String(err),
       rawResponse: roRaw
     };
-    const stationNames = {
-      2: "RO Psalmen",
-      3: "RO Klassiek",
-      5: "RO Orgel",
-      6: "RO Psalms and Hymns"
-    };
-    for (const [id, name] of Object.entries(stationNames)) {
+    for (const [id, name] of Object.entries(roStations)) {
       result.stations.push({
         id: `ro-${id}`,
         name,
