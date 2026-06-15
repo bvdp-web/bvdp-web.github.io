@@ -36,6 +36,7 @@ export async function onRequest(context) {
       const name = gnrStations[id];
       if (!name) continue;
       result.stations.push({
+        id: `gnr-${id}`,,
         name,
         artist: station?.artist ?? null,
         title: station?.title ?? null
@@ -48,7 +49,7 @@ export async function onRequest(context) {
     };
     for (const [id, name] of Object.entries(gnrStations)) {
       result.stations.push({
-        id,
+        id: `gnr-${id}`,,
         name,
         error: true
       });
