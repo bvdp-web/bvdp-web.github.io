@@ -67,7 +67,7 @@ async function fetchCO() {
 function parseCO(raw) {
   const parts = raw.trim().split(" - ");
   const out = [];
-  for (const [id, station] of Object.entries(coStations)) {
+  for (const [id, name] of Object.entries(coStations)) {
     const name = coStations[id];
     if (!name) continue;
     out.push({
