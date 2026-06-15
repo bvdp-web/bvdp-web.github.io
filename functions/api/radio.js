@@ -7,7 +7,7 @@ const gnrStations = {
   "blijde-klanken": "GNR Blijde Klanken"
 };
 const coStations = {
-  co: "Christelijke Omroep"
+  "co": "Christelijke Omroep"
 };
 const roStations = Object.freeze({
   2: "RO Psalmen",
