@@ -39,8 +39,8 @@ async function fetchGNR() {
   const res = await fetch("https://api.grootnieuwsradio.nl/static/now-playing.json");
   return await res.json();
 }
-function parseGNR(data) {
-  const stations = data?.stations;
+function parseGNR(raw) {
+  const data = JSON.parse(raw)?.stations;
   if (!data || typeof data !== "object" || Array.isArray(data)) {
     throw new Error("Invalid GNR response shape");
   }
@@ -68,7 +68,7 @@ function parseCO(raw) {
   const parts = raw.trim().split(" - ");
   const out = [];
   for (const [id, name] of Object.entries(coStations)) {
-    const name = coStations;
+    const name = coStations[id];
     if (!name) continue;
     out.push({
       name,
