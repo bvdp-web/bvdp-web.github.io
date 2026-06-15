@@ -143,16 +143,22 @@ async function updateNowPlaying() {
     clearTimeout(timeout);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
-    const stations = data.stations;
-    for (const s of stations) {
-      const el = document.getElementById(`${s.id}-now-playing`);
-      if (!el) continue;
-      el.textContent = s.error ? "Niet beschikbaar" : `${s.title} — ${s.artist}`;
-      if (currentCard && currentCard.dataset.stationId === s.id && "mediaSession" in navigator) {
+    const map = new Map(data.stations.map(s => [s.name, s]));
+    document.querySelectorAll(".station-card").forEach(card => {
+      const name = card.dataset.stationId;
+      const el = card.querySelector(".now-playing");
+      if (!el) return;
+      const s = map.get(name);
+      let text = "Niet beschikbaar";
+      if (s && !s.error) {
+        text = [s.title, s.artist].filter(Boolean).join(" — ");
+      }
+      el.textContent = text || "Niet beschikbaar";
+      if (window.currentCard && window.currentCard === card && "mediaSession" in navigator) {
         navigator.mediaSession.metadata = new MediaMetadata({
-          title: s.title || currentCard.dataset.title,
+          title: s.title || "",
           artist: s.artist || "",
-          album: currentCard.dataset.title || "Radio"
+          album: card.querySelector("h3")?.textContent || "Radio"
         });
       }
     }
