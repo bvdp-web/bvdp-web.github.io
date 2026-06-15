@@ -37,10 +37,10 @@ async function runProvider(fetchFn, parseFn, fallback) {
 // =========================
 async function fetchGNR() {
   const res = await fetch("https://api.grootnieuwsradio.nl/static/now-playing.json");
-  return await res.json();
+  return await res.text();
 }
 function parseGNR(raw) {
-  const data = raw?.stations;
+  const data = JSON.parse(raw)?.stations;
   if (!data || typeof data !== "object" || Array.isArray(data)) {
     throw new Error("Invalid GNR response shape");
   }
