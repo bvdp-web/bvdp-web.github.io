@@ -20,8 +20,8 @@ export async function onRequest(context) {
   // -------------------------
   const gnrStations = {
     "gnr": "Groot Nieuws Radio",
-    "non-stop": "GNR Non-Stop",
-    "blijde-klanken": "GNR Blijde Klanken"
+    "gnr-ns": "GNR Non-Stop",
+    "gnr-bk": "GNR Blijde Klanken"
   };
   let gnrRaw = null;
   try {
