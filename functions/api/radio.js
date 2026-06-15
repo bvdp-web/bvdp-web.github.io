@@ -126,6 +126,7 @@ export async function onRequest(context) {
       throw new Error("Invalid RO response shape");
     }
     const now = Date.now();
+    const nowWithOffset = now + 30000;
     function lastSunday(year, month) {
       const d = new Date(Date.UTC(year, month + 1, 0));
       const day = d.getUTCDay();
@@ -159,7 +160,7 @@ export async function onRequest(context) {
       const current = tracks.find(track => {
         const start = parseTime(track.start);
         const end = parseTime(track.end);
-        return start <= now && now < end;
+        return start <= nowWithOffset && nowWithOffset < end;
       });
       result.stations.push({
         name,
