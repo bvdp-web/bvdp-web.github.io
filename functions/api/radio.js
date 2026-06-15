@@ -40,7 +40,7 @@ async function fetchGNR() {
   return await res.json();
 }
 function parseGNR(raw) {
-  const data = JSON.parse(raw)?.stations;
+  const data = raw?.stations;
   if (!data || typeof data !== "object" || Array.isArray(data)) {
     throw new Error("Invalid GNR response shape");
   }
