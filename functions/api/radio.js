@@ -15,7 +15,7 @@ const roStations = Object.freeze({
   5: "RO Orgel",
   6: "RO Psalms and Hymns"
 });
-const roFallback = Object.values(roStations);
+const roFallback = Object.entries(roStations);
 
 // =========================
 // PROVIDER HELPERS
@@ -23,7 +23,7 @@ const roFallback = Object.values(roStations);
 async function runProvider(fetchFn, parseFn, fallback) {
   try {
     const raw = await fetchFn();
-    return parseFn(raw, ctx);
+    return parseFn(raw);
   } catch (err) {
     return fallback.map(name => ({
       name,
@@ -39,8 +39,8 @@ async function fetchGNR() {
   const res = await fetch("https://api.grootnieuwsradio.nl/static/now-playing.json");
   return await res.json();
 }
-function parseGNR(raw) {
-  const data = JSON.parse(raw)?.stations;
+function parseGNR(data) {
+  const stations = data?.stations;
   if (!data || typeof data !== "object" || Array.isArray(data)) {
     throw new Error("Invalid GNR response shape");
   }
@@ -68,7 +68,7 @@ function parseCO(raw) {
   const parts = raw.trim().split(" - ");
   const out = [];
   for (const [id, name] of Object.entries(coStations)) {
-    const name = coStations[id];
+    const name = coStations;
     if (!name) continue;
     out.push({
       name,
