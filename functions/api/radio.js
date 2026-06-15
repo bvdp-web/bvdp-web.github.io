@@ -7,7 +7,7 @@ const gnrStations = {
   "blijde-klanken": "GNR Blijde Klanken"
 };
 const coStations = {
-  "co": "Christelijke Omroep"
+  co: "Christelijke Omroep"
 };
 const roStations = Object.freeze({
   2: "RO Psalmen",
@@ -15,37 +15,32 @@ const roStations = Object.freeze({
   5: "RO Orgel",
   6: "RO Psalms and Hymns"
 });
-const roFallback = Object.entries(roStations);
 
 // =========================
-// PROVIDER HELPERS
+// HELPERS
 // =========================
-async function runProvider(fetchFn, parseFn, fallback) {
-  try {
-    const raw = await fetchFn();
-    return parseFn(raw);
-  } catch (err) {
-    return fallback.map(name => ({
-      name,
-      error: true
-    }));
-  }
+function errorResponse(name, err) {
+  return {
+    name,
+    error: true,
+    raw: err?.message ?? String(err)
+  };
 }
 
 // =========================
-// GNR PROVIDER
+// GNR
 // =========================
 async function fetchGNR() {
   const res = await fetch("https://api.grootnieuwsradio.nl/static/now-playing.json");
-  return await res.text();
+  return res.json();
 }
-function parseGNR(raw) {
-  const data = JSON.parse(raw)?.stations;
-  if (!data || typeof data !== "object" || Array.isArray(data)) {
+function parseGNR(data) {
+  const stations = data?.stations;
+  if (!stations || typeof stations !== "object") {
     throw new Error("Invalid GNR response shape");
   }
   const out = [];
-  for (const [id, station] of Object.entries(data)) {
+  for (const [id, station] of Object.entries(stations)) {
     const name = gnrStations[id];
     if (!name) continue;
     out.push({
@@ -58,34 +53,27 @@ function parseGNR(raw) {
 }
 
 // =========================
-// CO PROVIDER
+// CO
 // =========================
 async function fetchCO() {
   const res = await fetch("https://christelijkeomroep.nl/custom/ajax/getnowplaying.ajax.php");
-  return await res.text();
+  return res.text();
 }
 function parseCO(raw) {
   const parts = raw.trim().split(" - ");
-  const out = [];
-  for (const [id, name] of Object.entries(coStations)) {
-    const name = coStations[id];
-    if (!name) continue;
-    out.push({
-      name,
-      artist: parts[0] ?? null,
-      title: parts.slice(1).join(" - ") ?? null
-    });
-  }
-  return out;
+  return Object.entries(coStations).map(([id, name]) => ({
+    name,
+    artist: parts[0] ?? null,
+    title: parts.slice(1).join(" - ") ?? null
+  }));
 }
 
 // =========================
-// RO PROVIDER
+// RO
 // =========================
 function lastSunday(year, month) {
   const d = new Date(Date.UTC(year, month + 1, 0));
-  const day = d.getUTCDay();
-  d.setUTCDate(d.getUTCDate() - day);
+  d.setUTCDate(d.getUTCDate() - d.getUTCDay());
   return d;
 }
 function getDSTBounds(year) {
@@ -98,16 +86,16 @@ function getDSTBounds(year) {
     end: end.getTime()
   };
 }
-const parseTime = (t) => {
+function parseTime(t) {
   if (!t) return NaN;
   const [date, time] = t.split(" ");
   const [y, m, d] = date.split("-").map(Number);
   const [hh, mm, ss] = time.split(":").map(Number);
-  const utcTimestamp = Date.UTC(y, m - 1, d, hh, mm, ss);
+  const utc = Date.UTC(y, m - 1, d, hh, mm, ss);
   const { start, end } = getDSTBounds(y);
-  const offsetHours = (utcTimestamp >= start && utcTimestamp < end) ? 2 : 1;
-  return utcTimestamp - offsetHours * 60 * 60 * 1000;
-};
+  const offset = utc >= start && utc < end ? 2 : 1;
+  return utc - offset * 3600 * 1000;
+}
 async function fetchRO() {
   const res = await fetch("https://beheer.reformatorischeomroep.nl/graphql", {
     method: "POST",
@@ -116,66 +104,75 @@ async function fetchRO() {
       query: `{ playlists { id playlist { title author date start end } } }`
     })
   });
-  const raw = await res.text();
-  return JSON.parse(raw);
+  return res.json();
 }
-function parseRO(roData, nowWithOffset) {
-  const roJSONresponse = roData?.data?.playlists;
-  if (!Array.isArray(roJSONresponse)) {
+function parseRO(data, now) {
+  const playlists = data?.data?.playlists;
+  if (!Array.isArray(playlists)) {
     throw new Error("Invalid RO response shape");
   }
-  const stations = [];
-  for (const station of roJSONresponse) {
+  const out = [];
+  for (const station of playlists) {
     const name = roStations[station.id];
     if (!name) continue;
     const tracks = station.playlist ?? [];
-    const current = tracks.find(track => {
-      const start = parseTime(track.start);
-      const end = parseTime(track.end);
-      return start <= nowWithOffset && nowWithOffset < end;
+    const current = tracks.find(t => {
+      const start = parseTime(t.start);
+      const end = parseTime(t.end);
+      return start <= now && now < end;
     });
-    stations.push({
+    out.push({
       name,
       artist: current?.author ?? null,
       title: current?.title ?? null
     });
   }
-  return stations;
+  return out;
 }
 
 // =========================
-// WORKER HANDLER
+// RUN WRAPPER
+// =========================
+async function run(fetchFn, parseFn, fallback, ...args) {
+  try {
+    const raw = await fetchFn();
+    return parseFn(raw, ...args);
+  } catch (err) {
+    return fallback.map(name =>
+      typeof name === "string"
+        ? errorResponse(name, err)
+        : { ...name, error: true, raw: String(err) }
+    );
+  }
+}
+
+// =========================
+// WORKER
 // =========================
 export async function onRequest(context) {
-  const request = context.request;
-  const ctx = context;
-  const cache = caches.default;
-  const url = new URL(request.url);
-  const cacheKey = new Request(url.toString(), request);
-  const cached = await cache.match(cacheKey);
+  const url = new URL(context.request.url);
+  const key = new Request(url.toString(), context.request);
+  const cached = await caches.default.match(key);
   if (cached) return cached;
-  const result = {
-    updatedAt: Date.now(),
-    stations: []
-  };
-  const nowWithOffset = Date.now() + 30000;
+  const now = Date.now() + 30000;
 
   const [gnr, co, ro] = await Promise.all([
-    runProvider(fetchGNR, parseGNR, Object.values(gnrStations)),
-    runProvider(fetchCO, parseCO, Object.values(coStations)),
-    runProvider(fetchRO, (data) => parseRO(data, nowWithOffset), roFallback)
+    run(fetchGNR, parseGNR, Object.values(gnrStations)),
+    run(fetchCO, parseCO, Object.values(coStations)),
+    run(fetchRO, parseRO, Object.entries(roStations), now)
   ]);
-  result.stations.push(...gnr, ...co, ...ro);
+  const result = {
+    updatedAt: Date.now(),
+    stations: [...gnr, ...co, ...ro]
+  };
 
   const response = new Response(JSON.stringify(result), {
     headers: {
       "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
-      "Cache-Control": "public, max-age=30"
+      "Cache-Control": "public, max-age=30",
+      "Access-Control-Allow-Origin": "*"
     }
   });
-
-  ctx.waitUntil(cache.put(cacheKey, response.clone()));
-
+  context.waitUntil(cache.put(key, response.clone()));
   return response;
 }
