@@ -79,7 +79,7 @@ export async function onRequest(context) {
   try {
     const coRes = await fetch("https://christelijkeomroep.nl/custom/ajax/getnowplaying.ajax.php");
     coRaw = await coRes.text();
-    const coText = (await coRes.text()).trim();
+    const coText = coRaw.trim();
     const coParts = coText.split(" - ");
     result.stations.push({
       ...coStation,
@@ -110,6 +110,9 @@ export async function onRequest(context) {
   try {
     const roRes = await fetch("https://beheer.reformatorischeomroep.nl/graphql", {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({
         query: `
           {
