@@ -46,6 +46,8 @@ function parseGNR(raw) {
   }
   const out = [];
   for (const [id, station] of Object.entries(data)) {
+    const name = gnrStations[id];
+    if (!name) continue;
     out.push({
       name,
       artist: station?.artist ?? null,
@@ -66,10 +68,12 @@ function parseCO(raw) {
   const parts = raw.trim().split(" - ");
   const out = [];
   for (const [id, name] of Object.entries(coStations)) {
+    const name = coStations[id];
+    if (!name) continue;
     out.push({
       name,
-      artist: station?.artist ?? null,
-      title: station?.title ?? null
+      artist: parts[0] ?? null,
+      title: parts.slice(1).join(" - ") ?? null
     });
   }
   return out;
