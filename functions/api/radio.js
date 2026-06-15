@@ -124,33 +124,32 @@ export async function onRequest(context) {
       5: "RO Orgel",
       6: "RO Psalms and Hymns"
     };
+    function lastSunday(year, month) {
+      const d = new Date(Date.UTC(year, month + 1, 0));
+      const day = d.getUTCDay();
+      d.setUTCDate(d.getUTCDate() - day);
+      return d;
+    }
+    function getDSTBounds(year) {
+      const start = lastSunday(year, 2);
+      start.setUTCHours(1);
+      const end = lastSunday(year, 9);
+      end.setUTCHours(1);
+      return {
+        start: start.getTime(),
+        end: end.getTime()
+      };
+    }
     const parseTime = (t) => {
       if (!t) return NaN;
       /* return new Date(t.replace(" ", "T") + "+02:00").getTime(); */
       const [date, time] = t.split(" ");
-      const iso = `${date}T${time}`;
-      const dt = new Date(iso);
-      const fmt = new Intl.DateTimeFormat("en-US", {
-        timeZone: "Europe/Amsterdam",
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: false
-      });
-      const parts = Object.fromEntries(
-        fmt.formatToParts(dt).map(p => [p.type, p.value])
-      );
-      return Date.UTC(
-        +parts.year,
-        +parts.month - 1,
-        +parts.day,
-        +parts.hour,
-        +parts.minute,
-        +parts.second
-      );
+      const [y, m, d] = date.split("-").map(Number);
+      const [hh, mm, ss] = time.split(":").map(Number);
+      const localTimestamp = Date.UTC(y, m - 1, d, hh, mm, ss);
+      const { start, end } = getDSTBounds(y);
+      const offsetHours = (localTimestamp >= start && localTimestamp < end) ? 2 : 1;
+      return localTimestamp - offsetHours * 60 * 60 * 1000;
     };
     for (const station of playlists) {
       const name = stationNames[station.id];
