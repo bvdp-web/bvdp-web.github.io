@@ -23,7 +23,7 @@ const roFallback = Object.values(roStations);
 async function runProvider(fetchFn, parseFn, fallback) {
   try {
     const raw = await fetchFn();
-    return parseFn(raw);
+    return parseFn(raw, ctx);
   } catch (err) {
     return fallback.map(name => ({
       name,
@@ -37,7 +37,7 @@ async function runProvider(fetchFn, parseFn, fallback) {
 // =========================
 async function fetchGNR() {
   const res = await fetch("https://api.grootnieuwsradio.nl/static/now-playing.json");
-  return await res.text();
+  return await res.json();
 }
 function parseGNR(raw) {
   const data = JSON.parse(raw)?.stations;
@@ -113,18 +113,7 @@ async function fetchRO() {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      query: `{
-        playlists {
-          id
-          playlist {
-            title
-            author
-            date
-            start
-            end
-          }
-        }
-      }`
+      query: `{ playlists { id playlist { title author date start end } } }`
     })
   });
   const raw = await res.text();
