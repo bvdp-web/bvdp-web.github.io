@@ -1,12 +1,87 @@
-// -------------------------
-//  RO PARSER
-// -------------------------
-const roStations = {
+// =========================
+// SHARED CONSTANTS
+// =========================
+const gnrStations = {
+  "gnr": "Groot Nieuws Radio",
+  "non-stop": "GNR Non-Stop",
+  "blijde-klanken": "GNR Blijde Klanken"
+};
+const coStations = {
+  "co": "Christelijke Omroep",
+};
+const roStations = Object.freeze({
   2: "RO Psalmen",
   3: "RO Klassiek",
   5: "RO Orgel",
   6: "RO Psalms and Hymns"
-};
+});
+const roFallback = Object.values(roStations);
+
+// =========================
+// PROVIDER HELPERS
+// =========================
+async function runProvider(fetchFn, parseFn, fallback) {
+  try {
+    const raw = await fetchFn();
+    return parseFn(raw);
+  } catch (err) {
+    return fallback.map(name => ({
+      name,
+      error: true
+    }));
+  }
+}
+
+// =========================
+// GNR PROVIDER
+// =========================
+async function fetchGNR() {
+  const res = await fetch("https://api.grootnieuwsradio.nl/static/now-playing.json");
+  return await res.text();
+}
+function parseGNR(raw) {
+  const data = JSON.parse(raw)?.stations;
+  if (!data || typeof data !== "object" || Array.isArray(data)) {
+    throw new Error("Invalid GNR response shape");
+  }
+  const out = [];
+  for (const [id, station] of Object.entries(data)) {
+    const name = gnrStations[id];
+    if (!name) continue;
+    out.push({
+      name,
+      artist: station?.artist ?? null,
+      title: station?.title ?? null
+    });
+  }
+  return out;
+}
+
+// =========================
+// CO PROVIDER
+// =========================
+async function fetchCO() {
+  const res = await fetch("https://christelijkeomroep.nl/custom/ajax/getnowplaying.ajax.php");
+  return await res.text();
+}
+function parseCO(raw) {
+  const parts = raw.trim().split(" - ");
+  const out = [];
+  for (const [id, station] of Object.entries(data)) {
+    const name = coStations[id];
+    if (!name) continue;
+    out.push({
+      name,
+      artist: station?.artist ?? null,
+      title: station?.title ?? null
+    });
+  }
+  return out;
+}
+
+// =========================
+// RO PROVIDER
+// =========================
 function lastSunday(year, month) {
   const d = new Date(Date.UTC(year, month + 1, 0));
   const day = d.getUTCDay();
@@ -28,11 +103,33 @@ const parseTime = (t) => {
   const [date, time] = t.split(" ");
   const [y, m, d] = date.split("-").map(Number);
   const [hh, mm, ss] = time.split(":").map(Number);
-  const localTimestamp = Date.UTC(y, m - 1, d, hh, mm, ss);
+  const utcTimestamp = Date.UTC(y, m - 1, d, hh, mm, ss);
   const { start, end } = getDSTBounds(y);
-  const offsetHours = (localTimestamp >= start && localTimestamp < end) ? 2 : 1;
-  return localTimestamp - offsetHours * 60 * 60 * 1000;
+  const offsetHours = (utcTimestamp >= start && utcTimestamp < end) ? 2 : 1;
+  return utcTimestamp - offsetHours * 60 * 60 * 1000;
 };
+async function fetchRO() {
+  const res = await fetch("https://beheer.reformatorischeomroep.nl/graphql", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      query: `{
+        playlists {
+          id
+          playlist {
+            title
+            author
+            date
+            start
+            end
+          }
+        }
+      }`
+    })
+  });
+  const raw = await res.text();
+  return JSON.parse(raw);
+}
 function parseRO(roData, nowWithOffset) {
   const roJSONresponse = roData?.data?.playlists;
   if (!Array.isArray(roJSONresponse)) {
@@ -57,169 +154,29 @@ function parseRO(roData, nowWithOffset) {
   return stations;
 }
 
-// -------------------------
-// RO FETCH AND CACHE
-// ------------------------- 
-let roCache = {
-  data: null,
-  raw: null,
-  updatedAt: 0
-};
-const RO_TTL = 30 * 60 * 1000;
-async function getRO(nowWithOffset) {
-  let roRaw = null
-  const now = Date.now();
-  if (roCache.data && now - roCache.updatedAt < RO_TTL) {
-    return parseRO(roCache.data, nowWithOffset);
-  }
-  const roRes = await fetch("https://beheer.reformatorischeomroep.nl/graphql", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      query: `
-        {
-          playlists {
-            id
-            playlist {
-              title
-              author
-              date
-              start
-              end
-            }
-          }
-        }
-      `
-    })
-  });
-  roRaw = await roRes.text();
-  let roData;
-  try {
-    roData = JSON.parse(roRaw);
-  } catch (e) {
-    throw new Error("Invalid RO JSON response");
-  }
-  roCache = {
-    data: roData,
-    raw: roRaw,
-    updatedAt: now
-  };
-  return parseRO(roData, nowWithOffset);
-}
-
-// -------------------------
-// STEP 4 — Worker handler
-// -------------------------
+// =========================
+// WORKER HANDLER
+// =========================
 export async function onRequest(context) {
   const request = context.request;
   const ctx = context;
-
+  const cache = caches.default;
   const url = new URL(request.url);
   const cacheKey = new Request(url.toString(), request);
-  const cache = caches.default;
-
-  // ---- CACHE HIT ----
   const cached = await cache.match(cacheKey);
   if (cached) return cached;
   const result = {
     updatedAt: Date.now(),
     stations: []
   };
+  const nowWithOffset = Date.now() + 30000;
 
-  const now = Date.now();
-  const nowWithOffset = now + 30000;
-
-  // -------------------------
-  // GNR (JSON API)
-  // -------------------------
-  const gnrStations = {
-    "gnr": "Groot Nieuws Radio",
-    "non-stop": "GNR Non-Stop",
-    "blijde-klanken": "GNR Blijde Klanken"
-  };
-  let gnrRaw = null;
-  try {
-    const gnrRes = await fetch("https://api.grootnieuwsradio.nl/static/now-playing.json");
-    gnrRaw = await gnrRes.text();
-    const gnrData = JSON.parse(gnrRaw);
-    const gnrJSONresponse = gnrData?.stations;
-    if (!gnrJSONresponse || typeof gnrJSONresponse !== "object" || Array.isArray(gnrJSONresponse)) {
-      throw new Error("Invalid GNR response shape");
-    }
-    for (const [id, station] of Object.entries(gnrJSONresponse)) {
-      const name = gnrStations[id];
-      if (!name) continue;
-      result.stations.push({
-        name,
-        artist: station?.artist ?? null,
-        title: station?.title ?? null
-      });
-    }
-  } catch (err) {
-    result.gnrDebug = {
-      error: String(err),
-      rawResponse: gnrRaw
-    };
-    for (const [id, name] of Object.entries(gnrStations)) {
-      result.stations.push({
-        name,
-        error: true
-      });
-    }
-  }
-
-  // -------------------------
-  // Christelijke Omroep (plain text)
-  // -------------------------
-  const coStations = {
-    co: "Christelijke Omroep"
-  };
-  let coRaw = null;
-  try {
-    const coRes = await fetch("https://christelijkeomroep.nl/custom/ajax/getnowplaying.ajax.php");
-    coRaw = await coRes.text();
-    const coText = coRaw.trim();
-    const coParts = coText.split(" - ");
-    for (const [id, name] of Object.entries(coStations)) {
-      result.stations.push({
-        name,
-        artist: coParts[0] ?? null,
-        title: coParts.slice(1).join(" - ") ?? null
-      });
-    }
-  } catch (err) {
-    result.coDebug = {
-      error: String(err),
-      rawResponse: coRaw
-    };
-    for (const [id, name] of Object.entries(coStations)) {
-      result.stations.push({
-        name,
-        error: true
-      });
-    }
-  }
-
-  // -------------------------
-  // Reformatorische Omroep (JSON API)
-  // -------------------------
-  try {
-    const roStations = await getRO(nowWithOffset);
-    result.stations.push(...roStations);
-  } catch (err) {
-    result.roDebug = {
-      error: String(err),
-      rawResponse: roCache.raw
-    };
-    for (const [id, name] of Object.entries(roStations)) {
-      result.stations.push({
-        name,
-        error: true
-      });
-    }
-  }
+  const [gnr, co, ro] = await Promise.all([
+    runProvider(fetchGNR, parseGNR, Object.values(gnrStations)),
+    runProvider(fetchCO, parseCO, Object.values(coStations)),
+    runProvider(fetchRO, (data) => parseRO(data, nowWithOffset), roFallback)
+  ]);
+  result.stations.push(...gnr, ...co, ...ro);
 
   const response = new Response(JSON.stringify(result), {
     headers: {
@@ -229,9 +186,7 @@ export async function onRequest(context) {
     }
   });
 
-  ctx.waitUntil(
-    caches.default.put(cacheKey, response.clone())
-  );
+  ctx.waitUntil(cache.put(cacheKey, response.clone()));
 
   return response;
-};
+}
