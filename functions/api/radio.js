@@ -36,7 +36,6 @@ export async function onRequest(context) {
       const name = gnrStations[id];
       if (!name) continue;
       result.stations.push({
-        id: `gnr-${id}`,
         name,
         artist: station?.artist ?? null,
         title: station?.title ?? null
@@ -49,7 +48,6 @@ export async function onRequest(context) {
     };
     for (const [id, name] of Object.entries(gnrStations)) {
       result.stations.push({
-        id: `gnr-${id}`,
         name,
         error: true
       });
@@ -70,7 +68,6 @@ export async function onRequest(context) {
     const coParts = coText.split(" - ");
     for (const [id, name] of Object.entries(coStations)) {
       result.stations.push({
-        id,
         name,
         artist: coParts[0] ?? null,
         title: coParts.slice(1).join(" - ") ?? null
@@ -83,7 +80,6 @@ export async function onRequest(context) {
     };
     for (const [id, name] of Object.entries(coStations)) {
       result.stations.push({
-        id,
         name,
         error: true
       });
@@ -166,7 +162,6 @@ export async function onRequest(context) {
         return start <= now && now < end;
       });
       result.stations.push({
-        id: `ro-${station.id}`,
         name,
         artist: current?.author ?? null,
         title: current?.title ?? null
@@ -179,7 +174,6 @@ export async function onRequest(context) {
     };
     for (const [id, name] of Object.entries(roStations)) {
       result.stations.push({
-        id: `ro-${id}`,
         name,
         error: true
       });
