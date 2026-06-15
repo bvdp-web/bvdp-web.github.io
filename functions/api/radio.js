@@ -1,5 +1,118 @@
-export async function onRequest(context) {
+// -------------------------
+//  RO PARSER
+// -------------------------
+const roStations = {
+  2: "RO Psalmen",
+  3: "RO Klassiek",
+  5: "RO Orgel",
+  6: "RO Psalms and Hymns"
+};
+function lastSunday(year, month) {
+  const d = new Date(Date.UTC(year, month + 1, 0));
+  const day = d.getUTCDay();
+  d.setUTCDate(d.getUTCDate() - day);
+  return d;
+}
+function getDSTBounds(year) {
+  const start = lastSunday(year, 2);
+  start.setUTCHours(1);
+  const end = lastSunday(year, 9);
+  end.setUTCHours(1);
+  return {
+    start: start.getTime(),
+    end: end.getTime()
+  };
+}
+const parseTime = (t) => {
+  if (!t) return NaN;
+  const [date, time] = t.split(" ");
+  const [y, m, d] = date.split("-").map(Number);
+  const [hh, mm, ss] = time.split(":").map(Number);
+  const localTimestamp = Date.UTC(y, m - 1, d, hh, mm, ss);
+  const { start, end } = getDSTBounds(y);
+  const offsetHours = (localTimestamp >= start && localTimestamp < end) ? 2 : 1;
+  return localTimestamp - offsetHours * 60 * 60 * 1000;
+};
+function parseRO(roData, nowWithOffset) {
+  const roJSONresponse = roData?.data?.playlists;
+  if (!Array.isArray(roJSONresponse)) {
+    throw new Error("Invalid RO response shape");
+  }
+  const stations = [];
+  for (const station of roJSONresponse) {
+    const name = roStations[station.id];
+    if (!name) continue;
+    const tracks = station.playlist ?? [];
+    const current = tracks.find(track => {
+      const start = parseTime(track.start);
+      const end = parseTime(track.end);
+      return start <= nowWithOffset && nowWithOffset < end;
+    });
+    stations.push({
+      name,
+      artist: current?.author ?? null,
+      title: current?.title ?? null
+    });
+  }
+  return stations;
+}
 
+// -------------------------
+// RO FETCH AND CACHE
+// ------------------------- 
+let roCache = {
+  data: null,
+  raw: null,
+  updatedAt: 0
+};
+const RO_TTL = 30 * 60 * 1000;
+async function getRO(nowWithOffset) {
+  let roRaw = null
+  const now = Date.now();
+  if (roCache.data && now - roCache.updatedAt < RO_TTL) {
+    return parseRO(roCache.data, nowWithOffset);
+  }
+  const roRes = await fetch("https://beheer.reformatorischeomroep.nl/graphql", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      query: `
+        {
+          playlists {
+            id
+            playlist {
+              title
+              author
+              date
+              start
+              end
+            }
+          }
+        }
+      `
+    })
+  });
+  roRaw = await roRes.text();
+  let roData;
+  try {
+    roData = JSON.parse(roRaw);
+  } catch (e) {
+    throw new Error("Invalid RO JSON response");
+  }
+  roCache = {
+    data: roData,
+    raw: roRaw,
+    updatedAt: now
+  };
+  return parseRO(roData, nowWithOffset);
+}
+
+// -------------------------
+// STEP 4 — Worker handler
+// -------------------------
+export async function onRequest(context) {
   const request = context.request;
   const ctx = context;
 
@@ -14,6 +127,9 @@ export async function onRequest(context) {
     updatedAt: Date.now(),
     stations: []
   };
+
+  const now = Date.now();
+  const nowWithOffset = now + 30000;
 
   // -------------------------
   // GNR (JSON API)
@@ -89,89 +205,13 @@ export async function onRequest(context) {
   // -------------------------
   // Reformatorische Omroep (JSON API)
   // -------------------------
-  const roStations = {
-    2: "RO Psalmen",
-    3: "RO Klassiek",
-    5: "RO Orgel",
-    6: "RO Psalms and Hymns"
-  };
-  let roRaw = null;
   try {
-    const roRes = await fetch("https://beheer.reformatorischeomroep.nl/graphql", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        query: `
-          {
-            playlists {
-              id
-              playlist {
-                title
-                author
-                date
-                start
-                end
-              }
-            }
-          }
-        `
-      })
-    });
-    roRaw = await roRes.text();
-    const roData = JSON.parse(roRaw);
-    const roJSONresponse = roData?.data?.playlists;
-    if (!Array.isArray(roJSONresponse)) {
-      throw new Error("Invalid RO response shape");
-    }
-    const now = Date.now();
-    const nowWithOffset = now + 30000;
-    function lastSunday(year, month) {
-      const d = new Date(Date.UTC(year, month + 1, 0));
-      const day = d.getUTCDay();
-      d.setUTCDate(d.getUTCDate() - day);
-      return d;
-    }
-    function getDSTBounds(year) {
-      const start = lastSunday(year, 2);
-      start.setUTCHours(1);
-      const end = lastSunday(year, 9);
-      end.setUTCHours(1);
-      return {
-        start: start.getTime(),
-        end: end.getTime()
-      };
-    }
-    const parseTime = (t) => {
-      if (!t) return NaN;
-      const [date, time] = t.split(" ");
-      const [y, m, d] = date.split("-").map(Number);
-      const [hh, mm, ss] = time.split(":").map(Number);
-      const localTimestamp = Date.UTC(y, m - 1, d, hh, mm, ss);
-      const { start, end } = getDSTBounds(y);
-      const offsetHours = (localTimestamp >= start && localTimestamp < end) ? 2 : 1;
-      return localTimestamp - offsetHours * 60 * 60 * 1000;
-    };
-    for (const station of roJSONresponse) {
-      const name = roStations[station.id];
-      if (!name) continue;
-      const tracks = station.playlist ?? [];
-      const current = tracks.find(track => {
-        const start = parseTime(track.start);
-        const end = parseTime(track.end);
-        return start <= nowWithOffset && nowWithOffset < end;
-      });
-      result.stations.push({
-        name,
-        artist: current?.author ?? null,
-        title: current?.title ?? null
-      });
-    }
+    const roStations = await getRO(nowWithOffset);
+    result.stations.push(...roStations);
   } catch (err) {
     result.roDebug = {
       error: String(err),
-      rawResponse: roRaw
+      rawResponse: roCache.raw
     };
     for (const [id, name] of Object.entries(roStations)) {
       result.stations.push({
