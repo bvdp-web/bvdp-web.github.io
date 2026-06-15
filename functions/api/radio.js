@@ -19,37 +19,25 @@ export async function onRequest(context) {
   // GNR (JSON API)
   // -------------------------
   const gnrStations = {
-    "gnr": {
-      name: "Groot Nieuws Radio",
-      sourceKey: ["gnr", "groot-nieuws-radio"]
-    },
-    "gnr-ns": {
-      name: "GNR Non-Stop",
-      sourceKey: ["non-stop"]
-    },
-    "gnr-bk": {
-      name: "GNR Blijde Klanken",
-      sourceKey: ["blijde-klanken"]
-    }
+    "gnr": "Groot Nieuws Radio",
+    "non-stop": "GNR Non-Stop",
+    "blijde-klanken": "GNR Blijde Klanken"
   };
   let gnrRaw = null;
   try {
     const gnrRes = await fetch("https://api.grootnieuwsradio.nl/static/now-playing.json");
     gnrRaw = await gnrRes.text();
     const gnrData = JSON.parse(gnrRaw);
-    const gnrStationsError = gnrData?.stations;
-    if (!gnrStationsError || typeof gnrStationsError !== "object" || Array.isArray(gnrStationsError)) {
+    const gnrJSONresponse = gnrData?.stations;
+    if (!gnrJSONresponse || typeof gnrJSONresponse !== "object" || Array.isArray(gnrJSONresponse)) {
       throw new Error("Invalid GNR response shape");
     }
-    for (const [id, config] of Object.entries(gnrStations)) {
-      let station;
-      for (const key of config.sourceKey) {
-        station = gnrData.stations[key];
-        if (station) break;
-      }
+    for (const [id, station] of Object.entries(gnrJSONresponse)) {
+      const name = gnrStations[id];
+      if (!name) continue;
       result.stations.push({
         id,
-        name: config.name,
+        name,
         artist: station?.artist ?? null,
         title: station?.title ?? null
       });
@@ -59,10 +47,10 @@ export async function onRequest(context) {
       error: String(err),
       rawResponse: gnrRaw
     };
-    for (const [id, config] of Object.entries(gnrStations)) {
+    for (const [id, name] of Object.entries(gnrStations)) {
       result.stations.push({
         id,
-        name: config.name,
+        name,
         error: true
       });
     }
@@ -71,9 +59,8 @@ export async function onRequest(context) {
   // -------------------------
   // Christelijke Omroep (plain text)
   // -------------------------
-  const coStation = {
-    id: "co",
-    name: "Christelijke Omroep"
+  const coStations = {
+    co: "Christelijke Omroep"
   };
   let coRaw = null;
   try {
@@ -81,20 +68,26 @@ export async function onRequest(context) {
     coRaw = await coRes.text();
     const coText = coRaw.trim();
     const coParts = coText.split(" - ");
-    result.stations.push({
-      ...coStation,
-      artist: coParts[0] || "",
-      title: coParts.slice(1).join(" - ")
-    });
+    for (const [id, name] of Object.entries(coStations)) {
+      result.stations.push({
+        id,
+        name,
+        artist: coParts[0] ?? null,
+        title: coParts.slice(1).join(" - ") ?? null
+      });
+    }
   } catch (err) {
     result.coDebug = {
       error: String(err),
       rawResponse: coRaw
     };
-    result.stations.push({
-      ...coStation,
-      error: true
-    });
+    for (const [id, name] of Object.entries(coStations)) {
+      result.stations.push({
+        id,
+        name,
+        error: true
+      });
+    }
   }
 
   // -------------------------
@@ -132,8 +125,8 @@ export async function onRequest(context) {
     });
     roRaw = await roRes.text();
     const roData = JSON.parse(roRaw);
-    const roStationsError = roData?.data?.playlists;
-    if (!Array.isArray(roStationsError)) {
+    const roJSONresponse = roData?.data?.playlists;
+    if (!Array.isArray(roJSONresponse)) {
       throw new Error("Invalid RO response shape");
     }
     const now = Date.now();
@@ -163,8 +156,8 @@ export async function onRequest(context) {
       const offsetHours = (localTimestamp >= start && localTimestamp < end) ? 2 : 1;
       return localTimestamp - offsetHours * 60 * 60 * 1000;
     };
-    for (const station of playlists) {
-      const name = stationNames[station.id];
+    for (const station of roJSONresponse) {
+      const name = roStations[station.id];
       if (!name) continue;
       const tracks = station.playlist ?? [];
       const current = tracks.find(track => {
