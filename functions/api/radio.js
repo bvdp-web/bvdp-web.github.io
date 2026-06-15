@@ -46,8 +46,6 @@ function parseGNR(raw) {
   }
   const out = [];
   for (const [id, station] of Object.entries(data)) {
-    const name = gnrStations[id];
-    if (!name) continue;
     out.push({
       name,
       artist: station?.artist ?? null,
