@@ -144,12 +144,12 @@ async function updateNowPlaying() {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     const map = new Map(data.stations.map(s => [s.name, s]));
-    const valid = s && !s.error;
     document.querySelectorAll(".station-card").forEach(card => {
       const name = card.dataset.stationId;
       const el = card.querySelector(".now-playing");
       if (!el) return;
       const s = map.get(name);
+      const valid = s && !s.error;
       let text = "Niet beschikbaar";
       if (valid) {
         text = [s.title, s.artist].filter(Boolean).join(" — ");
