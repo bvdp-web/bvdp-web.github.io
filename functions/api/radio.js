@@ -152,7 +152,8 @@ async function run(fetchFn, parseFn, fallback, ...args) {
 export async function onRequest(context) {
   const url = new URL(context.request.url);
   const key = new Request(url.toString(), context.request);
-  const cached = await caches.default.match(key);
+  const cache = caches.default;
+  const cached = await cache.match(key);
   if (cached) return cached;
   const now = Date.now() + 30000;
 
