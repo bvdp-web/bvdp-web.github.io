@@ -33,7 +33,7 @@ html.dark .station-card {
   height: 90px;
   object-fit: contain;
 }
-html:not(.dark) .station-card[data-name="GNR Blijde Klanken"] img {
+html:not(.dark) .station-card[data-station-id="GNR Blijde Klanken"] img {
   filter: invert(1);
 }
 .station-card h3 {
