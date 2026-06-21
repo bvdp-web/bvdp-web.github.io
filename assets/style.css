@@ -41,6 +41,10 @@
   --button-bg-active: #333;
   --back-button-bg: #e2e8f0;
   --back-button-color: #111827;
+  --card-padding: 25px;
+  --card-border-radius: 10px;
+  --card-margin: 20px;
+  --card-gap: 20px;
 }
 html.dark {
   --body-bg: #0f172a;
@@ -204,9 +208,9 @@ p {
 }
 .card {
   background: var(--card-bg);
-  padding: 25px;
-  border-radius: 10px;
-  margin-bottom: 20px;
+  padding: var(--card-padding);
+  border-radius: var(--card-border-radius);
+  margin-bottom: var(--card-margin);
   box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
@@ -245,11 +249,11 @@ footer {
 .youtube {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(80%, 350px), 1fr));
-  gap: 30px;
-  margin-top: 40px;
+  gap: var(--card-gap);
+  margin-bottom: var(--card-margin);
 }
 .youtube > .card {
-  padding: 20px;
+  margin: 0px;
   border-radius: 12px;
   box-shadow: 0 6px 15px rgba(0,0,0,0.08);
   transition: transform 0.2s;
