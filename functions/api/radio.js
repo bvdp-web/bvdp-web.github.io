@@ -155,7 +155,7 @@ export async function onRequest(context) {
   const cache = caches.default;
   const cached = await cache.match(key);
   if (cached) return cached;
-  const now = Date.now() + 60000;
+  const now = Date.now() + 45000;
 
   const [gnr, co, ro] = await Promise.all([
     run(fetchGNR, parseGNR, Object.values(gnrStations)),
