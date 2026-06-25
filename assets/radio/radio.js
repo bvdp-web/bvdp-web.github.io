@@ -4,12 +4,7 @@ const buttons = document.querySelectorAll(".play-btn");
 
 let currentCard = null;
 let restartLock = false;
-let userStopped = false;
 let changingStation = false;
-let reconnectAttempts = 0;
-let reconnectTimer = null;
-let reconnectResetTimer = null;
-const MAX_RETRIES = 3;
 
 // --- UI helpers ---
 function resetStations() {
@@ -46,12 +41,9 @@ buttons.forEach(button => {
     // Same station
     if (currentCard === card) {
       if (!player.paused) {
-        userStopped = true;
         player.pause();
         console.log("Button eventListener: pause current station");
       } else {
-        userStopped = false;
-        reconnectAttempts = 0;
         await PlayStream();
         console.log("Button eventListener: play current station");
       }
@@ -63,8 +55,6 @@ buttons.forEach(button => {
     resetStations();
     currentCard = card;
     card.classList.add("active");
-    userStopped = false;
-    reconnectAttempts = 0;
     await PlayStream();
     console.log("Button eventListener: selected new station");
     changingStation = false;
@@ -75,7 +65,6 @@ buttons.forEach(button => {
 // force a reconnect to the live stream ---
 player.addEventListener("play", async () => {
   if (!changingStation && !restartLock) {
-    reconnectAttempts = 0;
     await PlayStream();
     console.log("Play eventListener: play station");
     return;
@@ -86,44 +75,6 @@ player.addEventListener("pause", () => {
   console.log("Play eventListener: pause station");
   updateCurrentButton();
 });
-
-// --- Reconnect logic ---
-function scheduleReconnect() {
-  if (!currentCard || userStopped || reconnectTimer) return;
-  if (reconnectAttempts >= MAX_RETRIES) {
-    player.pause();
-    console.warn("Stream temporarily unavailable, giving up");
-    return;
-  }
-  reconnectTimer = setTimeout(async () => {
-    reconnectTimer = null;
-    reconnectAttempts++;
-    await PlayStream();
-    if (reconnectResetTimer) clearTimeout(reconnectResetTimer);
-    reconnectResetTimer = setTimeout(() => {
-      console.log("Reconnect attempts reset after 60s");
-      reconnectAttempts = 0;
-      PlayStream();
-    }, 60000);
-  }, 2500);
-}
-
-// --- Resume playback on visibility/focus ---
-document.addEventListener("visibilitychange", () => {
-  if (!document.hidden && currentCard && player.paused && reconnectAttempts > 0) {
-    console.log("Tab visible, trying to resume playback");
-    reconnectAttempts = 0
-    PlayStream();
-  }
-});
-
-// --- Event listeners for unexpected pauses/errors ---
-["error", "stalled", "ended"].forEach(evt =>
-  player.addEventListener(evt, () => {
-    console.warn(`Player event: ${evt}, checking stream...`);
-    scheduleReconnect();
-  })
-);
 
 
 
