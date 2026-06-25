@@ -26,9 +26,11 @@ function updateCurrentButton() {
 
 // --- Always restart stream from live position ---
 async function PlayStream() {
-  console.log("Testing PlayStream before `if (!currentCard || restartLock) return;`");
-  if (!currentCard || restartLock) return;
-  console.log("Testing PlayStream after `if (!currentCard || restartLock) return;`");
+  console.log("Testing PlayStream before `if (!currentCard) return;`");
+  if (!currentCard) return;
+  console.log("Testing PlayStream after `if (!currentCard) return;` and before `if (restartLock) return;`");
+  if (restartLock) return;
+  console.log("Testing PlayStream after `if (restartLock) return;`");
   restartLock = true;
   const stream = currentCard.dataset.stream;
   player.pause();
