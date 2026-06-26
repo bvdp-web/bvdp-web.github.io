@@ -99,6 +99,7 @@ function updateMediaSession(card, s = {}) {
            "/assets/images/favicon.png"
     }]
   });
+  console.log(navigator.mediaSession.metadata);
 }
 
 
