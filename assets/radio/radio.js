@@ -57,6 +57,13 @@ buttons.forEach(button => {
     card.classList.add("active");
     console.log("Button eventListener: selected new station");
     await PlayStream();
+    if ("mediaSession" in navigator) {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: "Loading…",
+        artist: "",
+        album: card.querySelector("h3")?.textContent || "Radio"
+      });
+    }
     changingStation = false;
   });
 });
@@ -109,11 +116,11 @@ async function updateNowPlaying() {
       console.log(navigator.mediaSession.metadata);
       console.log({
         valid,
-        currentCard: window.currentCard,
+        currentCard: currentCard,
         card,
-        same: window.currentCard === card
+        same: currentCard === card
       });
-      if (valid && window.currentCard && window.currentCard === card && "mediaSession" in navigator) {
+      if (valid && currentCard && currentCard === card && "mediaSession" in navigator) {
         navigator.mediaSession.metadata = new MediaMetadata({
           title: s.title || "",
           artist: s.artist || "",
