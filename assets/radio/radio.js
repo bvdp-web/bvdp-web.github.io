@@ -28,6 +28,7 @@ async function PlayStream() {
   player.removeAttribute("src");
   player.src = `${stream}?t=${Date.now()}`;
   player.load();
+  updateMediaSession(card, { title: "Loading…" });
   await player.play();
   if ("mediaSession" in navigator) {
     navigator.mediaSession.playbackState = "playing";
@@ -59,7 +60,6 @@ buttons.forEach(button => {
     currentCard = card;
     card.classList.add("active");
     console.log("Button eventListener: selected new station");
-    updateMediaSession(card, { title: "Loading…" });
     await PlayStream();
     changingStation = false;
   });
@@ -99,7 +99,6 @@ function updateMediaSession(card, s = {}) {
            "/assets/images/favicon.png"
     }]
   });
-  console.log(navigator.mediaSession.metadata);
 }
 
 
