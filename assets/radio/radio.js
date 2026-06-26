@@ -29,6 +29,9 @@ async function PlayStream() {
   player.src = `${stream}?t=${Date.now()}`;
   player.load();
   await player.play();
+  if ("mediaSession" in navigator) {
+    navigator.mediaSession.playbackState = "playing";
+  }
   console.log("Playing stream");
   restartLock = false;
 }
@@ -56,14 +59,8 @@ buttons.forEach(button => {
     currentCard = card;
     card.classList.add("active");
     console.log("Button eventListener: selected new station");
+    updateMediaSession(card, { title: "Loading…" });
     await PlayStream();
-    if ("mediaSession" in navigator) {
-      navigator.mediaSession.metadata = new MediaMetadata({
-        title: "Loading…",
-        artist: "",
-        album: card.querySelector("h3")?.textContent || "Radio"
-      });
-    }
     changingStation = false;
   });
 });
@@ -80,8 +77,29 @@ player.addEventListener("play", async () => {
 });
 player.addEventListener("pause", () => {
   console.log("Play eventListener: pause station");
+  if ("mediaSession" in navigator) {
+    navigator.mediaSession.playbackState = "paused";
+  }
   updateCurrentButton();
 });
+
+
+
+
+// --- Set MediaSessiondata ---
+function updateMediaSession(card, s = {}) {
+  if (!("mediaSession" in navigator)) return;
+  navigator.mediaSession.metadata = new MediaMetadata({
+    title: s.title || "Loading…",
+    artist: s.artist || "",
+    album: card.querySelector("h3")?.textContent?.trim() || "Radio",
+    artwork: [{
+      src: card.querySelector("img")?.src ||
+           document.querySelector('link[rel~="icon"]')?.href ||
+           "/assets/images/favicon.png"
+    }]
+  });
+}
 
 
 
@@ -112,20 +130,8 @@ async function updateNowPlaying() {
         text = [s.title, s.artist].filter(Boolean).join(" — ");
       }
       el.textContent = text || "Niet beschikbaar";
-      console.log("MediaSession supported:", "mediaSession" in navigator);
-      console.log(navigator.mediaSession.metadata);
-      console.log({
-        valid,
-        currentCard: currentCard,
-        card,
-        same: currentCard === card
-      });
-      if (valid && currentCard && currentCard === card && "mediaSession" in navigator) {
-        navigator.mediaSession.metadata = new MediaMetadata({
-          title: s.title || "",
-          artist: s.artist || "",
-          album: card.querySelector("h3")?.textContent || "Radio"
-        });
+      if (valid && currentCard === card) {
+        updateMediaSession(card, s);
       }
     })
     console.log("Metadata updated");
