@@ -41,11 +41,11 @@ buttons.forEach(button => {
     // Same station
     if (currentCard === card) {
       if (!player.paused) {
-        player.pause();
         console.log("Button eventListener: pause current station");
+        player.pause();
       } else {
-        await PlayStream();
         console.log("Button eventListener: play current station");
+        await PlayStream();
       }
       return;
     }
@@ -55,8 +55,8 @@ buttons.forEach(button => {
     resetStations();
     currentCard = card;
     card.classList.add("active");
-    await PlayStream();
     console.log("Button eventListener: selected new station");
+    await PlayStream();
     changingStation = false;
   });
 });
@@ -65,8 +65,8 @@ buttons.forEach(button => {
 // force a reconnect to the live stream ---
 player.addEventListener("play", async () => {
   if (!changingStation && !restartLock) {
-    await PlayStream();
     console.log("Play eventListener: play station");
+    await PlayStream();
     return;
   }
   updateCurrentButton();
