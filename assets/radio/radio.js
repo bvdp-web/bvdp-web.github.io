@@ -105,6 +105,14 @@ async function updateNowPlaying() {
         text = [s.title, s.artist].filter(Boolean).join(" — ");
       }
       el.textContent = text || "Niet beschikbaar";
+      console.log("MediaSession supported:", "mediaSession" in navigator);
+      console.log(navigator.mediaSession.metadata);
+      console.log({
+        valid,
+        currentCard: window.currentCard,
+        card,
+        same: window.currentCard === card
+      });
       if (valid && window.currentCard && window.currentCard === card && "mediaSession" in navigator) {
         navigator.mediaSession.metadata = new MediaMetadata({
           title: s.title || "",
