@@ -141,21 +141,14 @@ async function fetchCNL() {
   return res.json();
 }
 function parseCNL(data) {
-  const stations = data?.stations;
-  if (!stations || typeof stations !== "object") {
+  if (!data?.current) {
     throw new Error("Invalid CNL response shape");
   }
-  const out = [];
-  for (const [id, station] of Object.entries(stations)) {
-    const name = cnlStations[id];
-    if (!name) continue;
-    out.push({
-      name,
-      artist: station?.artist ?? null,
-      title: station?.title ?? null
-    });
-  }
-  return out;
+  return [{
+    name: cnlStations["cnl"],
+    artist: data.current.artist ?? null,
+    title: data.current.title ?? null
+  }];
 }
 
 // =========================
