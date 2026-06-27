@@ -1,6 +1,12 @@
 // =========================
 // SHARED CONSTANTS
 // =========================
+const roStations = Object.freeze({
+  2: "RO Psalmen",
+  3: "RO Klassiek",
+  5: "RO Orgel",
+  6: "RO Psalms and Hymns"
+});
 const gnrStations = {
   "gnr": "Groot Nieuws Radio",
   "non-stop": "GNR Non-Stop",
@@ -9,12 +15,6 @@ const gnrStations = {
 const coStations = {
   "co": "Christelijke Omroep"
 };
-const roStations = Object.freeze({
-  2: "RO Psalmen",
-  3: "RO Klassiek",
-  5: "RO Orgel",
-  6: "RO Psalms and Hymns"
-});
 const cnlStations = {
   "cnl": "ClassicNL"
 };
@@ -28,47 +28,6 @@ function errorResponse(name, err) {
     error: true,
     raw: err?.message ?? String(err)
   };
-}
-
-// =========================
-// GNR
-// =========================
-async function fetchGNR() {
-  const res = await fetch("https://api.grootnieuwsradio.nl/static/now-playing.json");
-  return res.json();
-}
-function parseGNR(data) {
-  const stations = data?.stations;
-  if (!stations || typeof stations !== "object") {
-    throw new Error("Invalid GNR response shape");
-  }
-  const out = [];
-  for (const [id, station] of Object.entries(stations)) {
-    const name = gnrStations[id];
-    if (!name) continue;
-    out.push({
-      name,
-      artist: station?.artist ?? null,
-      title: station?.title ?? null
-    });
-  }
-  return out;
-}
-
-// =========================
-// CO
-// =========================
-async function fetchCO() {
-  const res = await fetch("https://christelijkeomroep.nl/custom/ajax/getnowplaying.ajax.php");
-  return res.text();
-}
-function parseCO(raw) {
-  const parts = raw.trim().split(" - ");
-  return Object.entries(coStations).map(([id, name]) => ({
-    name,
-    artist: parts[0] ?? null,
-    title: parts.slice(1).join(" - ") ?? null
-  }));
 }
 
 // =========================
@@ -134,6 +93,47 @@ function parseRO(data, now) {
 }
 
 // =========================
+// GNR
+// =========================
+async function fetchGNR() {
+  const res = await fetch("https://api.grootnieuwsradio.nl/static/now-playing.json");
+  return res.json();
+}
+function parseGNR(data) {
+  const stations = data?.stations;
+  if (!stations || typeof stations !== "object") {
+    throw new Error("Invalid GNR response shape");
+  }
+  const out = [];
+  for (const [id, station] of Object.entries(stations)) {
+    const name = gnrStations[id];
+    if (!name) continue;
+    out.push({
+      name,
+      artist: station?.artist ?? null,
+      title: station?.title ?? null
+    });
+  }
+  return out;
+}
+
+// =========================
+// CO
+// =========================
+async function fetchCO() {
+  const res = await fetch("https://christelijkeomroep.nl/custom/ajax/getnowplaying.ajax.php");
+  return res.text();
+}
+function parseCO(raw) {
+  const parts = raw.trim().split(" - ");
+  return Object.entries(coStations).map(([id, name]) => ({
+    name,
+    artist: parts[0] ?? null,
+    title: parts.slice(1).join(" - ") ?? null
+  }));
+}
+
+// =========================
 // CNL
 // =========================
 async function fetchCNL() {
@@ -179,14 +179,14 @@ export async function onRequest(context) {
   const now = Date.now() + 45000;
 
   const [gnr, co, ro, cnl] = await Promise.all([
+    run(fetchRO, parseRO, Object.entries(roStations), now),
     run(fetchGNR, parseGNR, Object.values(gnrStations)),
     run(fetchCO, parseCO, Object.values(coStations)),
-    run(fetchRO, parseRO, Object.entries(roStations), now),
     run(fetchCNL, parseCNL, Object.values(cnlStations))
   ]);
   const result = {
     updatedAt: Date.now(),
-    stations: [...gnr, ...co, ...ro, ...cnl]
+    stations: [ ...ro, ...gnr, ...co, ...cnl]
   };
 
   const response = new Response(JSON.stringify(result), {
