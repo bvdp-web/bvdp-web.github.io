@@ -126,11 +126,11 @@ async function fetchCO() {
 }
 function parseCO(raw) {
   const parts = raw.trim().split(" - ");
-  return Object.entries(coStations).map(([id, name]) => ({
-    name,
+  return [{
+    name: coStations["co"],
     artist: parts[0] ?? null,
     title: parts.slice(1).join(" - ") ?? null
-  }));
+  }];
 }
 
 // =========================
