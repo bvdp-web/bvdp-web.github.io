@@ -39,7 +39,6 @@ async function PlayStream() {
   if ("mediaSession" in navigator) {
     navigator.mediaSession.playbackState = "playing";
   }
-  updateMediaSession(currentCard);
   console.log("Playing stream");
   restartLock = false;
   if (debug) { console.log("DEBUG: restartLock = false"); }
