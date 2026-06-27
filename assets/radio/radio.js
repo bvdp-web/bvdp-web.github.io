@@ -5,6 +5,7 @@ const buttons = document.querySelectorAll(".play-btn");
 let currentCard = null;
 let restartLock = false;
 let changingStation = false;
+let debug = false
 
 // --- UI helpers ---
 function resetStations() {
@@ -82,6 +83,13 @@ player.addEventListener("pause", () => {
   }
   updateCurrentButton();
 });
+if (debug) {
+  ["stalled", "waiting", "error"].forEach(type => {
+    player.addEventListener(type, (e) => {
+      console.log(e.type, e);
+    });
+  });
+}
 
 
 
@@ -99,6 +107,9 @@ function updateMediaSession(card, s = {}) {
            "/assets/images/favicon.png"
     }]
   });
+  if (debug) {
+    console.log(navigator.mediaSession.metadata);
+  }
 }
 
 
