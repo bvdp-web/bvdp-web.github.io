@@ -13,25 +13,28 @@ function resetStations() {
   buttons.forEach(button => {
     button.textContent = "▶ Play";
   });
+  if (debug) { console.log("DEBUG: resetStations()"); }
 }
 function updateCurrentButton() {
   if (!currentCard) return;
   const button = currentCard.querySelector(".play-btn");
   button.textContent = player.paused ? "▶ Play" : "⏹ Stop";
+  if (debug) { console.log("DEBUG: updateCurrentButton()"); }
 }
 
 // --- Always restart stream from live position ---
 async function PlayStream() {
   if (!currentCard || restartLock) return;
   restartLock = true;
-  if (debug) { console.log("restartLock = true"); }
+  if (debug) { console.log("DEBUG: restartLock = true"); }
   const stream = currentCard.dataset.stream;
   player.pause();
+  if (debug) { console.log("DEBUG: player.pause();"); }
   player.removeAttribute("src");
-  if (debug) { console.log("player.removeAttribute()"); }
+  if (debug) { console.log("DEBUG: player.removeAttribute();"); }
   player.src = `${stream}?t=${Date.now()}`;
   player.load();
-  if (debug) { console.log("player.load();"); }
+  if (debug) { console.log("DEBUG: player.load();"); }
   await player.play();
   if ("mediaSession" in navigator) {
     navigator.mediaSession.playbackState = "playing";
@@ -39,7 +42,7 @@ async function PlayStream() {
   updateMediaSession(currentCard);
   console.log("Playing stream");
   restartLock = false;
-  if (debug) { console.log("restartLock = false"); }
+  if (debug) { console.log("DEBUG: restartLock = false"); }
 }
 
 // --- Button clicks ---
@@ -73,6 +76,7 @@ buttons.forEach(button => {
 // --- If anything starts playback after a pause,
 // force a reconnect to the live stream ---
 player.addEventListener("play", async () => {
+  if (debug) { console.log("DEBUG: Play eventListener before `if (!changingStation && !restartLock)`"); }
   if (!changingStation && !restartLock) {
     console.log("Play eventListener: play station");
     await PlayStream();
@@ -90,7 +94,7 @@ player.addEventListener("pause", () => {
 if (debug) {
   ["stalled", "waiting", "error"].forEach(type => {
     player.addEventListener(type, (e) => {
-      console.log(e.type, e);
+      console.log("DEBUG: ", e.type, e);
     });
   });
 }
@@ -111,9 +115,7 @@ function updateMediaSession(card, s = {}) {
            "/assets/images/favicon.png"
     }]
   });
-  if (debug) {
-    console.log(navigator.mediaSession.metadata);
-  }
+  if (debug) { console.log("DEBUG: ", navigator.mediaSession.metadata); }
 }
 
 
