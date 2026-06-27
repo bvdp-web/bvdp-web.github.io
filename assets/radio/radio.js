@@ -29,11 +29,11 @@ async function PlayStream() {
   player.removeAttribute("src");
   player.src = `${stream}?t=${Date.now()}`;
   player.load();
-  updateMediaSession(currentCard, { title: "Loading…" });
   await player.play();
   if ("mediaSession" in navigator) {
     navigator.mediaSession.playbackState = "playing";
   }
+  updateMediaSession(currentCard);
   console.log("Playing stream");
   restartLock = false;
 }
