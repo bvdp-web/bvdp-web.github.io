@@ -24,11 +24,14 @@ function updateCurrentButton() {
 async function PlayStream() {
   if (!currentCard || restartLock) return;
   restartLock = true;
+  if (debug) { console.log("restartLock = true"); }
   const stream = currentCard.dataset.stream;
   player.pause();
   player.removeAttribute("src");
+  if (debug) { console.log("player.removeAttribute("src")"); }
   player.src = `${stream}?t=${Date.now()}`;
   player.load();
+  if (debug) { console.log("player.load();"); }
   await player.play();
   if ("mediaSession" in navigator) {
     navigator.mediaSession.playbackState = "playing";
@@ -36,6 +39,7 @@ async function PlayStream() {
   updateMediaSession(currentCard);
   console.log("Playing stream");
   restartLock = false;
+  if (debug) { console.log("restartLock = false"); }
 }
 
 // --- Button clicks ---
