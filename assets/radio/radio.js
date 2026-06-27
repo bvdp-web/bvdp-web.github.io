@@ -28,7 +28,7 @@ async function PlayStream() {
   const stream = currentCard.dataset.stream;
   player.pause();
   player.removeAttribute("src");
-  if (debug) { console.log("player.removeAttribute("src")"); }
+  if (debug) { console.log("player.removeAttribute()"); }
   player.src = `${stream}?t=${Date.now()}`;
   player.load();
   if (debug) { console.log("player.load();"); }
