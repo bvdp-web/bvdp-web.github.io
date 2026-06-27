@@ -35,13 +35,13 @@ async function PlayStream() {
   player.src = `${stream}?t=${Date.now()}`;
   player.load();
   if (debugRadio) { console.log("DEBUG: player.load();"); }
-  await player.play();
-  if ("mediaSession" in navigator) {
-    navigator.mediaSession.playbackState = "playing";
+  try {
+    await player.play();
+    console.log("Playing stream");
+  } finally {
+    restartLock = false;
+    if (debugRadio) { console.log("DEBUG: restartLock = false"); }
   }
-  console.log("Playing stream");
-  restartLock = false;
-  if (debugRadio) { console.log("DEBUG: restartLock = false"); }
 }
 
 // --- Button clicks ---
@@ -79,6 +79,9 @@ player.addEventListener("play", async () => {
   if (!changingStation && !restartLock) {
     console.log("Play eventListener: play station");
     await PlayStream();
+    if ("mediaSession" in navigator) {
+      navigator.mediaSession.playbackState = "playing";
+    }
     return;
   }
   updateCurrentButton();
