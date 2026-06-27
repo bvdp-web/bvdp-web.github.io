@@ -15,6 +15,9 @@ const roStations = Object.freeze({
   5: "RO Orgel",
   6: "RO Psalms and Hymns"
 });
+const cnlStations = {
+  "cnl": "ClassicNL"
+};
 
 // =========================
 // HELPERS
@@ -131,6 +134,31 @@ function parseRO(data, now) {
 }
 
 // =========================
+// CNL
+// =========================
+async function fetchCNL() {
+  const res = await fetch("https://www.classic.nl/nowplaying/fetch.php?station=CLASSICFM");
+  return res.json();
+}
+function parseCNL(data) {
+  const stations = data?.stations;
+  if (!stations || typeof stations !== "object") {
+    throw new Error("Invalid CNL response shape");
+  }
+  const out = [];
+  for (const [id, station] of Object.entries(stations)) {
+    const name = cnlStations[id];
+    if (!name) continue;
+    out.push({
+      name,
+      artist: station?.artist ?? null,
+      title: station?.title ?? null
+    });
+  }
+  return out;
+}
+
+// =========================
 // RUN WRAPPER
 // =========================
 async function run(fetchFn, parseFn, fallback, ...args) {
@@ -157,14 +185,15 @@ export async function onRequest(context) {
   if (cached) return cached;
   const now = Date.now() + 45000;
 
-  const [gnr, co, ro] = await Promise.all([
+  const [gnr, co, ro, cnl] = await Promise.all([
     run(fetchGNR, parseGNR, Object.values(gnrStations)),
     run(fetchCO, parseCO, Object.values(coStations)),
-    run(fetchRO, parseRO, Object.entries(roStations), now)
+    run(fetchRO, parseRO, Object.entries(roStations), now),
+    run(fetchCNL, parseCNL, Object.values(cnlStations))
   ]);
   const result = {
     updatedAt: Date.now(),
-    stations: [...gnr, ...co, ...ro]
+    stations: [...gnr, ...co, ...ro, ...cnl]
   };
 
   const response = new Response(JSON.stringify(result), {
