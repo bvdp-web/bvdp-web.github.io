@@ -146,8 +146,8 @@ function parseCNL(data) {
   }
   return [{
     name: cnlStations["cnl"],
-    artist: data.current.artist ?? null,
-    title: data.current.title ?? null
+    artist: data.current.title ?? null, // ClassicNL turned it around: artist=title and title=artist
+    title: data.current.artist ?? null
   }];
 }
 
