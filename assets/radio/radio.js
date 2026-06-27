@@ -79,10 +79,10 @@ player.addEventListener("play", async () => {
   if (!changingStation && !restartLock) {
     console.log("Play eventListener: play station");
     await PlayStream();
-    if ("mediaSession" in navigator) {
-      navigator.mediaSession.playbackState = "playing";
-    }
     return;
+  }
+  if ("mediaSession" in navigator) {
+    navigator.mediaSession.playbackState = "playing";
   }
   updateCurrentButton();
 });
