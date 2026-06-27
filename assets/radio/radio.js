@@ -81,16 +81,12 @@ player.addEventListener("play", async () => {
     await PlayStream();
     return;
   }
-  if ("mediaSession" in navigator) {
-    navigator.mediaSession.playbackState = "playing";
-  }
+  navigator.mediaSession.playbackState = "playing";
   updateCurrentButton();
 });
 player.addEventListener("pause", () => {
   console.log("Play eventListener: pause station");
-  if ("mediaSession" in navigator) {
-    navigator.mediaSession.playbackState = "paused";
-  }
+  navigator.mediaSession.playbackState = "paused";
   updateCurrentButton();
 });
 if (debugRadio) {
@@ -106,7 +102,6 @@ if (debugRadio) {
 
 // --- Set MediaSessiondata ---
 function updateMediaSession(card, s = {}) {
-  if (!("mediaSession" in navigator)) return;
   navigator.mediaSession.metadata = new MediaMetadata({
     title: s.title || "Loading…",
     artist: s.artist || "",
@@ -119,14 +114,12 @@ function updateMediaSession(card, s = {}) {
   });
   if (debugRadio) { console.log("DEBUG: ", navigator.mediaSession.metadata); }
 }
-if ('mediaSession' in navigator) {
-  navigator.mediaSession.setActionHandler('play', () => {
-    player.play();
-  });
-  navigator.mediaSession.setActionHandler('pause', () => {
-    player.pause();
-  });
-}
+navigator.mediaSession.setActionHandler('play', () => {
+  player.play();
+});
+navigator.mediaSession.setActionHandler('pause', () => {
+  player.pause();
+});
 
 
 
