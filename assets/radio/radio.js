@@ -116,7 +116,14 @@ function updateMediaSession(card, s = {}) {
   });
   if (debugRadio) { console.log("DEBUG: ", navigator.mediaSession.metadata); }
 }
-
+if ('mediaSession' in navigator) {
+  navigator.mediaSession.setActionHandler('play', () => {
+    player.play();
+  });
+  navigator.mediaSession.setActionHandler('pause', () => {
+    player.pause();
+  });
+}
 
 
 
