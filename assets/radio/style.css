@@ -51,3 +51,10 @@ html:not(.dark) .station-card[data-station-id="GNR Blijde Klanken"] img {
   min-height: 2.5em;
   overflow-wrap: break-word;
 }
+
+/* 📱 MOBILE */
+@media (max-width: 768px) {
+  .radio-section .now-playing {
+    display: none;
+  }
+}
