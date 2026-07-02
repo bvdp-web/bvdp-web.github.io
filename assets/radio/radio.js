@@ -1,7 +1,6 @@
 const player = document.getElementById("radioPlayer");
 const cards = document.querySelectorAll(".station-card");
 const buttons = document.querySelectorAll(".play-btn");
-
 let currentCard = null;
 let restartLock = false;
 let changingStation = false;
