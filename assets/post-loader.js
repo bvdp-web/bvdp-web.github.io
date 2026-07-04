@@ -65,6 +65,7 @@
     textNodes.forEach(textNode => {
       const parent = textNode.parentNode;
       const text = textNode.nodeValue;
+      text = text.replace(/([\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+)\.(\d+)/g, "$2.$1");
       const fragment = document.createDocumentFragment();
       let lastIndex = 0;
       const combinedRegex = /([\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+(?:\s+[\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+)*)|([\u0370-\u03FF\u1F00-\u1FFF]+)/g;
