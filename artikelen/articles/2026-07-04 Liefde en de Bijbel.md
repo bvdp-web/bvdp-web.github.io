@@ -15,6 +15,7 @@ De seksuele liefde, eros, kan zeker voortvloeien uit de agape en philia tussen m
 
 ## Overzicht grondwoorden en voorbeelden  
 In het onderstaand overzicht heb ik per testament de Hebreeuwse respectivelijk de Griekse woorden weergegeven met de Nederlandse vertaling. Ook heb ik voor de statestiek weergegeven hoevaak en in hoeveel versen deze woorden worden gebruikt. Ook heb ik per woord enkele of meerdere exemplarische teksten weergegeven.  
+
 ### Oude Testament  
 1. Ahavah ((lemma.sesb.h:אהב) / (lemma.sesb.h:אֲהָבָה)) &nbsp;&nbsp;&nbsp; (210+38x;197+35vs BHS)  
 &nbsp;&nbsp;&nbsp; --> Goddelijke en menselijke liefde  
