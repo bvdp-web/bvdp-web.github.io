@@ -63,8 +63,8 @@
       // --- 1. CLASSIFY ON ORIGINAL TEXT (FREEZE STATE) ---
       const isHebrewBlock = (t) => {
         const hebrew = (t.match(/[\u0590-\u05FF]/g) || []).length;
-        const latin = (t.match(/[a-zA-Z]/g) || []).length;
-        return hebrew / Math.max(t.length, 1) > 0.6 && latin === 0;
+        const latinWords = t.match(/[A-Za-z]{2,}/g);
+        return !latinWords;
       };
       const originalHebrewBlock = isHebrewBlock(originalText);
       // --- 2. LEMMA NUMBER NORMALIZATION ---
