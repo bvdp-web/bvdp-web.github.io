@@ -60,6 +60,7 @@
     textNodes.forEach(textNode => {
       const parent = textNode.parentNode;
       let originalText = textNode.nodeValue;
+      let text = originalText;
       // --- 1. CLASSIFY ON ORIGINAL TEXT (FREEZE STATE) ---
       const isHebrewBlock = (t) => {
         const hebrew = (t.match(/[\u0590-\u05FF]/g) || []).length;
