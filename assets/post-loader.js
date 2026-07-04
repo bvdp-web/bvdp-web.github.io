@@ -67,13 +67,13 @@
         return !latinWords;
       };
       const originalHebrewBlock = isHebrewBlock(originalText);
-      // --- 2. LEMMA NUMBER NORMALIZATION ---
-      let text = originalText.replace(
-        /([\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+)\.(\d+)/g,
-        "$2.$1"
-      );
-      // --- 3. SLASH REORDER (ONLY IF NOT HEBREW BLOCK) ---
+      // --- 2. LEMMA NUMBER NORMALIZATION (ONLY IF NOT HEBREW BLOCK) ---
       if (!originalHebrewBlock) {
+        let text = originalText.replace(
+          /([\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+)\.(\d+)/g,
+          "$2.$1"
+        );
+        // --- 3. SLASH REORDER (ONLY IF NOT HEBREW BLOCK) ---
         const parts = text.split(/\s*\/\s*/);
         const isHebrewSegment = str =>
           /^[\u0590-\u05FF\uFB1D-\uFB4F״׳־׃\s\.\d]+$/.test(str);
@@ -128,8 +128,7 @@
       const hebrew = text.match(/[\u0590-\u05FF]/g) || [];
       const greek = text.match(/[\u0370-\u03FF\u1F00-\u1FFF]/g) || [];
       const latinWords = text.match(/[A-Za-z]{2,}/g);
-      const hasLatin = !!latinWords;
-      if (!hasLatin) {
+      if (!latinWords) {
         if (hebrew.length > greek.length) {
           p.classList.add("hebrew-block");
         } else if (greek.length > hebrew.length) {
