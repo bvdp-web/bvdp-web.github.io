@@ -49,7 +49,20 @@
       if (!originalText) return;
       let text = originalText;
       const originalHebrewBlock = isHebrewBlock(originalText);
-
+      // 1. lemma normalization (only outside Hebrew blocks)
+      if (!originalHebrewBlock) {
+        text = text.replace(
+          /([\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+)\.(\d+)/g,
+          "$2.$1"
+        );
+      }
+      // 2. slash reorder (only outside Hebrew blocks)
+      if (!originalHebrewBlock) {
+        const parts = text.split(/\s*\/\s*/);
+        if (parts.length > 1 && parts.every(isHebrewSegment)) {
+          text = parts.reverse().join(" / ");
+        }
+      }
       // 3. rendering decision
       const fragment = document.createDocumentFragment();
       if (originalHebrewBlock) {
