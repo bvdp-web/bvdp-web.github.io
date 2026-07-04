@@ -441,8 +441,9 @@ footer {
   margin-bottom: 1rem;
 }
 .markdown-body blockquote {
-  border-left: .25em solid grey;
+  border-left: .15em solid grey;
   padding: 0 1em;
+  line-height: 1;
 }
 /* Hebrew and Greek styling */
 .hebrew-inline {
