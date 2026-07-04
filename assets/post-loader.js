@@ -70,7 +70,7 @@
       } else {
         let lastIndex = 0;
         const combinedRegex =
-          /([\u0590-\u05FF\uFB1D-\u05FF״׳־׃]+(?:\s+[\u0590-\u05FF\uFB1D-\u05FF״׳־׃]+)*)|([\u0370-\u03FF\u1F00-\u1FFF]+)/g;
+          /([\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+(?:\s+[\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+)*)|([\u0370-\u03FF\u1F00-\u1FFF]+)/g;
         text.replace(combinedRegex, (match, hebrewMatch, greekMatch, offset) => {
           if (offset > lastIndex) {
             fragment.appendChild(
