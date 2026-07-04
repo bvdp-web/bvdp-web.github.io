@@ -64,7 +64,7 @@
     }
     textNodes.forEach(textNode => {
       const parent = textNode.parentNode;
-      const text = textNode.nodeValue;
+      let text = textNode.nodeValue;
       text = text.replace(/([\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+)\.(\d+)/g, "$2.$1");  // fix lemma numbering order
       const parts = text.split(/\s*\/\s*/); // reorder Hebrew slash chains
       const isHebrew = str => /^[\u0590-\u05FF\uFB1D-\uFB4F״׳־׃\s\.\d]+$/.test(str);
