@@ -31,12 +31,10 @@
     });
     backContainer.appendChild(backBtn);
   }
-  
+
   function applyBiblicalLanguageSupport(container) {
     const hebrewChar = /[\u0590-\u05FF\uFB1D-\uFB4F]/;
     const greekChar = /[\u0370-\u03FF\u1F00-\u1FFF]/;
-    const hebrewWord = /([\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+)/g;
-    const greekWord = /([\u0370-\u03FF\u1F00-\u1FFF]+)/g;
     const skipTags = ["CODE", "PRE", "SCRIPT", "STYLE"];
     const walker = document.createTreeWalker(
       container,
@@ -44,13 +42,10 @@
       {
         acceptNode(node) {
           if (!node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
-          if (skipTags.includes(node.parentNode.nodeName))
+          if (skipTags.includes(node.parentNode.nodeName)) {
             return NodeFilter.FILTER_REJECT;
-  
-          if (
-            hebrewChar.test(node.nodeValue) ||
-            greekChar.test(node.nodeValue)
-          ) {
+          }
+          if (hebrewChar.test(node.nodeValue) || greekChar.test(node.nodeValue)) {
             return NodeFilter.FILTER_ACCEPT;
           }
           return NodeFilter.FILTER_REJECT;
@@ -63,15 +58,22 @@
       textNodes.push(node);
     }
     textNodes.forEach(textNode => {
-      const isHebrewBlock = (text) => {
-        const hebrew = (text.match(/[\u0590-\u05FF]/g) || []).length;
-        const latin = (text.match(/[a-zA-Z]/g) || []).length;
-        return hebrew / Math.max(text.length, 1) > 0.6 && latin === 0;
-      };
       const parent = textNode.parentNode;
-      let text = textNode.nodeValue;
-      text = text.replace(/([\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+)\.(\d+)/g, "$2.$1");  // fix lemma numbering order
-      if (!isHebrewBlock(text)) {
+      let originalText = textNode.nodeValue;
+      // --- 1. CLASSIFY ON ORIGINAL TEXT (FREEZE STATE) ---
+      const isHebrewBlock = (t) => {
+        const hebrew = (t.match(/[\u0590-\u05FF]/g) || []).length;
+        const latin = (t.match(/[a-zA-Z]/g) || []).length;
+        return hebrew / Math.max(t.length, 1) > 0.6 && latin === 0;
+      };
+      const originalHebrewBlock = isHebrewBlock(originalText);
+      // --- 2. LEMMA NUMBER NORMALIZATION ---
+      let text = originalText.replace(
+        /([\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+)\.(\d+)/g,
+        "$2.$1"
+      );
+      // --- 3. SLASH REORDER (ONLY IF NOT HEBREW BLOCK) ---
+      if (!originalHebrewBlock) {
         const parts = text.split(/\s*\/\s*/);
         const isHebrewSegment = str =>
           /^[\u0590-\u05FF\uFB1D-\uFB4F״׳־׃\s\.\d]+$/.test(str);
@@ -79,39 +81,45 @@
           text = parts.reverse().join(" / ");
         }
       }
+      // --- 4. RENDERING ---
       const fragment = document.createDocumentFragment();
-      let lastIndex = 0;
-      const combinedRegex = /([\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+(?:\s+[\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+)*)|([\u0370-\u03FF\u1F00-\u1FFF]+)/g;
-      text.replace(combinedRegex, (match, hebrewMatch, greekMatch, offset) => {
-        if (offset > lastIndex) {
+      if (originalHebrewBlock) {
+        fragment.appendChild(document.createTextNode(text));
+      } else {
+        let lastIndex = 0;
+        const combinedRegex =
+          /([\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+(?:\s+[\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+)*)|([\u0370-\u03FF\u1F00-\u1FFF]+)/g;
+        text.replace(combinedRegex, (match, hebrewMatch, greekMatch, offset) => {
+          if (offset > lastIndex) {
+            fragment.appendChild(
+              document.createTextNode(text.slice(lastIndex, offset))
+            );
+          }
+          const span = document.createElement("span");
+          if (hebrewMatch) {
+            span.className = /H[1-6]/.test(parent.nodeName)
+              ? "hebrew-heading"
+              : "hebrew-inline";
+          } else {
+            span.className = /H[1-6]/.test(parent.nodeName)
+              ? "greek-heading"
+              : "greek-inline";
+          }
+          span.textContent = match;
+          fragment.appendChild(span);
+          lastIndex = offset + match.length;
+        });
+        if (lastIndex < text.length) {
           fragment.appendChild(
-            document.createTextNode(text.slice(lastIndex, offset))
+            document.createTextNode(text.slice(lastIndex))
           );
         }
-        const span = document.createElement("span");
-        if (hebrewMatch) {
-          span.className = /H[1-6]/.test(parent.nodeName)
-            ? "hebrew-heading"
-            : "hebrew-inline";
-        } else {
-          span.className = /H[1-6]/.test(parent.nodeName)
-            ? "greek-heading"
-            : "greek-inline";
-        }
-        span.textContent = match;
-        fragment.appendChild(span);
-        lastIndex = offset + match.length;
-      });
-      if (lastIndex < text.length) {
-        fragment.appendChild(
-          document.createTextNode(text.slice(lastIndex))
-        );
       }
       parent.replaceChild(fragment, textNode);
     });
     detectLanguageBlocks(container);
   }
-  
+
   function detectLanguageBlocks(container) {
     const paragraphs = container.querySelectorAll("p, blockquote");
     paragraphs.forEach(p => {
