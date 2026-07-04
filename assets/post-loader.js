@@ -65,8 +65,12 @@
     textNodes.forEach(textNode => {
       const parent = textNode.parentNode;
       const text = textNode.nodeValue;
-      text = text.split(" / ").reverse().join(" / "); // normalize ordering FIRST
       text = text.replace(/([\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+)\.(\d+)/g, "$2.$1");  // fix lemma numbering order
+      const parts = text.split(/\s*\/\s*/); // reorder Hebrew slash chains
+      const isHebrew = str => /^[\u0590-\u05FF\uFB1D-\u05FF״׳־׃\s\.\d]+$/.test(str);
+      if (parts.length > 1 && parts.every(isHebrew)) {
+        text = parts.reverse().join(" / ");
+      }
       const fragment = document.createDocumentFragment();
       let lastIndex = 0;
       const combinedRegex = /([\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+(?:\s+[\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+)*)|([\u0370-\u03FF\u1F00-\u1FFF]+)/g;
