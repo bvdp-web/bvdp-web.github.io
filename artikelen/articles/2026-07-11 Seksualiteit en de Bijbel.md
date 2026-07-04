@@ -31,11 +31,11 @@ Spreuken 6:32&nbsp;&nbsp;[Maar] die met een vrouw overspel doet, is verstandeloo
 Spreuken 30:20&nbsp;&nbsp;Alzo is de weg ener overspelige vrouw; zij eet en wist haar mond, en zegt: Ik heb geen ongerechtigheid gewrocht!  
 Profetiën waarin God overspel verwijdt.  
 
-### lemma.sesb.h:זנה.1 / זְנוּנִים (hoererij)  
+### lemma.sesb.h:<span>זנה.1</span> / <span>זְנוּנִים</span> (hoererij)  
 BHS: 93+12x in 82+10 versen  
 
-lemma.sesb.h:זנה.1 NOT lemma.sesb.h:נאף NOT lemma.sesb.h:נַאֲפוּפִים NOT lemma.sesb.h:נִאֻפִים +   
-lemma.sesb.h:זְנוּנִים NOT lemma.sesb.h:זנה.1 NOT lemma.sesb.h:נאף NOT lemma.sesb.h:נַאֲפוּפִים NOT lemma.sesb.h:נִאֻפִים:  
+lemma.sesb.h:<span>זנה.1</span> NOT lemma.sesb.h:<span>נאף</span> NOT lemma.sesb.h:<span>נַאֲפוּפִים</span> NOT lemma.sesb.h:<span>נִאֻפִים</span> +   
+lemma.sesb.h:<span>זְנוּנִים</span> NOT lemma.sesb.h:<span>זנה.1</span> NOT lemma.sesb.h:<span>נאף</span> NOT lemma.sesb.h:<span>נַאֲפוּפִים</span> NOT lemma.sesb.h:<span>נִאֻפִים</span>:  
 BHS: 86+5x in 76+5 versen  
 
 Leviticus 19:29&nbsp;&nbsp;Gij zult uw dochter niet ontheiligen, haar ter hoererij houdende; opdat het land niet hoerere, en het land met schandelijke daden vervuld worde.  
@@ -49,7 +49,7 @@ Geschiedenissen met betrekking tot hoererij en wetten en profetiën met betrekki
 ### lemma.sesb.h:<span>קָדֵשׁ.1</span> (tempelprosituee)  
 BHS: 11x in 9 versen  
 
-lemma.sesb.h:קָדֵשׁ.1 NOT lemma.sesb.h:זְנוּנִים NOT lemma.sesb.h:זנה.1 NOT lemma.sesb.h:נאף NOT lemma.sesb.h:נַאֲפוּפִים NOT lemma.sesb.h:נִאֻפִים:  
+lemma.sesb.h:<span>קָדֵשׁ.1</span> NOT lemma.sesb.h:<span>זְנוּנִים</span> NOT lemma.sesb.h:<span>זנה.1</span> NOT lemma.sesb.h:<span>נאף</span> NOT lemma.sesb.h:<span>נַאֲפוּפִים</span> NOT lemma.sesb.h:<span>נִאֻפִים</span>:  
 BHS: 10x in 8 versen  
 
 Genesis 38:21-22&nbsp;&nbsp;En hij vraagde de lieden van haar plaats, zeggende: Waar is de hoer, die bij deze twee fonteinen aan den weg was? En zij zeiden: Hier is geen hoer geweest.&nbsp;&nbsp;En hij keerde weder tot Juda, en zeide: Ik heb haar niet gevonden; en ook zeiden de lieden van die plaats: Hier is geen hoer geweest.  
