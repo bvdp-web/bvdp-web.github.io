@@ -451,6 +451,7 @@ footer {
   direction: rtl;
   unicode-bidi: isolate;
   font-feature-settings: "kern", "liga";
+  font-size: 1.15em;
   letter-spacing: 0.05em;
   white-space: nowrap; /* keeps Hebrew words intact */
 }
