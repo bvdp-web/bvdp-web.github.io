@@ -63,13 +63,21 @@
       textNodes.push(node);
     }
     textNodes.forEach(textNode => {
+      const isHebrewBlock = (text) => {
+        const hebrew = (text.match(/[\u0590-\u05FF]/g) || []).length;
+        const latin = (text.match(/[a-zA-Z]/g) || []).length;
+        return hebrew / Math.max(text.length, 1) > 0.6 && latin === 0;
+      };
       const parent = textNode.parentNode;
       let text = textNode.nodeValue;
       text = text.replace(/([\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+)\.(\d+)/g, "$2.$1");  // fix lemma numbering order
-      const parts = text.split(/\s*\/\s*/); // reorder Hebrew slash chains
-      const isHebrew = str => /^[\u0590-\u05FF\uFB1D-\uFB4F״׳־׃\s\.\d]+$/.test(str);
-      if (parts.length > 1 && parts.every(isHebrew)) {
-        text = parts.reverse().join(" / ");
+      if (!isHebrewBlock(text)) {
+        const parts = text.split(/\s*\/\s*/);
+        const isHebrewSegment = str =>
+          /^[\u0590-\u05FF\uFB1D-\uFB4F״׳־׃\s\.\d]+$/.test(str);
+        if (parts.length > 1 && parts.every(isHebrewSegment)) {
+          text = parts.reverse().join(" / ");
+        }
       }
       const fragment = document.createDocumentFragment();
       let lastIndex = 0;
