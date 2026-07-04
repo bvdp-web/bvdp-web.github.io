@@ -408,12 +408,10 @@ footer {
 .markdown-body {
   line-height: 1.25; 
 }
-.markdown-body h1 {
-  margin-top: 0;
-  margin-bottom: 0.75rem;
-  font-weight: 600;
+.markdown-body > :first-child {
+  margin-top: 0 !important;
 }
-.markdown-body h1:not(:first-of-type),
+.markdown-body h1,
 .markdown-body h2,
 .markdown-body h3,
 .markdown-body h4,
@@ -441,6 +439,10 @@ footer {
 .markdown-body details {
   margin-top: 0;
   margin-bottom: 1rem;
+}
+.markdown-body blockquote {
+  border-left: .25em solid grey;
+  padding: 0 1em;
 }
 /* Hebrew and Greek styling */
 .hebrew-inline {
