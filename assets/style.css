@@ -57,8 +57,9 @@ html.dark {
   --dailyverses-title: #6ea79e;
   --button-bg-active: #777;
   --back-button-bg: #132946;
+  --back-button-color: lightblue;
 }
-html.dark .container a {
+html.dark .container a:not(.button) {
   color: lightblue;
 }
 
