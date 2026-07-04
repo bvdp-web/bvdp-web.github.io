@@ -31,7 +31,7 @@ Spreuken 6:32&nbsp;&nbsp;[Maar] die met een vrouw overspel doet, is verstandeloo
 Spreuken 30:20&nbsp;&nbsp;Alzo is de weg ener overspelige vrouw; zij eet en wist haar mond, en zegt: Ik heb geen ongerechtigheid gewrocht!  
 Profetiën waarin God overspel verwijdt.  
 
-### lemma.sesb.h:<span>זנה.1</span> / <span>זְנוּנִים</span> (hoererij)  
+### lemma.sesb.h:זנה.1 / זְנוּנִים (hoererij)  
 BHS: 93+12x in 82+10 versen  
 
 lemma.sesb.h:זנה.1 NOT lemma.sesb.h:נאף NOT lemma.sesb.h:נַאֲפוּפִים NOT lemma.sesb.h:נִאֻפִים +   
