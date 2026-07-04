@@ -125,15 +125,14 @@
     paragraphs.forEach(p => {
       const text = p.textContent.trim();
       if (!text) return;
-      const hebrewCount =
-        (text.match(/[\u0590-\u05FF]/g) || []).length;
-      const greekCount =
-        (text.match(/[\u0370-\u03FF\u1F00-\u1FFF]/g) || []).length;
-      const ratio = (hebrewCount + greekCount) / text.length;
-      if (ratio > 0.6) {
-        if (hebrewCount > greekCount) {
+      const hebrew = text.match(/[\u0590-\u05FF]/g) || [];
+      const greek = text.match(/[\u0370-\u03FF\u1F00-\u1FFF]/g) || [];
+      const latinWords = text.match(/[A-Za-z]{2,}/g);
+      const hasLatin = !!latinWords;
+      if (!hasLatin) {
+        if (hebrew.length > greek.length) {
           p.classList.add("hebrew-block");
-        } else {
+        } else if (greek.length > hebrew.length) {
           p.classList.add("greek-block");
         }
       }
