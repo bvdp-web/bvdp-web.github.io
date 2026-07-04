@@ -19,7 +19,7 @@ James, Sharon - *Gender Ideology: What Do Christians Need to Know* (2019)
 Perry, Laura - *Transgender to Transformed: A Story of Transition That Will Truly Set You Free* (2020)  
 
 ## Oude Testament  
-### lemma.sesb.h:<span>נאף</span> / <span>נַאֲפוּפִים</span> / <span>נִאֻפִים</span> (overspel, echtbreken)  
+### lemma.sesb.h:<span>נאף</span> , <span>נַאֲפוּפִים</span> / <span>נִאֻפִים</span> (overspel, echtbreken)  
 BHS: 31+2+1x in 26+2+1 versen  
 
 Exodus 20:14&nbsp;&nbsp;Gij zult niet echtbreken.  
