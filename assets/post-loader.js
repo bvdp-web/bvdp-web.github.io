@@ -33,63 +33,44 @@
   }
 
   function applyBiblicalLanguageSupport(container) {
-    const hebrewChar = /[\u0590-\u05FF\uFB1D-\uFB4F]/;
-    const greekChar = /[\u0370-\u03FF\u1F00-\u1FFF]/;
-    const skipTags = ["CODE", "PRE", "SCRIPT", "STYLE"];
-    const walker = document.createTreeWalker(
-      container,
-      NodeFilter.SHOW_TEXT,
-      {
-        acceptNode(node) {
-          if (!node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
-          if (skipTags.includes(node.parentNode.nodeName)) {
-            return NodeFilter.FILTER_REJECT;
-          }
-          if (hebrewChar.test(node.nodeValue) || greekChar.test(node.nodeValue)) {
-            return NodeFilter.FILTER_ACCEPT;
-          }
-          return NodeFilter.FILTER_REJECT;
-        }
-      }
-    );
-    const textNodes = [];
-    let node;
-    while ((node = walker.nextNode())) {
-      textNodes.push(node);
-    }
-    textNodes.forEach(textNode => {
-      const parent = textNode.parentNode;
-      let originalText = textNode.nodeValue;
+    const skipTags = new Set(["CODE", "PRE", "SCRIPT", "STYLE"]);
+    const hebrewRegex = /[\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]/;
+    const greekRegex = /[\u0370-\u03FF\u1F00-\u1FFF]/;
+    const isHebrewBlock = (t) => {
+      const latinWords = t.match(/[A-Za-z]{2,}/g);
+      return !latinWords;
+    };
+    const isHebrewSegment = (s) =>
+      /^[\u0590-\u05FF\uFB1D-\uFB4F״׳־׃\s\.\d]+$/.test(s);
+    const blocks = container.querySelectorAll("h1, h2, h3, h4, h5, h6, p, blockquote");
+    blocks.forEach(el => {
+      if (skipTags.has(el.tagName)) return;
+      const originalText = el.textContent.trim();
+      if (!originalText) return;
       let text = originalText;
-      // --- 1. CLASSIFY ON ORIGINAL TEXT (FREEZE STATE) ---
-      const isHebrewBlock = (t) => {
-        const hebrew = (t.match(/[\u0590-\u05FF]/g) || []).length;
-        const latinWords = t.match(/[A-Za-z]{2,}/g);
-        return !latinWords;
-      };
       const originalHebrewBlock = isHebrewBlock(originalText);
-      // --- 2. LEMMA NUMBER NORMALIZATION (ONLY IF NOT HEBREW BLOCK) ---
+      // 1. lemma normalization (only outside Hebrew blocks)
       if (!originalHebrewBlock) {
-        let text = originalText.replace(
+        text = text.replace(
           /([\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+)\.(\d+)/g,
           "$2.$1"
         );
-        // --- 3. SLASH REORDER (ONLY IF NOT HEBREW BLOCK) ---
+      }
+      // 2. slash reorder (only outside Hebrew blocks)
+      if (!originalHebrewBlock) {
         const parts = text.split(/\s*\/\s*/);
-        const isHebrewSegment = str =>
-          /^[\u0590-\u05FF\uFB1D-\uFB4F״׳־׃\s\.\d]+$/.test(str);
         if (parts.length > 1 && parts.every(isHebrewSegment)) {
           text = parts.reverse().join(" / ");
         }
       }
-      // --- 4. RENDERING ---
+      // 3. rendering decision
       const fragment = document.createDocumentFragment();
       if (originalHebrewBlock) {
         fragment.appendChild(document.createTextNode(text));
       } else {
         let lastIndex = 0;
         const combinedRegex =
-          /([\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+(?:\s+[\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+)*)|([\u0370-\u03FF\u1F00-\u1FFF]+)/g;
+          /([\u0590-\u05FF\uFB1D-\u05FF״׳־׃]+(?:\s+[\u0590-\u05FF\uFB1D-\u05FF״׳־׃]+)*)|([\u0370-\u03FF\u1F00-\u1FFF]+)/g;
         text.replace(combinedRegex, (match, hebrewMatch, greekMatch, offset) => {
           if (offset > lastIndex) {
             fragment.appendChild(
@@ -98,11 +79,11 @@
           }
           const span = document.createElement("span");
           if (hebrewMatch) {
-            span.className = /H[1-6]/.test(parent.nodeName)
+            span.className = /H[1-6]/.test(el.nodeName)
               ? "hebrew-heading"
               : "hebrew-inline";
           } else {
-            span.className = /H[1-6]/.test(parent.nodeName)
+            span.className = /H[1-6]/.test(el.nodeName)
               ? "greek-heading"
               : "greek-inline";
           }
@@ -116,7 +97,7 @@
           );
         }
       }
-      parent.replaceChild(fragment, textNode);
+      el.replaceChildren(fragment);
     });
     detectLanguageBlocks(container);
   }
