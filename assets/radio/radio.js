@@ -147,6 +147,7 @@ async function updateNowPlaying() {
         text = [s.title, s.artist].filter(Boolean).join(" — ");
       }
       el.textContent = text || "Niet beschikbaar";
+      el.title = text || "Niet beschikbaar";
       if (valid && currentCard === card) {
         updateMediaSession(card, s);
       }
