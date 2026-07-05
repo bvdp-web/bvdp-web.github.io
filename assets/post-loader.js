@@ -59,11 +59,7 @@
     while ((node = walker.nextNode())) {
       const parent = node.parentElement;
       if (!parent || skip.has(parent.tagName)) continue;
-      let block = blockCache.get(parent);
-      if (!block) {
-        block = parent.closest("h1,h2,h3,h4,h5,h6,p,blockquote");
-        blockCache.set(parent, block);
-      }
+      const block = parent.closest("h1,h2,h3,h4,h5,h6,p,blockquote");
       const blockLang = block ? blockMap.get(block) : null;
       const text = node.nodeValue;
       if (!text || !text.trim()) continue;
