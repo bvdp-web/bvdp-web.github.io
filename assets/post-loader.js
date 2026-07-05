@@ -147,9 +147,9 @@
     linkify: true,
     typographer: false
   }).use(window.markdownitFootnote)
+    .use(window.markdownitMark)
     .use(window.markdownitSub)
-    .use(window.markdownitSup)
-    .use(window.markdownitMark);
+    .use(window.markdownitSup);
   // --- LoadPost Function ---
   async function loadPost() {
     if (!post) return showNotFound();
