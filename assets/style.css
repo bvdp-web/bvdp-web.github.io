@@ -452,17 +452,16 @@ footer {
   padding: 0 1em;
   line-height: 1;
 }
+.markdown-body .footnotes-sep {
+  margin-top: 2.5rem;
+}
 .markdown-body .footnotes {
-  font-size: 0.9em;
-  margin-top: 2em;
-  border-top: 1px solid #ddd;
+  font-size: 0.85em;
   padding-top: 1em;
+  color: gray;
 }
-.markdown-body.footnotes ol {
-  padding-left: 1.5em;
-}
-.markdown-body.footnotes li {
-  margin-bottom: 0.5em;
+.markdown-body .footnotes-list {
+  padding-left: 1rem;
 }
 /* Hebrew and Greek styling */
 .hebrew-inline {
