@@ -35,27 +35,14 @@
   function applyBiblicalLanguageSupport(container) {
     const skipTags = new Set(["SCRIPT", "STYLE", "CODE", "PRE"]);
     // TEXT CLASSIFICATION HELPERS
-    function classifyText(text) {
-      const cleaned = text.replace(/^[A-Za-z]+\s*\d+:\d+\s*/, "");
-      const tokens = cleaned.split(/\s+/).filter(Boolean);
-      let greekTokens = 0;
-      let hebrewTokens = 0;
-      let latinTokens = 0;
-      for (const t of tokens) {
-        if (/[\u0370-\u03FF\u1F00-\u1FFF]/.test(t)) {
-          greekTokens++;
-        } else if (/[\u0590-\u05FF]/.test(t)) {
-          hebrewTokens++;
-        } else if (/[A-Za-z]{2,}/.test(t)) {
-          latinTokens++;
-        }
-      }
-      const total = tokens.length;
-      const greekRatio = greekTokens / total;
-      const hebrewRatio = hebrewTokens / total;
-      const latinRatio = latinTokens / total;
-      if (greekRatio > 0.6 && latinRatio < 0.3) return "greek";
-      if (hebrewRatio > 0.6 && latinRatio < 0.3) return "hebrew";
+    function getBlockLanguage(el) {
+      const text = el.textContent.trim();
+      const hebrew = (text.match(/[\u0590-\u05FF]/g) || []).length;
+      const greek = (text.match(/[\u0370-\u03FF\u1F00-\u1FFF]/g) || []).length;
+      const latin = (text.match(/[A-Za-z]{2,}/g) || []).length;
+      if (latin) return null;
+      if (hebrew > greek) return "hebrew";
+      if (greek > hebrew) return "greek";
       return null;
     }
     function isHebrewSegment(s) {
@@ -136,7 +123,7 @@
       }
       for (const node of nodes) {
         if (node.nodeName === "BR") {
-          // flushLine();
+          flushLine();
           continue;
         }
         if (node.nodeType === 3) {
@@ -145,7 +132,7 @@
       }
       flushLine();
       // Remove original content safely
-      nodes.forEach(n => n.remove());
+      // nodes.forEach(n => n.remove());
     }
     // RUN
     const blocks = container.querySelectorAll("h1,h2,h3,h4,h5,h6,p,blockquote");
