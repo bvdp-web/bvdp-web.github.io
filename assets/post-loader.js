@@ -144,10 +144,10 @@
     try {
       const res = await fetch(`/${section}/articles/${post}.md`);
       if (!res.ok) throw new Error();
-      let md = await res.text();
+      let text = await res.text();
       // Remove YAML front matter if present
-      md = md.replace(/^---\s*[\s\S]*?---\s*/, "");
-      content.innerHTML = marked.parse(md);
+      text = text.replace(/^---\s*[\s\S]*?---\s*/, "");
+      content.innerHTML = md.render(text);
       requestAnimationFrame(() => {
         applyBiblicalLanguageSupport(content);
       });
@@ -155,6 +155,7 @@
       showNotFound();
     }
   }
+
 
   function showNotFound() {
     content.innerHTML = `
