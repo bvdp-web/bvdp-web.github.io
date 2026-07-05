@@ -1,24 +1,23 @@
 (async function () {
+  // SET BACK BUTTON
   const params = new URLSearchParams(window.location.search);
   const post = params.get("post");
   const content = document.getElementById("content");
   if (!content) return;
-
   const pathParts = window.location.pathname.split("/");
   const section = pathParts.includes("preken") ? "preken" : "artikelen";
-
   const backContainer = document.getElementById("back-button");
   if (backContainer) {
-    // Create back button element
+    // --- Create back button element ---
     const backBtn = document.createElement("a");
     backBtn.className = "back-btn";
     backBtn.title = "Ga terug naar de vorige pagina";
     backBtn.setAttribute("aria-label", "Ga terug naar de vorige pagina");
     backBtn.textContent = "← Terug naar het overzicht";
-    // Add dynamic click handler
+    // --- Add dynamic click handler ---
     backBtn.addEventListener("click", e => {
       e.preventDefault();
-      // Check if the referrer contains artikelen or preken
+      // check if the referrer contains artikelen or preken
       if (document.referrer) {
         const ref = document.referrer.toLowerCase();
         if (ref.includes("/artikelen/") || ref.includes("/preken/")) {
@@ -26,19 +25,20 @@
           return;
         }
       }
-      // Fallback: go to section overview
+      // fallback: go to section overview
       window.location.href = `/${section}/`;
     });
     backContainer.appendChild(backBtn);
   }
 
+  // APPLY SUPPORT FOR BiIBLICAL LANGUAGE
   function applyBiblicalLanguageSupport(container) {
     const skipTags = new Set(["SCRIPT", "STYLE", "CODE", "PRE"]);
-    // METADATA STRIPPING
+    // --- Metadata Stripping ---
     function stripReferenceMetadata(text) {
       return text.replace(/^[A-Za-z]+\s*\d+:\d+\s*/, "").trim();
     }
-    // LINGUISTIC CLASSIFICATION
+    // --- Linguistic Classification ---
     function classifyText(text) {
       const cleaned = stripReferenceMetadata(text);
       const tokens = cleaned.split(/\s+/).filter(Boolean);
@@ -58,17 +58,17 @@
       if (hebrewRatio > 0.7 && latinRatio < 0.2) return "hebrew";
       return null;
     }
-    // HEBREW SEGMENT CHECK
+    // --- Hebrew Segment Check ---
     function isHebrewSegment(s) {
       return /^[\u0590-\u05FF\uFB1D-\uFB4F״׳־׃\s\.\d]+$/.test(s);
     }
-    // PREPROCESS (SAFE)
+    // --- Preprocess ---
     function preprocess(text) {
       // lemma normalization
       text = text.replace(/([\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+)\.(\d+)/g, "$2.$1");
       return text;
     }
-    // INLINE WRAPPER
+    // --- Inline Wrapper ---
     function renderInline(text, isHeading) {
       const fragment = document.createDocumentFragment();
       const regex = /([\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+(?:\s+[\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+)*)|([\u0370-\u03FF\u1F00-\u1FFF]+)/g;
@@ -93,7 +93,7 @@
       }
       return fragment;
     }
-    // CORE: TEXT NODE WALKER
+    // --- Text Node Walker
     function walkTextNodes(root) {
       const walker = document.createTreeWalker(
         root,
@@ -115,7 +115,7 @@
       while (walker.nextNode()) nodes.push(walker.currentNode);
       return nodes;
     }
-    // MAIN PROCESSOR
+    // --- Main Processor ---
     function process(container) {
       const textNodes = walkTextNodes(container);
       for (const node of textNodes) {
@@ -136,17 +136,25 @@
         node.replaceWith(renderInline(text, isHeading));
       }
     }
-    // RUN
+    // --- Run ---
     process(container);
   }
 
+  // LOAD POST USING MARKDOWN PARSER
+  // --- Set Markdown-It options
+  const md = window.markdownit({
+    html: true,
+    linkify: true,
+    typographer: false
+  }).use(window.markdownitFootnote);
+  // --- LoadPost Function ---
   async function loadPost() {
     if (!post) return showNotFound();
     try {
       const res = await fetch(`/${section}/articles/${post}.md`);
       if (!res.ok) throw new Error();
       let text = await res.text();
-      // Remove YAML front matter if present
+      // remove YAML front matter if present
       text = text.replace(/^---\s*[\s\S]*?---\s*/, "");
       content.innerHTML = md.render(text);
       requestAnimationFrame(() => {
@@ -156,7 +164,7 @@
       showNotFound();
     }
   }
-
+  // --- When Post Not Found
   function showNotFound() {
     content.innerHTML = `
       <h1>Helaas... Niet gevonden.</h1>
