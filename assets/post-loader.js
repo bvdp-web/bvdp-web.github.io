@@ -65,15 +65,15 @@
     // PREPROCESS (SAFE)
     function preprocess(text) {
       // lemma normalization
-      text = text.replace(
-        /([\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+)\.(\d+)/g,
-        "$2.$1"
-      );
+      //text = text.replace(
+      //  /([\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+)\.(\d+)/g,
+      //  "$2.$1"
+      //);
       // slash reorder (Hebrew only structures)
-      const parts = text.split(/\s*\/\s*/);
-      if (parts.length > 1 && parts.every(isHebrewSegment)) {
-        text = parts.join(" / ");
-      }
+      //const parts = text.split(/\s*\/\s*/);
+      //if (parts.length > 1 && parts.every(isHebrewSegment)) {
+      //  text = parts.join(" / ");
+      //}
       return text;
     }
     // INLINE WRAPPER
