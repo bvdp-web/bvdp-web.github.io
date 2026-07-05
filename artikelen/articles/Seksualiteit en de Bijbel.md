@@ -19,7 +19,7 @@ James, Sharon - *Gender Ideology: What Do Christians Need to Know* (2019)
 Perry, Laura - *Transgender to Transformed: A Story of Transition That Will Truly Set You Free* (2020)  
 
 ## Oude Testament  
-### lemma.sesb.h:<span>נאף</span> / <span>נַאֲפוּפִים</span> / <span>נִאֻפִים</span> (overspel, echtbreken)  
+### lemma.sesb.h:נאף / נַאֲפוּפִים / נִאֻפִים (overspel, echtbreken)  
 BHS: 31+2+1x in 26+2+1 versen  
 
 Exodus 20:14&nbsp;&nbsp;Gij zult niet echtbreken.  
@@ -31,11 +31,11 @@ Spreuken 6:32&nbsp;&nbsp;[Maar] die met een vrouw overspel doet, is verstandeloo
 Spreuken 30:20&nbsp;&nbsp;Alzo is de weg ener overspelige vrouw; zij eet en wist haar mond, en zegt: Ik heb geen ongerechtigheid gewrocht!  
 Profetiën waarin God overspel verwijdt.  
 
-### lemma.sesb.h:<span>זנה.1</span> / <span>זְנוּנִים</span> (hoererij)  
+### lemma.sesb.h:זנה.1 / זְנוּנִים (hoererij)  
 BHS: 93+12x in 82+10 versen  
 
-lemma.sesb.h:<span>זנה.1</span> NOT lemma.sesb.h:<span>נאף</span> NOT lemma.sesb.h:<span>נַאֲפוּפִים</span> NOT lemma.sesb.h:<span>נִאֻפִים</span> +   
-lemma.sesb.h:<span>זְנוּנִים</span> NOT lemma.sesb.h:<span>זנה.1</span> NOT lemma.sesb.h:<span>נאף</span> NOT lemma.sesb.h:<span>נַאֲפוּפִים</span> NOT lemma.sesb.h:<span>נִאֻפִים</span>:  
+lemma.sesb.h:זנה.1 NOT lemma.sesb.h:נאף NOT lemma.sesb.h:נַאֲפוּפִים NOT lemma.sesb.h:נִאֻפִים +   
+lemma.sesb.h:זְנוּנִים NOT lemma.sesb.h:זנה.1 NOT lemma.sesb.h:נאף NOT lemma.sesb.h:נַאֲפוּפִים NOT lemma.sesb.h:נִאֻפִים:  
 BHS: 86+5x in 76+5 versen  
 
 Leviticus 19:29&nbsp;&nbsp;Gij zult uw dochter niet ontheiligen, haar ter hoererij houdende; opdat het land niet hoerere, en het land met schandelijke daden vervuld worde.  
@@ -46,10 +46,10 @@ Deuteronomium 22:21&nbsp;&nbsp;Zo zullen zij deze jonge dochter uitbrengen tot d
 Deuteronomium 23:18&nbsp;&nbsp;Gij zult geen hoerenloon noch hondenprijs in het huis des HEEREN, uws Gods, brengen, tot enige gelofte; want ook die beiden zijn den HEERE, uw God, een gruwel.  
 Geschiedenissen met betrekking tot hoererij en wetten en profetiën met betrekking tot afgodenhoererij.  
 
-### lemma.sesb.h:<span>קָדֵשׁ.1</span> (tempelprosituee)  
+### lemma.sesb.h:קָדֵשׁ.1 (tempelprosituee)  
 BHS: 11x in 9 versen  
 
-lemma.sesb.h:<span>קָדֵשׁ.1</span> NOT lemma.sesb.h:<span>זְנוּנִים</span> NOT lemma.sesb.h:<span>זנה.1</span> NOT lemma.sesb.h:<span>נאף</span> NOT lemma.sesb.h:<span>נַאֲפוּפִים</span> NOT lemma.sesb.h:<span>נִאֻפִים</span>:  
+lemma.sesb.h:קָדֵשׁ.1 NOT lemma.sesb.h:זְנוּנִים NOT lemma.sesb.h:זנה.1 NOT lemma.sesb.h:נאף NOT lemma.sesb.h:נַאֲפוּפִים NOT lemma.sesb.h:נִאֻפִים:  
 BHS: 10x in 8 versen  
 
 Genesis 38:21-22&nbsp;&nbsp;En hij vraagde de lieden van haar plaats, zeggende: Waar is de hoer, die bij deze twee fonteinen aan den weg was? En zij zeiden: Hier is geen hoer geweest.&nbsp;&nbsp;En hij keerde weder tot Juda, en zeide: Ik heb haar niet gevonden; en ook zeiden de lieden van die plaats: Hier is geen hoer geweest.  
@@ -191,4 +191,3 @@ Masturbatie zou in deze mogen als een mogelijke uitlaatklep voor seksuele spanni
 
 Echter masturbatie zonder je schuldig te maken aan Mattheüs 5:28 “Maar Ik zeg u, dat zo wie een vrouw [aan] ziet, om dezelve te begeren, die heeft alrede overspel in zijn hart met haar gedaan.” is meestal onmogelijk. (een kwart van de mannen en de helft van de vrouwen zou niet regelmatig fantaseren tijdens masturbatie.)  
 Verder is seksualiteit en seks relationeel en lichamelijk-emotioneel-spiritueel bedoeld. Solistische masturbatie is dat duidelijk niet.  
-
