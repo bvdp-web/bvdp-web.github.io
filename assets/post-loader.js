@@ -113,7 +113,7 @@
         } else {
           // Mixed → inline processing
           el.appendChild(renderInline(lineText, isHeading, lang));
-          // el.appendChild(document.createElement("br"));
+          el.appendChild(document.createElement("br"));
         }
         lineText = "";
       }
