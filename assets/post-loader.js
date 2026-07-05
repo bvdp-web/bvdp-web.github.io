@@ -103,6 +103,7 @@
             const parent = node.parentElement;
             if (!parent) return NodeFilter.FILTER_REJECT;
             if (skipTags.has(parent.tagName)) return NodeFilter.FILTER_REJECT;
+            // if (parent.closest(".footnotes")) return NodeFilter.FILTER_REJECT;
             if (!node.nodeValue || !node.nodeValue.trim()) {
               return NodeFilter.FILTER_REJECT;
             }
@@ -144,10 +145,10 @@
     try {
       const res = await fetch(`/${section}/articles/${post}.md`);
       if (!res.ok) throw new Error();
-      let md = await res.text();
+      let text = await res.text();
       // Remove YAML front matter if present
-      md = md.replace(/^---\s*[\s\S]*?---\s*/, "");
-      content.innerHTML = marked.parse(md);
+      text = text.replace(/^---\s*[\s\S]*?---\s*/, "");
+      content.innerHTML = md.render(text);
       requestAnimationFrame(() => {
         applyBiblicalLanguageSupport(content);
       });
