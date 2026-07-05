@@ -41,6 +41,7 @@
   --button-bg-active: #333;
   --back-button-bg: #e2e8f0;
   --back-button-color: #111827;
+  --button-border-radius: 5px;
   --card-padding: 25px;
   --card-border-radius: 10px;
   --card-margin: 20px;
@@ -255,7 +256,6 @@ footer {
 }
 .youtube > .card {
   margin: 0px;
-  border-radius: 12px;
   box-shadow: 0 6px 15px rgba(0,0,0,0.08);
   transition: transform 0.2s;
 }
@@ -273,7 +273,7 @@ footer {
   position: relative;
   width: 100%;
   overflow: hidden;
-  border-radius: 10px;
+  border-radius: var(--card-border-radius);
   margin-bottom: 15px;
   aspect-ratio: 16 / 9;
   cursor: pointer;
@@ -281,7 +281,7 @@ footer {
 .youtube > .card.loaded > iframe {
   width: 100%;
   border: 0;
-  border-radius: 10px;
+  border-radius: var(--card-border-radius);
   margin-bottom: 10px;
   aspect-ratio: 16 / 9;
 }
@@ -338,7 +338,7 @@ footer {
   font-weight: 600;
   border: none;
   padding: 8px 14px;
-  border-radius: 4px;
+  border-radius: var(--button-border-radius);
   cursor: pointer;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -356,7 +356,7 @@ footer {
   padding: 10px;
   width: 100%;
   margin-bottom: 20px;
-  border-radius: 6px;
+  border-radius: var(--button-border-radius);
   border: 1px solid #ccc;
 }
 /* Lezen button */
@@ -379,7 +379,7 @@ footer {
 #pagination button {
   padding: 6px 12px;
   margin: 4px;
-  border-radius: 5px;
+  border-radius: var(--button-border-radius);
   border: none;
   background: var(--button-bg);
   color: var(--button-color);
@@ -402,7 +402,7 @@ footer {
   padding: 8px 14px;
   background: var(--back-button-bg);
   color: var(--back-button-color);
-  border-radius: 6px;
+  border-radius: var(--button-border-radius);
   text-decoration: none;
   font-weight: 500;
   transition: 0.2s ease;
