@@ -36,41 +36,41 @@
     const skipTags = new Set(["CODE", "PRE", "SCRIPT", "STYLE"]);
     const hebrewRegex = /[\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]/;
     const greekRegex = /[\u0370-\u03FF\u1F00-\u1FFF]/;
-    const isHebrewBlock = (t) => {
-      const latin = /[A-Za-z]{2,}/.test(t);
-      const hebrew = /[\u0590-\u05FF\uFB1D-\uFB4F]/.test(t);
-      const greek = /[\u0370-\u03FF\u1F00-\u1FFF]/.test(t);
-      if (latin) return false;
-      if (hebrew && !greek) return true;
-      return false;
-    };
     const isHebrewSegment = (s) =>
       /^[\u0590-\u05FF\uFB1D-\uFB4F״׳־׃\s\.\d]+$/.test(s);
+    // --- BLOCK LANGUAGE DETECTION ---
+    function getBlockLanguage(el) {
+      const text = el.textContent.trim();
+      const hebrew = (text.match(/[\u0590-\u05FF]/g) || []).length;
+      const greek = (text.match(/[\u0370-\u03FF\u1F00-\u1FFF]/g) || []).length;
+      const latin = (text.match(/[A-Za-z]{2,}/g) || []).length;
+      if (latin) return null;
+      if (hebrew > greek) return "hebrew";
+      if (greek > hebrew) return "greek";
+      return null;
+    }
+    const blockLangMap = new WeakMap();
     function processTextNode(node, isHeading) {
       const originalText = node.nodeValue;
       if (!originalText || !originalText.trim()) return;
       let text = originalText;
-      const originalHebrewBlock = isHebrewBlock(text);
-      // 1. lemma normalization
-      if (!originalHebrewBlock) {
-        text = text.replace(
-          /([\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+)\.(\d+)/g,
-          "$2.$1"
-        );
-      }
+      // 1. lemma normalization (safe here, still contiguous text node)
+      text = text.replace(
+        /([\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+)\.(\d+)/g,
+        "$2.$1"
+      );
       // 2. slash reorder
-      if (!originalHebrewBlock) {
-        const parts = text.split(/\s*\/\s*/);
-        if (parts.length > 1 && parts.every(isHebrewSegment)) {
-          text = parts.reverse().join(" / ");
-        }
+      const parts = text.split(/\s*\/\s*/);
+      if (parts.length > 1 && parts.every(isHebrewSegment)) {
+        text = parts.reverse().join(" / ");
       }
-      // 3. wrap mixed Hebrew/Greek segments
       const fragment = document.createDocumentFragment();
       const combinedRegex =
         /([\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+(?:\s+[\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+)*)|([\u0370-\u03FF\u1F00-\u1FFF]+)/g;
       let lastIndex = 0;
       let match;
+      const parentBlock = node.parentElement?.closest("h1,h2,h3,h4,h5,h6,p,blockquote");
+      const blockLang = parentBlock ? blockLangMap.get(parentBlock) : null;
       while ((match = combinedRegex.exec(text)) !== null) {
         const offset = match.index;
         if (offset > lastIndex) {
@@ -81,9 +81,19 @@
         const span = document.createElement("span");
         const isHebrew = !!match[1];
         if (isHebrew) {
-          span.className = isHeading ? "hebrew-heading" : "hebrew-inline";
+          span.className =
+            blockLang === "hebrew"
+              ? "hebrew-block"
+              : isHeading
+                ? "hebrew-heading"
+                : "hebrew-inline";
         } else {
-          span.className = isHeading ? "greek-heading" : "greek-inline";
+          span.className =
+            blockLang === "greek"
+              ? "greek-block"
+              : isHeading
+                ? "greek-heading"
+                : "greek-inline";
         }
         span.textContent = match[0];
         fragment.appendChild(span);
@@ -99,6 +109,12 @@
     function walk(el) {
       if (skipTags.has(el.tagName)) return;
       const isHeading = /^H[1-6]$/.test(el.tagName);
+      const isBlock = /^H[1-6]|P|BLOCKQUOTE$/.test(el.tagName);
+      // store block language BEFORE mutation
+      if (isBlock) {
+        const lang = getBlockLanguage(el);
+        if (lang) blockLangMap.set(el, lang);
+      }
       const walker = document.createTreeWalker(
         el,
         NodeFilter.SHOW_TEXT,
@@ -119,8 +135,8 @@
       const nodes = [];
       while (walker.nextNode()) nodes.push(walker.currentNode);
       for (const node of nodes) {
-        const parent = node.parentElement;
-        const heading = parent && /^H[1-6]$/.test(parent.tagName);
+        const heading = node.parentElement &&
+          /^H[1-6]$/.test(node.parentElement.tagName);
         processTextNode(node, heading);
       }
     }
