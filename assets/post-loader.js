@@ -32,134 +32,73 @@
     backContainer.appendChild(backBtn);
   }
 
+  const hasHebrew = /\p{Script=Hebrew}/u;
+  const hasGreek = /\p{Script=Greek}/u;
+  const hasLatin = /[A-Za-z]{2,}/;
+  const blockMap = new WeakMap();
+  function classifyBlock(text) {
+    const hebrew = (text.match(/\p{Script=Hebrew}/gu) || []).length;
+    const greek = (text.match(/\p{Script=Greek}/gu) || []).length;
+    const latin = /[A-Za-z]{2,}/.test(text);
+    if (latin) return null;
+    if (hebrew > greek) return "hebrew";
+    if (greek > hebrew) return "greek";
+    return null;
+  }
   function applyBiblicalLanguageSupport(container) {
-    const skipTags = new Set(["CODE", "PRE", "SCRIPT", "STYLE"]);
-    const hebrewRegex = /[\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]/;
-    const greekRegex = /[\u0370-\u03FF\u1F00-\u1FFF]/;
-    const isHebrewSegment = (s) =>
-      /^[\u0590-\u05FF\uFB1D-\uFB4F״׳־׃\s\.\d]+$/.test(s);
-    // --- BLOCK LANGUAGE DETECTION ---
-    function getBlockLanguage(el) {
-      const text = el.textContent.trim();
-      const hebrew = (text.match(/[\u0590-\u05FF]/g) || []).length;
-      const greek = (text.match(/[\u0370-\u03FF\u1F00-\u1FFF]/g) || []).length;
-      const latin = (text.match(/[A-Za-z]{2,}/g) || []).length;
-      if (latin) return null;
-      if (hebrew > greek) return "hebrew";
-      if (greek > hebrew) return "greek";
-      return null;
+    const blocks = container.querySelectorAll("h1,h2,h3,h4,h5,h6,p,blockquote");
+    // STAGE 1: classify
+    blocks.forEach(el => {
+      const lang = classifyBlock(el.textContent);
+      if (lang) blockMap.set(el, lang);
+    });
+    // STAGE 2: inline processing only where needed
+    const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT);
+    const skip = new Set(["SCRIPT","STYLE","CODE","PRE"]);
+    let node;
+    while ((node = walker.nextNode())) {
+      const parent = node.parentElement;
+      if (!parent || skip.has(parent.tagName)) continue;
+      let block = blockCache.get(parent);
+      if (!block) {
+        block = parent.closest("h1,h2,h3,h4,h5,h6,p,blockquote");
+        blockCache.set(parent, block);
+      }
+      const blockLang = block ? blockMap.get(block) : null;
+      const text = node.nodeValue;
+      if (!text || !text.trim()) continue;
+      // If whole block is Hebrew/Greek → do NOTHING inline
+      if (blockLang) continue;
+      // Only mixed blocks get processed
+      wrapInline(node, parent, block);
     }
-    const blockLangMap = new WeakMap();
-    function processTextNode(node, isHeading) {
-      const originalText = node.nodeValue;
-      if (!originalText || !originalText.trim()) return;
-      let text = originalText;
-      // 1. lemma normalization (safe here, still contiguous text node)
-      text = text.replace(
-        /([\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+)\.(\d+)/g,
-        "$2.$1"
-      );
-      // 2. slash reorder
-      const parts = text.split(/\s*\/\s*/);
-      if (parts.length > 1 && parts.every(isHebrewSegment)) {
-        text = parts.reverse().join(" / ");
+  }
+  function wrapInline(node, parent, block) {
+    const isHeading = /^H[1-6]$/.test(parent.tagName);
+    const text = node.nodeValue;
+    const regex = /([\p{Script=Hebrew}]+)|([\p{Script=Greek}]+)/gu;
+    const fragment = document.createDocumentFragment();
+    let last = 0;
+    let m;
+    while ((m = regex.exec(text)) !== null) {
+      const i = m.index;
+      if (i > last) {
+        fragment.appendChild(document.createTextNode(text.slice(last, i)));
       }
-      const fragment = document.createDocumentFragment();
-      const combinedRegex =
-        /([\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+(?:\s+[\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+)*)|([\u0370-\u03FF\u1F00-\u1FFF]+)/g;
-      let lastIndex = 0;
-      let match;
-      const parentBlock = node.parentElement?.closest("h1,h2,h3,h4,h5,h6,p,blockquote");
-      const blockLang = parentBlock ? blockLangMap.get(parentBlock) : null;
-      while ((match = combinedRegex.exec(text)) !== null) {
-        const offset = match.index;
-        if (offset > lastIndex) {
-          fragment.appendChild(
-            document.createTextNode(text.slice(lastIndex, offset))
-          );
-        }
-        const span = document.createElement("span");
-        const isHebrew = !!match[1];
-        if (isHebrew) {
-          span.className =
-            blockLang === "hebrew"
-              ? "hebrew-block"
-              : isHeading
-                ? "hebrew-heading"
-                : "hebrew-inline";
-        } else {
-          span.className =
-            blockLang === "greek"
-              ? "greek-block"
-              : isHeading
-                ? "greek-heading"
-                : "greek-inline";
-        }
-        span.textContent = match[0];
-        fragment.appendChild(span);
-        lastIndex = offset + match[0].length;
-      }
-      if (lastIndex < text.length) {
-        fragment.appendChild(
-          document.createTextNode(text.slice(lastIndex))
-        );
-      }
-      node.parentNode.replaceChild(fragment, node);
+      const span = document.createElement("span");
+      const isHebrew = !!m[1];
+      span.className =
+        isHebrew
+          ? (isHeading ? "hebrew-heading" : "hebrew-inline")
+          : (isHeading ? "greek-heading" : "greek-inline");
+      span.textContent = m[0];
+      fragment.appendChild(span);
+      last = i + m[0].length;
     }
-    function walk(el) {
-      if (skipTags.has(el.tagName)) return;
-      const isHeading = /^H[1-6]$/.test(el.tagName);
-      const isBlock = /^H[1-6]|P|BLOCKQUOTE$/.test(el.tagName);
-      // store block language BEFORE mutation
-      if (isBlock) {
-        const lang = getBlockLanguage(el);
-        if (lang) blockLangMap.set(el, lang);
-      }
-      const walker = document.createTreeWalker(
-        el,
-        NodeFilter.SHOW_TEXT,
-        {
-          acceptNode: (node) => {
-            if (!node.nodeValue || !node.nodeValue.trim()) {
-              return NodeFilter.FILTER_REJECT;
-            }
-            const parent = node.parentElement;
-            if (!parent) return NodeFilter.FILTER_REJECT;
-            if (skipTags.has(parent.tagName)) {
-              return NodeFilter.FILTER_REJECT;
-            }
-            return NodeFilter.FILTER_ACCEPT;
-          }
-        }
-      );
-      const nodes = [];
-      while (walker.nextNode()) nodes.push(walker.currentNode);
-      for (const node of nodes) {
-        const heading = node.parentElement &&
-          /^H[1-6]$/.test(node.parentElement.tagName);
-        processTextNode(node, heading);
-      }
+    if (last < text.length) {
+      fragment.appendChild(document.createTextNode(text.slice(last)));
     }
-
-    function detectLanguageBlocks(container) {
-      const paragraphs = container.querySelectorAll("p, blockquote");
-      paragraphs.forEach(p => {
-        const text = p.textContent.trim();
-        if (!text) return;
-        const hebrew = text.match(/[\u0590-\u05FF]/g) || [];
-        const greek = text.match(/[\u0370-\u03FF\u1F00-\u1FFF]/g) || [];
-        const latinWords = text.match(/[A-Za-z]{2,}/g);
-        if (!latinWords) {
-          if (hebrew.length > greek.length) {
-            p.classList.add("hebrew-block");
-          } else if (greek.length > hebrew.length) {
-            p.classList.add("greek-block");
-          }
-        }
-      });
-    }
-    walk(container);
-    detectLanguageBlocks(container);
+    node.replaceWith(fragment);
   }
 
   async function loadPost() {
