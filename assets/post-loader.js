@@ -36,12 +36,13 @@
     const skipTags = new Set(["SCRIPT", "STYLE", "CODE", "PRE"]);
     // TEXT CLASSIFICATION HELPERS
     function classifyText(text) {
-      const latin = /[A-Za-z]{2,}/.test(text);
-      const hebrew = (text.match(/[\u0590-\u05FF]/g) || []).length;
-      const greek = (text.match(/[\u0370-\u03FF\u1F00-\u1FFF]/g) || []).length;
-      if (latin) return null;
-      if (hebrew > greek) return "hebrew";
-      if (greek > hebrew) return "greek";
+      const cleaned = text.replace(/^[A-Za-z]+\s*\d+:\d+\s*/, "");
+      const hebrew = (cleaned.match(/[\u0590-\u05FF]/g) || []).length;
+      const greek = (cleaned.match(/[\u0370-\u03FF\u1F00-\u1FFF]/g) || []).length;
+      const hasGreek = greek > 3;
+      const hasHebrew = hebrew > 3;
+      if (hasHebrew && !hasGreek) return "hebrew";
+      if (hasGreek && !hasHebrew) return "greek";
       return null;
     }
     function isHebrewSegment(s) {
@@ -100,6 +101,9 @@
       const nodes = Array.from(el.childNodes);
       let lineBuffer = [];
       let lineText = "";
+      function hasLineBreaks(el) {
+        return el.querySelector("br") !== null;
+      }
       function flushLine() {
         if (!lineText.trim()) return;
         const lang = classifyText(lineText);
@@ -109,17 +113,16 @@
           span.className = lang === "hebrew" ? "hebrew-block" : "greek-block";
           span.textContent = lineText;
           el.appendChild(span);
-          // el.appendChild(document.createElement("br"));
         } else {
           // Mixed → inline processing
           el.appendChild(renderInline(lineText, isHeading, lang));
-          el.appendChild(document.createElement("br"));
         }
         lineText = "";
       }
       for (const node of nodes) {
         if (node.nodeName === "BR") {
           flushLine();
+          // el.appendChild(document.createElement("br"));
           continue;
         }
         if (node.nodeType === 3) {
