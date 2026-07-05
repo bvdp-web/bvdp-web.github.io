@@ -126,7 +126,6 @@
           span.className = lang === "hebrew" ? "hebrew-block" : "greek-block";
           span.textContent = lineText;
           el.appendChild(span);
-          el.appendChild(document.createElement("br"));
         } else {
           // Mixed → inline processing
           el.appendChild(renderInline(lineText, isHeading, lang));
@@ -145,7 +144,7 @@
       }
       flushLine();
       // Remove original content safely
-      // nodes.forEach(n => n.remove());
+      nodes.forEach(n => n.remove());
     }
     // RUN
     const blocks = container.querySelectorAll("h1,h2,h3,h4,h5,h6,p,blockquote");
