@@ -103,6 +103,7 @@
             const parent = node.parentElement;
             if (!parent) return NodeFilter.FILTER_REJECT;
             if (skipTags.has(parent.tagName)) return NodeFilter.FILTER_REJECT;
+            // if (parent.closest(".footnotes")) return NodeFilter.FILTER_REJECT;
             if (!node.nodeValue || !node.nodeValue.trim()) {
               return NodeFilter.FILTER_REJECT;
             }
@@ -155,7 +156,6 @@
       showNotFound();
     }
   }
-
 
   function showNotFound() {
     content.innerHTML = `
