@@ -31,7 +31,7 @@
     backContainer.appendChild(backBtn);
   }
 
-  // APPLY SUPPORT FOR BiIBLICAL LANGUAGE
+  // APPLY SUPPORT FOR BIBLICAL LANGUAGE
   function applyBiblicalLanguageSupport(container) {
     const skipTags = new Set(["SCRIPT", "STYLE", "CODE", "PRE"]);
     // --- Metadata Stripping ---
@@ -146,7 +146,10 @@
     html: true,
     linkify: true,
     typographer: false
-  }).use(window.markdownitFootnote);
+  }).use(window.markdownitFootnote)
+    .use(window.markdownitSub)
+    .use(window.markdownitSup)
+    .use(window.markdownitMark);
   // --- LoadPost Function ---
   async function loadPost() {
     if (!post) return showNotFound();
