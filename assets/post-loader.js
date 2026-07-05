@@ -37,16 +37,20 @@
     const hebrewRegex = /[\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]/;
     const greekRegex = /[\u0370-\u03FF\u1F00-\u1FFF]/;
     const isHebrewBlock = (t) => {
-      const latinWords = t.match(/[A-Za-z]{2,}/g);
-      return !latinWords;
+      const latin = /[A-Za-z]{2,}/.test(t);
+      const hebrew = /[\u0590-\u05FF\uFB1D-\uFB4F]/.test(t);
+      const greek = /[\u0370-\u03FF\u1F00-\u1FFF]/.test(t);
+      if (latin) return false;
+      if (hebrew && !greek) return true;
+      return false;
     };
     const isHebrewSegment = (s) =>
       /^[\u0590-\u05FF\uFB1D-\uFB4F״׳־׃\s\.\d]+$/.test(s);
     function processTextNode(node, isHeading) {
       const originalText = node.nodeValue;
       if (!originalText || !originalText.trim()) return;
-      const originalHebrewBlock = isHebrewBlock(originalText);
       let text = originalText;
+      const originalHebrewBlock = isHebrewBlock(text);
       // 1. lemma normalization
       if (!originalHebrewBlock) {
         text = text.replace(
@@ -108,7 +112,6 @@
             if (skipTags.has(parent.tagName)) {
               return NodeFilter.FILTER_REJECT;
             }
-
             return NodeFilter.FILTER_ACCEPT;
           }
         }
@@ -142,7 +145,7 @@
     walk(container);
     detectLanguageBlocks(container);
   }
-  
+
   async function loadPost() {
     if (!post) return showNotFound();
     try {
