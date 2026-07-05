@@ -34,26 +34,21 @@
 
   function applyBiblicalLanguageSupport(container) {
     const skipTags = new Set(["SCRIPT", "STYLE", "CODE", "PRE"]);
-    const blockLangMap = new WeakMap();
-    function getBlockLanguage(el) {
-      const text = el.textContent.trim();
+    // TEXT CLASSIFICATION HELPERS
+    function classifyText(text) {
+      const latin = /[A-Za-z]{2,}/.test(text);
       const hebrew = (text.match(/[\u0590-\u05FF]/g) || []).length;
       const greek = (text.match(/[\u0370-\u03FF\u1F00-\u1FFF]/g) || []).length;
-      const latin = (text.match(/[A-Za-z]{2,}/g) || []).length;
-      if (hebrew) {
-        if (latin) return null;
-      }
+      if (latin) return null;
       if (hebrew > greek) return "hebrew";
-      if (greek > latin) return "greek";
+      if (greek > hebrew) return "greek";
       return null;
     }
     function isHebrewSegment(s) {
       return /^[\u0590-\u05FF\uFB1D-\uFB4F״׳־׃\s\.\d]+$/.test(s);
     }
-    function processTextNode(node, isHeading, blockLang) {
-      const originalText = node.nodeValue;
-      if (!originalText || !originalText.trim()) return;
-      let text = originalText;
+    // PREPROCESSING (IMPORTANT)
+    function preprocess(text) {
       // lemma normalization
       text = text.replace(
         /([\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+)\.(\d+)/g,
@@ -62,17 +57,23 @@
       // slash reorder
       const parts = text.split(/\s*\/\s*/);
       if (parts.length > 1 && parts.every(isHebrewSegment)) {
-        text = parts.reverse().join(" / ");
+        text = parts.join(" / ");
       }
+      return text;
+    }
+    // INLINE RENDERING (MIXED ONLY)
+    function renderInline(text, isHeading, langHint) {
+      const fragment = document.createDocumentFragment();
       const regex =
         /([\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+(?:\s+[\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+)*)|([\u0370-\u03FF\u1F00-\u1FFF]+)/g;
-      const fragment = document.createDocumentFragment();
       let last = 0;
       let match;
       while ((match = regex.exec(text)) !== null) {
         const i = match.index;
         if (i > last) {
-          fragment.appendChild(document.createTextNode(text.slice(last, i)));
+          fragment.appendChild(
+            document.createTextNode(text.slice(last, i))
+          );
         }
         const span = document.createElement("span");
         const isHebrew = !!match[1];
@@ -86,52 +87,55 @@
       if (last < text.length) {
         fragment.appendChild(document.createTextNode(text.slice(last)));
       }
-      node.parentNode.replaceChild(fragment, node);
+      return fragment;
     }
-    function walk(el) {
+    // MAIN PROCESSOR
+    function processBlock(el) {
       if (skipTags.has(el.tagName)) return;
-      const blocks = el.querySelectorAll("h1,h2,h3,h4,h5,h6,p,blockquote");
-      // STEP 1: classify blocks
-      blocks.forEach(b => {
-        const lang = getBlockLanguage(b);
+      const isHeading = /^H[1-6]$/.test(el.tagName);
+      // IMPORTANT: preprocess once per block
+      const rawText = el.textContent;
+      const text = preprocess(rawText);
+      // Split by <br> into logical lines
+      const nodes = Array.from(el.childNodes);
+      let lineBuffer = [];
+      let lineText = "";
+      function flushLine() {
+        if (!lineText.trim()) return;
+        const lang = classifyText(lineText);
+        // PURE Hebrew/Greek line → block span only
         if (lang) {
-          b.classList.add(lang + "-block");
-          blockLangMap.set(b, lang);
+          const span = document.createElement("span");
+          span.className =
+            lang === "hebrew" ? "hebrew-block" : "greek-block";
+          span.textContent = lineText;
+          el.appendChild(span);
+          el.appendChild(document.createElement("br"));
+        } else {
+          // Mixed → inline processing
+          el.appendChild(
+            renderInline(lineText, isHeading, lang)
+          );
+          el.appendChild(document.createElement("br"));
         }
-      });
-      // STEP 2: inline processing ONLY for non-block-language blocks
-      const walker = document.createTreeWalker(
-        el,
-        NodeFilter.SHOW_TEXT,
-        {
-          acceptNode: (node) => {
-            const parent = node.parentElement;
-            if (!parent) return NodeFilter.FILTER_REJECT;
-            if (skipTags.has(parent.tagName)) {
-              return NodeFilter.FILTER_REJECT;
-            }
-            const block = parent.closest("h1,h2,h3,h4,h5,h6,p,blockquote");
-            const blockLang = block ? blockLangMap.get(block) : null;
-            // Skip ALL inline parsing in block-mode elements
-            if (blockLang) {
-              return NodeFilter.FILTER_REJECT;
-            }
-            return NodeFilter.FILTER_ACCEPT;
-          }
-        }
-      );
-      const nodes = [];
-      while (walker.nextNode()) nodes.push(walker.currentNode);
-      for (const node of nodes) {
-        const isHeading =
-          node.parentElement &&
-          /^H[1-6]$/.test(node.parentElement.tagName);
-        const block = node.parentElement?.closest("h1,h2,h3,h4,h5,h6,p,blockquote");
-        const blockLang = block ? blockLangMap.get(block) : null;
-        processTextNode(node, isHeading, blockLang);
+        lineText = "";
       }
+      for (const node of nodes) {
+        if (node.nodeName === "BR") {
+          flushLine();
+          continue;
+        }
+        if (node.nodeType === 3) {
+          lineText += node.nodeValue;
+        }
+      }
+      flushLine();
+      // Remove original content safely
+      nodes.forEach(n => n.remove());
     }
-    walk(container);
+    // RUN
+    const blocks = container.querySelectorAll("h1,h2,h3,h4,h5,h6,p,blockquote");
+    blocks.forEach(processBlock);
   }
 
   async function loadPost() {
