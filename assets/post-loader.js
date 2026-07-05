@@ -65,22 +65,13 @@
     // PREPROCESS (SAFE)
     function preprocess(text) {
       // lemma normalization
-      text = text.replace(
-        /([\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+)\.(\d+)/g,
-        "$2.$1"
-      );
-      // slash reorder (Hebrew only structures)
-      //const parts = text.split(/\s*\/\s*/);
-      //if (parts.length > 1 && parts.every(isHebrewSegment)) {
-      //  text = parts.join(" / ");
-      //}
+      text = text.replace(/([\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+)\.(\d+)/g, "$2.$1");
       return text;
     }
     // INLINE WRAPPER
     function renderInline(text, isHeading) {
       const fragment = document.createDocumentFragment();
-      const regex =
-        /([\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+(?:\s+[\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+)*)|([\u0370-\u03FF\u1F00-\u1FFF]+)/g;
+      const regex = /([\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+(?:\s+[\u0590-\u05FF\uFB1D-\uFB4F״׳־׃]+)*)|([\u0370-\u03FF\u1F00-\u1FFF]+)/g;
       let last = 0;
       let m;
       while ((m = regex.exec(text)) !== null) {
@@ -102,7 +93,7 @@
       }
       return fragment;
     }
-    // CORE: SAFE TREE WALK
+    // CORE: TEXT NODE WALKER
     function walkTextNodes(root) {
       const walker = document.createTreeWalker(
         root,
@@ -111,9 +102,7 @@
           acceptNode(node) {
             const parent = node.parentElement;
             if (!parent) return NodeFilter.FILTER_REJECT;
-            if (skipTags.has(parent.tagName)) {
-              return NodeFilter.FILTER_REJECT;
-            }
+            if (skipTags.has(parent.tagName)) return NodeFilter.FILTER_REJECT;
             if (!node.nodeValue || !node.nodeValue.trim()) {
               return NodeFilter.FILTER_REJECT;
             }
@@ -130,21 +119,20 @@
       const textNodes = walkTextNodes(container);
       for (const node of textNodes) {
         const raw = node.nodeValue;
-        const pre = preprocess(raw);
-        const lang = classifyText(pre);
+        const text = preprocess(raw);
+        const lang = classifyText(text);
         const isHeading =
           node.parentElement &&
           /^H[1-6]$/.test(node.parentElement.tagName);
         if (lang === "hebrew" || lang === "greek") {
           const span = document.createElement("span");
           span.className =lang === "hebrew" ? "hebrew-block" : "greek-block";
-          span.textContent = pre;
+          span.textContent = text;
           node.replaceWith(span);
           continue;
         }
         // mixed or neutral → inline processing
-        const frag = renderInline(pre, isHeading);
-        node.replaceWith(frag);
+        node.replaceWith(renderInline(text, isHeading));
       }
     }
     // RUN
