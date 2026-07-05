@@ -278,6 +278,11 @@ footer {
   aspect-ratio: 16 / 9;
   cursor: pointer;
 }
+.youtube > .card.loaded > iframe {
+  border-radius: 10px;
+  margin-bottom: 10px;
+  aspect-ratio: 16 / 9;
+}
 .youtube > .card > .thumbnail img {
   display: block;
   width: 100%;
