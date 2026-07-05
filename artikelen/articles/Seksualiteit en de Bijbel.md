@@ -7,9 +7,9 @@ description: Wat heeft de Bijbel te melden over seksualiteit
 # Seksualiteit en de Bijbel  
 Er is al zeer veel geschreven over seksualiteit en hoe God dat in Zijn goedheid bedoelt heeft. Dit artikel wil geen herhaling of samenvatting worden van de vele beschikbare literatuur, maar het wil een overzicht geven van wat God Zelf in de Bijbel ons heeft geopenbaard.  
 
-Mij dunkt dat de meeste teksten meer dan voor zichzelf spreken. Aan het einde van dit artikel zeg ik nog wat kort over seks voor het huwelijk als ook masturbatie. Uiteraard aan de hand van de Bijbel.  
+Ondanks de vele exegetische werken die beschikbaar zijn met betrekking tot de Bijbelteksten die te maken hebben met seksualiteit, dunkt mij dat de meeste teksten meer dan voor zichzelf spreken. Aan het einde van dit artikel zeg ik nog wat kort over seks voor het huwelijk als ook masturbatie. Uiteraard aan de hand van de Bijbel. Voor de Bijbelteksten heb ik de Statenvertaling gebruikt.  
 
-Mocht u toch nog geïnteresseerd zijn in enkele boeken, bij deze:  
+Mocht u toch nog geïnteresseerd zijn in enkele boeken die een gedegen en evenwichtige christelijke en Bijbelse visie weergeven, bij deze:  
 Hollinger, Dennis P. - *The Meaning of Sex: Christian Ethics and the Moral Life* (2009)  
 Moore, Russell D. en Andrew Walker - *The Gospel & Pornography* (2017)  
 Yuan, Christopher - *Holy Sexuality and the Gospel: Sex, Desire, and Relationships Shaped by God’s Grand Story* (2018)  
@@ -20,7 +20,7 @@ Perry, Laura - *Transgender to Transformed: A Story of Transition That Will Trul
 
 ## Oude Testament  
 ### lemma.sesb.h:נאף / נַאֲפוּפִים / נִאֻפִים (overspel, echtbreken)  
-BHS: 31+2+1x in 26+2+1 versen  
+BHS[^1]: 31+2+1x in 26+2+1 versen  
 
 Exodus 20:14&nbsp;&nbsp;Gij zult niet echtbreken.  
 Leviticus 20:10&nbsp;&nbsp;Een man ook, die met iemands huisvrouw overspel zal gedaan hebben, dewijl hij met zijns naasten vrouw overspel gedaan heeft, zal zekerlijk gedood worden, de overspeler en de overspeelster.  
@@ -62,7 +62,7 @@ Spreuken 7:5-27&nbsp;&nbsp;Opdat zij u bewaren voor een vreemde vrouw, voor de o
 
 ## Nieuwe Testament  
 ### root.g:μοιχος / moichos (overspel)  
-NA28: 32x in 27 versen  
+NA28[^2]: 32x in 27 versen  
 
 *Mattheüs 5:27-28*&nbsp;&nbsp;Gij hebt gehoord, dat [van] de ouden gezegd is: Gij zult geen overspel doen.&nbsp;&nbsp;Maar Ik zeg u, dat zo wie een vrouw [aan] ziet, om dezelve te begeren, die heeft alrede overspel in zijn hart met haar gedaan.  
 *Mattheüs 5:32*&nbsp;&nbsp;Maar Ik zeg u, dat zo wie zijn vrouw verlaten zal, anders dan uit oorzake van hoererij, die maakt, dat zij overspel doet; en zo wie de verlatene zal trouwen, die doet overspel.  
@@ -82,7 +82,7 @@ Johannes 8:3-4&nbsp;&nbsp;En de Schriftgeleerden en de Farizeën brachten tot He
 Romeinen 2:22&nbsp;&nbsp;Die zegt, dat men geen overspel doen zal, doet gij overspel? Die van de afgoden een gruwel hebt, berooft gij het heilige?  
 *Romeinen 7:3*&nbsp;&nbsp;Daarom dan, indien zij eens anderen mans wordt, terwijl de man leeft, zo zal zij een overspeelster genaamd worden; maar indien de man gestorven is, zo is zij vrij van de wet, alzo dat zij geen overspeelster is, als zij eens anderen mans wordt.  
 Romeinen 13:9&nbsp;&nbsp;Want dit: Gij zult geen overspel doen, gij zult niet doden, gij zult niet stelen, gij zult geen valse getuigenis geven, gij zult niet begeren; en zo er enig ander gebod is, wordt in dit woord als in een hoofdsom begrepen, [namelijk] in dit: Gij zult uw naaste liefhebben gelijk uzelven.  
-1 Korinthe 6:10 (9)&nbsp;&nbsp;Dwaalt niet; noch hoereerders, noch afgodendienaars, noch overspelers, noch ontuchtigen, noch die bij mannen liggen, noch dieven, noch gierigaards, noch dronkaards, geen lasteraars, geen rovers zullen het Koninkrijk Gods beërven.  
+1 Korinthe 6:10 (9)[^3]&nbsp;&nbsp;Dwaalt niet; noch hoereerders, noch afgodendienaars, noch overspelers, noch ontuchtigen, noch die bij mannen liggen, noch dieven, noch gierigaards, noch dronkaards, geen lasteraars, geen rovers zullen het Koninkrijk Gods beërven.  
 *Hebreeën 13:4*&nbsp;&nbsp;Het huwelijk [is] eerlijk onder allen, en het bed onbevlekt; maar hoereerders en overspelers zal God oordelen.  
 Jakobus 2:11&nbsp;&nbsp;Want Die gezegd heeft: Gij zult geen overspel doen, Die heeft ook gezegd: Gij zult niet doden. Indien gij nu geen overspel zult doen, maar zult doden, zo zijt gij een overtreder der wet geworden.  
 Jakobus 4:4&nbsp;&nbsp;Overspelers en overspeleressen, weet gij niet, dat de vriendschap der wereld een vijandschap Gods is? Zo wie dan een vriend der wereld wil zijn, die wordt een vijand van God gesteld.  
@@ -191,3 +191,7 @@ Masturbatie zou in deze mogen als een mogelijke uitlaatklep voor seksuele spanni
 
 Echter masturbatie zonder je schuldig te maken aan Mattheüs 5:28 “Maar Ik zeg u, dat zo wie een vrouw [aan] ziet, om dezelve te begeren, die heeft alrede overspel in zijn hart met haar gedaan.” is meestal onmogelijk. (een kwart van de mannen en de helft van de vrouwen zou niet regelmatig fantaseren tijdens masturbatie.)  
 Verder is seksualiteit en seks relationeel en lichamelijk-emotioneel-spiritueel bedoeld. Solistische masturbatie is dat duidelijk niet.  
+
+[^1]: BHS is de *Biblia Hebraica Stuttgartensia*. Het +-teken geven de verschillende Hebreeuwse lemma’s aan waarmee ik gezocht heb in [Logos Bible Software]( https://www.logos.com/)  
+[^2]: NA28 is de *Nestle-Aland Greek New Testament*, 28ste editie.  
+[^3]: In de NA28 is het vers 9 in tegenstelling tot enkele vertalingen waaronder de Statenvertaling.  
