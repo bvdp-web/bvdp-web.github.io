@@ -8,10 +8,6 @@ document.querySelectorAll(".youtube .thumbnail").forEach(thumb => {
     iframe.src = videoUrl + "&autoplay=1&shuffle=1&loop=1";
     iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
     iframe.allowFullscreen = true;
-    iframe.style.width = "100%";
-    iframe.style.aspectRatio = "16/9";
-    iframe.style.borderRadius = "10px";
-    iframe.style.border = "0";
     thumb.replaceWith(iframe);
     card.classList.add("loaded");
   });
