@@ -120,14 +120,12 @@
         NodeFilter.SHOW_TEXT,
         {
           acceptNode: (node) => {
-            if (!node.nodeValue || !node.nodeValue.trim()) {
-              return NodeFilter.FILTER_REJECT;
-            }
             const parent = node.parentElement;
             if (!parent) return NodeFilter.FILTER_REJECT;
-            if (skipTags.has(parent.tagName)) {
-              return NodeFilter.FILTER_REJECT;
-            }
+            if (skip.has(parent.tagName)) return NodeFilter.FILTER_REJECT;
+            const block = parent.closest("h1,h2,h3,h4,h5,h6,p,blockquote");
+            const blockLang = block ? blockLangMap.get(block) : null;
+            if (blockLang) return NodeFilter.FILTER_REJECT;
             return NodeFilter.FILTER_ACCEPT;
           }
         }
