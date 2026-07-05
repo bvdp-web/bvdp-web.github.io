@@ -192,6 +192,6 @@ Masturbatie zou in deze mogen als een mogelijke uitlaatklep voor seksuele spanni
 Echter masturbatie zonder je schuldig te maken aan Mattheüs 5:28 “Maar Ik zeg u, dat zo wie een vrouw [aan] ziet, om dezelve te begeren, die heeft alrede overspel in zijn hart met haar gedaan.” is meestal onmogelijk. (een kwart van de mannen en de helft van de vrouwen zou niet regelmatig fantaseren tijdens masturbatie.)  
 Verder is seksualiteit en seks relationeel en lichamelijk-emotioneel-spiritueel bedoeld. Solistische masturbatie is dat duidelijk niet.  
 
-[^1]: BHS is de *Biblia Hebraica Stuttgartensia*. Het +-teken geven de verschillende Hebreeuwse lemma’s aan waarmee ik gezocht heb in [Logos Bible Software]( https://www.logos.com/)  
+[^1]: BHS is de *Biblia Hebraica Stuttgartensia*. Het +-teken geven de verschillende Hebreeuwse lemma’s aan waarmee ik gezocht heb in [Logos Bible Software]( https://www.logos.com/).  
 [^2]: NA28 is de *Nestle-Aland Greek New Testament*, 28ste editie.  
 [^3]: In de NA28 is het vers 9 in tegenstelling tot enkele vertalingen waaronder de Statenvertaling.  
