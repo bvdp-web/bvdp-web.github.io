@@ -22,6 +22,10 @@
         const ref = document.referrer.toLowerCase();
         if (ref.includes("/artikelen/") || ref.includes("/preken/")) { 
           const page = new URL(document.referrer).searchParams.get("page") || "1";
+          const search = new URL(document.referrer).searchParams.get("search");
+          if (search) {
+            window.location.href = `/${section}/?page=${page}&search=${search}`; // preserves page number/search
+          }
           window.location.href = `/${section}/?page=${page}`; // preserves page number/search
           return;
         }
