@@ -20,7 +20,7 @@
       // check if the referrer contains artikelen or preken
       if (document.referrer) {
         const ref = document.referrer.toLowerCase();
-        if (ref.includes("/artikelen/") || ref.includes("/preken/")) 
+        if (ref.includes("/artikelen/") || ref.includes("/preken/")) { 
           const page = new URL(document.referrer).searchParams.get("page") || "1";
           window.location.href = `/${section}/?page=${page}`; // preserves page number/search
           return;
