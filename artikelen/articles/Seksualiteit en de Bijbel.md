@@ -183,7 +183,7 @@ Vr. + Antw. 108: Wat leert ons het zevende gebod?&nbsp;&nbsp;Dat alle onkuisheid
 Vr. + Antw. 109: Verbiedt God in dit gebod niet meer dan echtbreken en dergelijke schandelijkheden?&nbsp;&nbsp;Dewijl ons lichaam en ziel tempelen des Heiligen Geestes zijn, zo wil Hij, dat wij ze beide zuiver en heilig bewaren; daarom verbiedt Hij alle onkuise daden, gebaren, woorden, [Ef. 5:3-4; 1 Kor. 6:18-19] gedachten, lusten, [Matth. 5:27,28] en wat den mens daartoe trekken kan. [Ef. 5:18; 1 Kor. 15:33]  
 
 ## Masturbatie  
-De Bijbelse geschiedenis over Onan (Genesis 38) gaat volgens de meeste exegeten niet over masturbatie (ook wel Onanisme genoemd), maar over het nalaten van een familieplicht (leviraatshuwelijk/zwagerhuwelijk). In ieder geval legt het egoïsme ten opzichte van procreatie bloot wat God bestrafte.  
+De Bijbelse geschiedenis over Onan (Genesis 38) gaat volgens de meeste exegeten niet over masturbatie (ook wel Onanisme genoemd), maar over het nalaten van een familieplicht (leviraatshuwelijk/zwagerhuwelijk). In ieder geval legt het egoïsme ten opzichte van procreatie bloot. Dit bestrafte God.  
 
 De Bijbel spreekt niet expliciet over masturbatie; daarom bestaan verschillende ethische benaderingen: volledige afwijzing, volledige acceptatie, en een gematigde positie met voorwaarden.  
 Ethische kwesties hierin zijn de aanwezigheid van begeerte (lust) en het solistische karakter i.t.t. de relationeel bedoelde seksualiteit.  
