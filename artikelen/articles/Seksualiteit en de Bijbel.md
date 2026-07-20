@@ -185,6 +185,8 @@ Vr. + Antw. 109: Verbiedt God in dit gebod niet meer dan echtbreken en dergelijk
 ## Masturbatie  
 De Bijbelse geschiedenis over Onan (Genesis 38) gaat volgens de meeste exegeten niet over masturbatie (ook wel Onanisme genoemd), maar over het nalaten van een familieplicht (leviraatshuwelijk/zwagerhuwelijk). In ieder geval legt het egoïsme ten opzichte van procreatie bloot. Dit bestrafte God.  
 
+Verder veroorzaakt gewoonte masturbatie fixatie op narcistische seksualiteit. Een persoon die masturbeert is egocentrisch gefixeerd op zichzelf en is geïsoleerd. Ook gaat masturbatie gepaard met seksuele fantasieën, die vaak kunnen leiden tot pornografie, die zelf een verlangen naar verdere masturbatie oproept.  
+
 De Bijbel spreekt niet expliciet over masturbatie; daarom bestaan verschillende ethische benaderingen: volledige afwijzing, volledige acceptatie, en een gematigde positie met voorwaarden.  
 Ethische kwesties hierin zijn de aanwezigheid van begeerte (lust) en het solistische karakter i.t.t. de relationeel bedoelde seksualiteit.  
 Masturbatie zou in deze mogen als een mogelijke uitlaatklep voor seksuele spanning, mits het niet obsessief wordt en geen lust wordt gecultiveerd.  
