@@ -10,13 +10,15 @@ Er is al zeer veel geschreven over seksualiteit en hoe God dat in Zijn goedheid 
 Ondanks de vele exegetische werken die beschikbaar zijn met betrekking tot de Bijbelteksten die te maken hebben met seksualiteit, dunkt mij dat de meeste teksten meer dan voor zichzelf spreken. Aan het einde van dit artikel zeg ik nog wat kort over seks voor het huwelijk als ook masturbatie. Uiteraard aan de hand van de Bijbel. Voor de Bijbelteksten heb ik de Statenvertaling gebruikt.  
 
 Mocht u toch nog geïnteresseerd zijn in enkele boeken die een gedegen en evenwichtige christelijke en Bijbelse visie weergeven, bij deze:  
-Hollinger, Dennis P. - *The Meaning of Sex: Christian Ethics and the Moral Life* (2009)  
-Moore, Russell D. en Andrew Walker - *The Gospel & Pornography* (2017)  
-Yuan, Christopher - *Holy Sexuality and the Gospel: Sex, Desire, and Relationships Shaped by God’s Grand Story* (2018)  
-Pollard, Jeff - *Christian Modesty: The Public Undressing of America* (2000)  
-Kuby, Gabrielle - *The Global Sexual Revolution: Destruction of Freedom in the Name of Freedom* (2015)  
-James, Sharon - *Gender Ideology: What Do Christians Need to Know* (2019)  
-Perry, Laura - *Transgender to Transformed: A Story of Transition That Will Truly Set You Free* (2020)  
+Hollinger, Dennis P. - *The Meaning of Sex: Christian Ethics and the Moral Life* (2009);  
+Burk, Denny - *What Is the Meaning of Sex* (2013);  
+Moore, Russell D. en Andrew Walker - *The Gospel & Pornography* (2017);  
+Yuan, Christopher - *Holy Sexuality and the Gospel: Sex, Desire, and Relationships Shaped by God’s Grand Story* (2018);  
+Rueger, Matthew - *Sexual Morality in a Christless World* (2016);  
+Pollard, Jeff - *Christian Modesty: The Public Undressing of America* (2000);  
+Kuby, Gabrielle - *The Global Sexual Revolution: Destruction of Freedom in the Name of Freedom* (2015);  
+James, Sharon - *Gender Ideology: What Do Christians Need to Know* (2019);  
+Perry, Laura - *Transgender to Transformed: A Story of Transition That Will Truly Set You Free* (2020);  
 
 ## Oude Testament  
 ### lemma.sesb.h:נאף / נַאֲפוּפִים / נִאֻפִים (overspel, echtbreken)  
