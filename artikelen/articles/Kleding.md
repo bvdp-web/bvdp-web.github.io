@@ -127,7 +127,7 @@ Romeinen 12:1&nbsp;&nbsp;Ik bid u dan, broeders, door de ontfermingen Gods, dat 
 1 Korinthe 3:16&nbsp;&nbsp;Weet gij niet, dat gij Gods tempel zijt, en de Geest Gods in ulieden woont?
 1 Korinthe 6:19&nbsp;&nbsp;Of weet gij niet, dat ulieder lichaam een tempel is van den Heiligen Geest, Die in u is, Dien gij van God hebt, en [dat] gij uws zelfs niet zijt?  
 
-Het is niet “baas in eigen buik” of een misbruikte “christelijke vrijheid”. God zegt ons ook over het lichaam en hoe we dat kleden. God gaat niet alleen maar over de geest, zie Plato en Plutonius ((neo-)platonisme)  
+Het is niet “baas in eigen buik” of een misbruikte “christelijke vrijheid”. God zegt ons ook over het lichaam en hoe we dat kleden. God gaat niet alleen maar over de geest, zie Plato en Plutonius ((neo-)platonisme).  
 
 ## In alles God dienen
 Kolossenzen 1:10&nbsp;&nbsp;Opdat gij moogt wandelen waardiglijk den Heere, tot alle behagelijkheid, in alle goede werken vrucht dragende, en wassende in de kennis van God;  
@@ -140,4 +140,4 @@ Sam Jayasinghe:Bijbelse dresscode: met je kleding God eren (https://www.youtube.
 
 Meer dan zedigheid: Kleding kiezen volgens Bijbelse principes (https://www.bijbelsberaadmv.nl/2026/04/30/meer-dan-zedigheid-kleding-kiezen-volgens-bijbelse-principes/);  
 
-Pollard, Jeff - Christian Modesty: The Public Undressing of America (2000)  
+Pollard, Jeff - *Christian Modesty: The Public Undressing of America* (2000)  
