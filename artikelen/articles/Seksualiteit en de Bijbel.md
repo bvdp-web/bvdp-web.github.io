@@ -19,7 +19,7 @@ Pollard, Jeff - *Christian Modesty: The Public Undressing of America* (2000);
 Kuby, Gabrielle - *The Global Sexual Revolution: Destruction of Freedom in the Name of Freedom* (2015);  
 James, Sharon - *Gender Ideology: What Do Christians Need to Know* (2019);  
 Perry, Laura - *Transgender to Transformed: A Story of Transition That Will Truly Set You Free* (2020);  
-[Former Top P\*rn Star Exposes the Dirty Secrets of the P\*rn Industry](https://www.youtube.com/watch?v=QFVJT3s6luA);  
+<a href="https://www.youtube.com/watch?v=QFVJT3s6luA" target="_blank" rel="noopener noreferrer">Former Top P\*rn Star Exposes the Dirty Secrets of the P\*rn Industry</a>;  
 
 ## Oude Testament  
 ### lemma.sesb.h:נאף / נַאֲפוּפִים / נִאֻפִים (overspel, echtbreken)  
