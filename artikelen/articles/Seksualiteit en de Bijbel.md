@@ -186,7 +186,7 @@ Vr. + Antw. 108: Wat leert ons het zevende gebod?&nbsp;&nbsp;Dat alle onkuisheid
 Vr. + Antw. 109: Verbiedt God in dit gebod niet meer dan echtbreken en dergelijke schandelijkheden?&nbsp;&nbsp;Dewijl ons lichaam en ziel tempelen des Heiligen Geestes zijn, zo wil Hij, dat wij ze beide zuiver en heilig bewaren; daarom verbiedt Hij alle onkuise daden, gebaren, woorden, [Ef. 5:3-4; 1 Kor. 6:18-19] gedachten, lusten, [Matth. 5:27,28] en wat den mens daartoe trekken kan. [Ef. 5:18; 1 Kor. 15:33]  
 
 ## Masturbatie  
-De Bijbelse geschiedenis over Onan (Genesis 38) gaat volgens de meeste exegeten niet over masturbatie (ook wel Onanisme genoemd), maar over het nalaten van een familieplicht (leviraatshuwelijk/zwagerhuwelijk). In ieder geval legt het egoïsme ten opzichte van procreatie bloot. Dit bestrafte God.  
+De Bijbelse geschiedenis over Onan (Genesis 38) gaat volgens de meeste exegeten niet over masturbatie (ook wel Onanisme genoemd), maar over het nalaten van een familieplicht (leviraatshuwelijk/zwagerhuwelijk). In ieder geval legt het mijns inziens egoïsme ten opzichte van procreatie bloot. Dit egoïsme bestrafte God.  
 
 Verder veroorzaakt gewoonte masturbatie fixatie op narcistische seksualiteit. Een persoon die masturbeert is egocentrisch gefixeerd op zichzelf en is geïsoleerd. Ook gaat masturbatie gepaard met seksuele fantasieën, die vaak kunnen leiden tot pornografie, die zelf een verlangen naar verdere masturbatie oproept.  
 
@@ -194,7 +194,8 @@ De Bijbel spreekt niet expliciet over masturbatie; daarom bestaan verschillende 
 Ethische kwesties hierin zijn de aanwezigheid van begeerte (lust) en het solistische karakter i.t.t. de relationeel bedoelde seksualiteit.  
 Masturbatie zou in deze mogen als een mogelijke uitlaatklep voor seksuele spanning, mits het niet obsessief wordt en geen lust wordt gecultiveerd.  
 
-Echter masturbatie zonder je schuldig te maken aan Mattheüs 5:28 “Maar Ik zeg u, dat zo wie een vrouw [aan] ziet, om dezelve te begeren, die heeft alrede overspel in zijn hart met haar gedaan.” is meestal onmogelijk. (een kwart van de mannen en de helft van de vrouwen zou niet regelmatig fantaseren tijdens masturbatie.)  
+Echter masturbatie zonder je schuldig te maken aan Mattheüs 5:28 “Maar Ik zeg u, dat zo wie een vrouw [aan] ziet, om dezelve te begeren, die heeft alrede overspel in zijn hart met haar gedaan.” is meestal onmogelijk. (Een kwart van de mannen en de helft van de vrouwen zou niet regelmatig fantaseren tijdens masturbatie.) Het lijkt mij onmogelijk om ook maar geen enkele seconde iets te fantaseren dat Jezus’ gebod negeert. Zelfs al zou je over je aldan niet fictieve echtgenote of echtgenoot fantaseren, zelfs dan negeer je Jezus gebod. Immers seksualiteit behoort in het huwelijk. God wil niet dat we een egoïstische relatie met onze handen opbouwen, maar dat dat we een relatie met een ander opbouwen en bovenal met Hem. Hij duldt geen god naast of boven Hem.  
+
 Verder is seksualiteit en seks relationeel en lichamelijk-emotioneel-spiritueel bedoeld. Solistische masturbatie is dat duidelijk niet.  
 
 [^1]: BHS is de *Biblia Hebraica Stuttgartensia*. Het +-teken geven de verschillende Hebreeuwse lemma’s aan waarmee ik gezocht heb in <a href="https://www.logos.com/" target="_blank" rel="noopener noreferrer">Logos Bible Software</a>.  
