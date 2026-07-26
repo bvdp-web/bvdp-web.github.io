@@ -1,10 +1,10 @@
 ---
-title: Gods Kledingwetten
+title: Gods kledingwetten
 date: 2026-07-21
 description: Hoe wenst God dat de Christen zich kleedt?
 ---
 
-#  Gods Kledingwetten
+#  Gods kledingwetten
 Wat zegt de Bijbel over onze kleding? Kunnen we ons kleden zoals we zelf willen of heeft God ook in deze iets te zeggen over ons leven en gedrag?  
 Lees de hoeveelheid Bijbelteksten en trek zelf de conclusie. Voor het geval je denkt dat hier alleen maar de vrouwen eenzijdig worden aangesproken, is dit zeker niet het geval. Gods kleding voorschriften geldt net zo goed voor de man. Tegelijkertijd geldt dat we als Christen in Christus onze ogen moeten bewaren voor wat het ziet, zoals het kinderlied zingt. Een zondig mens zal altijd in en door elke kledingstijl iets zien wat voor hem zondig is.  
 ## Tegen schaamte
