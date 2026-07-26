@@ -136,7 +136,7 @@ Kolossenzen 3:17&nbsp;&nbsp;En al wat gij doet met woorden of met werken, [doet]
 God wil ook gediend worden in onze kledingkeus. Niet alleen woord, maar ook daad.  
 
 ## Bronnen
-Sam Jayasinghe:Bijbelse dresscode: met je kleding God eren (https://www.youtube.com/);  
+Sam Jayasinghe:Bijbelse dresscode: met je kleding God eren ([https://www.youtube.com/](https://www.youtube.com/watch?v=9AxszWlBqco));  
 
 Meer dan zedigheid: Kleding kiezen volgens Bijbelse principes (https://www.bijbelsberaadmv.nl/2026/04/30/meer-dan-zedigheid-kleding-kiezen-volgens-bijbelse-principes/);  
 
