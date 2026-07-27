@@ -20,7 +20,7 @@ Efeziërs 5:21-33&nbsp;&nbsp;Elkander onderdanig zijnde in de vreze Gods.&nbsp;&
 Filippenzen 2:3&nbsp;&nbsp;[Doet] geen ding door twisting of ijdele eer, maar door ootmoedigheid achte de een den ander uitnemender dan zichzelven.  
 
 ## Betekenis ‘hulpe’ uit Gen. 2:18  
-lemma.sesb.h:עֵזֶר.1  
+lemma.sesb.h:1.עֵזֶר  
 
 Het woord komt 21x voor in de BHS: Gen. 2:18, 20; Ex. 18:4; Deut. 33:7, 26, 29; Ps. 20:3, 33:20, 70:6, 89,20, 115:9-11, 121:1-2, 124:8, 146:5; Jes. 30:5; Ezech. 12:14; Dan. 11:34; Hos. 13:9.  
 Van deze 21x wordt het 17x (Ex. 18:4; Deut. 33:7, 26, 29; Ps. 20:3, 33:20, 70:6, 89,20, 115:9-11, 121:1-2, 124:8, 146:5; Hos. 13:9.) beschreven in de context van God Die Israël helpt. Het woord drukt geen minderwaardigheid uit maar het beschrijft een heilzame relatie.  
