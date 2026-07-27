@@ -44,10 +44,10 @@
     function stripReferenceMetadata(text) {
       return text
         // Bible references: Genesis 1:1
-        .replace(/^[A-Za-z]+\s*\d+:\d+\s*/, "")
+        //.replace(/^[A-Za-z]+\s*\d+:\d+\s*/, "")
         // lemma.sesb.h:1.  root.g:25.  lemma.bhs.g:123.
-        .replace(/^(?:lemma|root)(?:\.[^.]+)*\.[a-z]+:\d+\./i, "")
-        .trim();
+        //.replace(/^(?:lemma|root)(?:\.[^.]+)*\.[a-z]+:\d+\./i, "")
+        //.trim();
     }
     // --- Linguistic Classification ---
     function classifyText(text) {
