@@ -42,19 +42,33 @@
     const skipTags = new Set(["SCRIPT", "STYLE", "CODE", "PRE"]);
     // --- Metadata Stripping ---
     function stripReferenceMetadata(text) {
-      return text.replace(/^[A-Za-z]+\s*\d+:\d+\s*/, "").trim();
+      return text
+        // Bible references: Genesis 1:1
+        .replace(/^[A-Za-z]+\s*\d+:\d+\s*/, "")
+        // lemma.sesb.h:1.  root.g:25.  lemma.bhs.g:123.
+        .replace(/^(?:lemma|root)(?:\.[^.]+)*\.[a-z]+:\d+\./i, "")
+        .trim();
     }
     // --- Linguistic Classification ---
     function classifyText(text) {
       const cleaned = stripReferenceMetadata(text);
-      const tokens = cleaned.split(/\s+/).filter(Boolean);
+      // const tokens = cleaned.split(/\s+/).filter(Boolean);
       let greek = 0;
       let hebrew = 0;
       let latin = 0;
-      for (const t of tokens) {
-        if (/[\u0370-\u03FF\u1F00-\u1FFF]/.test(t)) greek++;
-        else if (/[\u0590-\u05FF]/.test(t)) hebrew++;
-        else if (/[A-Za-z]{2,}/.test(t)) latin++;
+      // for (const t of tokens) {
+      //   if (/[\u0370-\u03FF\u1F00-\u1FFF]/.test(t)) greek++;
+      //   else if (/[\u0590-\u05FF]/.test(t)) hebrew++;
+      //   else if (/[A-Za-z]{2,}/.test(t)) latin++;
+      // }     
+      for (const ch of cleaned.normalize("NFC")) {
+        if (/\p{Script=Hebrew}/u.test(ch)) {
+          hebrew++;
+        } else if (/\p{Script=Greek}/u.test(ch)) {
+          greek++;
+        } else if (/\p{Script=Latin}/u.test(ch)) {
+          latin++;
+        }
       }
       const total = tokens.length || 1;
       const greekRatio = greek / total;
