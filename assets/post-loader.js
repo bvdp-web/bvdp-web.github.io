@@ -70,7 +70,8 @@
           latin++;
         }
       }
-      const total = tokens.length || 1;
+      // const total = tokens.length || 1;
+      const total = hebrew + greek + latin || 1;
       const greekRatio = greek / total;
       const hebrewRatio = hebrew / total;
       const latinRatio = latin / total;
