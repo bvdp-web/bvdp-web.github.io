@@ -9,7 +9,7 @@ Er is al zeer veel geschreven over seksualiteit en hoe God dat in Zijn goedheid 
 
 Ondanks de vele exegetische werken die beschikbaar zijn met betrekking tot de Bijbelteksten die te maken hebben met seksualiteit, dunkt mij dat de meeste teksten meer dan voor zichzelf spreken. Aan het einde van dit artikel zeg ik nog wat kort over seks voor het huwelijk als ook masturbatie. Uiteraard aan de hand van de Bijbel. Voor de Bijbelteksten heb ik de Statenvertaling gebruikt.  
 
-Mocht u toch nog geïnteresseerd zijn in enkele boeken die een gedegen en evenwichtige christelijke en Bijbelse visie weergeven, bij deze:  
+Mocht u toch nog geïnteresseerd zijn in enkele bronnen die een gedegen en evenwichtige christelijke en Bijbelse visie weergeven, bij deze:  
 Hollinger, Dennis P. - *The Meaning of Sex: Christian Ethics and the Moral Life* (2009);  
 Burk, Denny - *What Is the Meaning of Sex* (2013);  
 Moore, Russell D. en Andrew Walker - *The Gospel & Pornography* (2017);  
@@ -20,6 +20,7 @@ Kuby, Gabrielle - *The Global Sexual Revolution: Destruction of Freedom in the N
 James, Sharon - *Gender Ideology: What Do Christians Need to Know* (2019);  
 Perry, Laura - *Transgender to Transformed: A Story of Transition That Will Truly Set You Free* (2020);  
 <a href="https://www.youtube.com/watch?v=QFVJT3s6luA" target="_blank" rel="noopener noreferrer">Former Top P\*rn Star Exposes the Dirty Secrets of the P\*rn Industry</a>;  
+[Wat is Bijbelse seks? – Dr. M. Klaassen](https://www.mklaassen.net/artikelen/wat-is-bijbelse-seks/);  
 
 ## Oude Testament  
 ### lemma.sesb.h:נאף / נַאֲפוּפִים / נִאֻפִים (overspel, echtbreken)  
@@ -186,7 +187,7 @@ Vr. + Antw. 108: Wat leert ons het zevende gebod?&nbsp;&nbsp;Dat alle onkuisheid
 Vr. + Antw. 109: Verbiedt God in dit gebod niet meer dan echtbreken en dergelijke schandelijkheden?&nbsp;&nbsp;Dewijl ons lichaam en ziel tempelen des Heiligen Geestes zijn, zo wil Hij, dat wij ze beide zuiver en heilig bewaren; daarom verbiedt Hij alle onkuise daden, gebaren, woorden, [Ef. 5:3-4; 1 Kor. 6:18-19] gedachten, lusten, [Matth. 5:27,28] en wat den mens daartoe trekken kan. [Ef. 5:18; 1 Kor. 15:33]  
 
 ## Masturbatie  
-De Bijbelse geschiedenis over Onan (Genesis 38) gaat volgens de meeste exegeten niet over masturbatie (ook wel Onanisme genoemd), maar over het nalaten van een familieplicht (leviraatshuwelijk/zwagerhuwelijk). In ieder geval legt het mijns inziens egoïsme ten opzichte van procreatie bloot. Dit egoïsme bestrafte God.  
+De Bijbelse geschiedenis over Onan (Genesis 38) gaat volgens de meeste exegeten niet over masturbatie (ook wel Onanisme genoemd), maar over het nalaten van een familieplicht (leviraatshuwelijk/zwagerhuwelijk). In ieder geval legt het mijns inziens egoïsme ten opzichte van procreatie bloot. Dit egoïsme bestrafte God. Het is zijn keus om wel genot te hebben, maar geen verantwoordelijkheid te willen nemen om nieuw leven te verwekken.  
 
 Verder veroorzaakt gewoonte masturbatie fixatie op narcistische seksualiteit. Een persoon die masturbeert is egocentrisch gefixeerd op zichzelf en is geïsoleerd. Ook gaat masturbatie gepaard met seksuele fantasieën, die vaak kunnen leiden tot pornografie, die zelf een verlangen naar verdere masturbatie oproept.  
 
