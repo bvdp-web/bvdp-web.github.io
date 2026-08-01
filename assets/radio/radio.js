@@ -190,6 +190,7 @@ function onVisibilityChange() {
 }
 document.addEventListener("DOMContentLoaded", updateNowPlaying);
 if (document.querySelector(".station-card.active")) {
+  console.log("Clicked active radio: metadata update");
   document.querySelector(".station-card.active").addEventListener("click", updateNowPlaying);
 }
 player.addEventListener("play", startMetadataUpdates);
