@@ -190,9 +190,7 @@ function onVisibilityChange() {
 }
 document.addEventListener("DOMContentLoaded", updateNowPlaying);
 if (document.querySelector(".station-card.active")) {
-  clearInterval(metadataIntervalId);
-  metadataIntervalId = null;
-  document.querySelector(".station-card.active").addEventListener("click", startMetadataUpdates);
+  document.querySelector(".station-card.active").addEventListener("click", updateNowPlaying);
 }
 player.addEventListener("play", startMetadataUpdates);
 player.addEventListener("pause", stopMetadataUpdates);
