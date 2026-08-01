@@ -189,6 +189,9 @@ function onVisibilityChange() {
   }
 }
 document.addEventListener("DOMContentLoaded", updateNowPlaying);
+if (document.querySelector(".station-card.active")) {
+  document.querySelector(".station-card.active").addEventListener("click", startMetadataUpdates);
+}
 player.addEventListener("play", startMetadataUpdates);
 player.addEventListener("pause", stopMetadataUpdates);
 document.addEventListener("visibilitychange", onVisibilityChange);
