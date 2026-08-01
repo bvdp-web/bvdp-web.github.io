@@ -189,15 +189,13 @@ function onVisibilityChange() {
   }
 }
 document.addEventListener("DOMContentLoaded", updateNowPlaying);
-player.addEventListener("play", () => {
-  const activeStation = document.querySelector(".station-card.active");
-  if (activeStation && !activeStation.dataset.listenerAdded) {
-    console.log("Clicked active radio: metadata update");
-    activeStation.addEventListener("click", updateNowPlaying);
-    activeStation.dataset.listenerAdded = "true";
+document.addEventListener("click", (event) => {
+  const activeStation = event.target.closest(".station-card.active");
+  if (activeStation && !event.target.closest("button")) {
+    updateNowPlaying();
   }
-  startMetadataUpdates();
 });
+player.addEventListener("play", startMetadataUpdates);
 player.addEventListener("pause", stopMetadataUpdates);
 document.addEventListener("visibilitychange", onVisibilityChange);
 window.addEventListener("focus", onVisibilityChange);
