@@ -189,11 +189,15 @@ function onVisibilityChange() {
   }
 }
 document.addEventListener("DOMContentLoaded", updateNowPlaying);
-if (document.querySelector(".station-card.active")) {
-  console.log("Clicked active radio: metadata update");
-  document.querySelector(".station-card.active").addEventListener("click", updateNowPlaying);
-}
-player.addEventListener("play", startMetadataUpdates);
+player.addEventListener("play", () => {
+  const activeStation = document.querySelector(".station-card.active");
+  if (activeStation && !activeStation.dataset.listenerAdded) {
+    console.log("Clicked active radio: metadata update");
+    activeStation.addEventListener("click", updateNowPlaying);
+    activeStation.dataset.listenerAdded = "true";
+  }
+  startMetadataUpdates();
+});
 player.addEventListener("pause", stopMetadataUpdates);
 document.addEventListener("visibilitychange", onVisibilityChange);
 window.addEventListener("focus", onVisibilityChange);
