@@ -61,7 +61,8 @@ Job 36:14&nbsp;&nbsp;Hun ziel zal in de jonkheid sterven, en hun leven onder de 
 
 ### Een vrouw begeren  
 Job 31:1&nbsp;&nbsp;Ik heb een verbond gemaakt met mijn ogen; hoe zou ik dan acht gegeven hebben op een maagd?  
-Spreuken 5:1-13&nbsp;&nbsp;… Want de lippen der vreemde [vrouw] druppen honigzeem, en haar gehemelte is gladder dan olie. … Opdat gij het pad des levens niet zoudt wegen, zijn haar gangen ongestadig, [dat] gij het niet merkt. … Maak uw weg verre van haar, en nader niet tot de deur van haar huis; …  
+Spreuken 5:1-23&nbsp;&nbsp;… Want de lippen der vreemde [vrouw] druppen honigzeem, en haar gehemelte is gladder dan olie. … Opdat gij het pad des levens niet zoudt wegen, zijn haar gangen ongestadig, [dat] gij het niet merkt. … Maak uw weg verre van haar, en nader niet tot de deur van haar huis; …  
+Spreuken 6:24-35&nbsp;&nbsp;… Begeer haar schoonheid niet in uw hart, en laat haar niet vangen met haar oogleden. … Zal iemand vuur in zijn boezem nemen, dat zijn klederen niet verbrand worden?... Alzo wie tot zijns naasten huisvrouw ingaat; al wie haar aanroert, zal niet onschuldig gehouden worden. …  
 Spreuken 7:5-27&nbsp;&nbsp;Opdat zij u bewaren voor een vreemde vrouw, voor de onbekende, [die] met haar redenen vleit. … En ziet, een vrouw ontmoette hem in hoerenversiersel, en met het hart op haar hoede; … Zij bewoog hem door de veelheid van haar onderricht, zij dreef hem aan door het gevlei harer lippen. …  
 
 ## Nieuwe Testament  
@@ -157,7 +158,7 @@ Judas :4&nbsp;&nbsp;Want er zijn sommige mensen ingeslopen, die eertijds tot dit
 
 ### Een vrouw begeren – Matth. 5:28  
 root.g:επιθυμεω = Een sterk verlangen hebben naar wat van iemand anders is en/of zich bezighouden met een activiteit die moreel verkeerd is – ‘begeerte, wellust, kwade verlangens, wellust, begeerte.’  
-NA28: 55x in 51 versen --> wordt zowel positief (zie o.a. Matth. 13:17) als negatief gebruikt  
+NA28: 55x in 51 versen --> wordt zowel positief (zie o.a. Matth. 13:17) als negatief gebruikt.  
 
 ## Trouwen i.p.v. Samenwonen (Seks voor het huwelijk?)  
 Tegen echtscheiding en seks buiten het huwelijk, zie alle benadrukte NT-teksten en hoe God het volk Israël aansprak middels de profeten m.b.t. hoererij.  
