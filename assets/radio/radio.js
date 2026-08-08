@@ -192,7 +192,7 @@ document.addEventListener("DOMContentLoaded", updateNowPlaying);
 document.addEventListener("click", (event) => {
   const activeStation = event.target.closest(".station-card.active");
   if (activeStation && !event.target.closest("button")) {
-    console.log("Manual radio click eventListener: update metadata");
+    console.log("Manual update metadata");
     updateNowPlaying();
   }
 });
