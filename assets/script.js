@@ -1,4 +1,4 @@
-if (localStorage.getItem("theme") !== "light") {
+if (window.matchMedia("(prefers-color-scheme: dark)").matches || localStorage.getItem("theme") !== "light") {
   document.documentElement.classList.add("dark");
 }
 function loadPartial(id, file, callback) {
