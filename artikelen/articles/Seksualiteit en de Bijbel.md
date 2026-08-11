@@ -1,6 +1,7 @@
 ---
 title: Seksualiteit en de Bijbel
 date: 2026-07-11
+update: 2026-08-11
 description: Wat heeft de Bijbel te melden over seksualiteit
 ---
 
