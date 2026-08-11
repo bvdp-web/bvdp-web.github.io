@@ -33,7 +33,7 @@ Job 24:15&nbsp;&nbsp;Ook neemt het oog des overspelers de schemering waar, zegge
 Psalmen 50:18&nbsp;&nbsp;Indien gij een dief ziet, zo loopt gij met hem; en uw deel is met de overspelers.  
 Spreuken 6:32&nbsp;&nbsp;[Maar] die met een vrouw overspel doet, is verstandeloos; hij verderft zijn ziel, die dat doet;  
 Spreuken 30:20&nbsp;&nbsp;Alzo is de weg ener overspelige vrouw; zij eet en wist haar mond, en zegt: Ik heb geen ongerechtigheid gewrocht!  
-Profetiën waarin God overspel verwijdt.  
+Profetieën waarin God overspel verwijdt.  
 
 ### lemma.sesb.h:זנה.1 / זְנוּנִים (hoererij)  
 BHS: 93+12x in 82+10 versen  
@@ -48,6 +48,11 @@ Leviticus 21:9&nbsp;&nbsp;Als nu de dochter van enigen priester zal beginnen te 
 Leviticus 21:14&nbsp;&nbsp;Een weduwe, of verstotene, of ontheiligde hoer, dezulke zal hij niet nemen; maar een maagd uit zijn volken zal hij tot een vrouw nemen.  
 Deuteronomium 22:21&nbsp;&nbsp;Zo zullen zij deze jonge dochter uitbrengen tot de deur van haars vaders huis, en de lieden harer stad zullen haar met stenen stenigen, dat zij sterve, omdat zij een dwaasheid in Israël gedaan heeft, hoererende in haars vaders huis; zo zult gij het boze uit het midden van u wegdoen.  
 Deuteronomium 23:18&nbsp;&nbsp;Gij zult geen hoerenloon noch hondenprijs in het huis des HEEREN, uws Gods, brengen, tot enige gelofte; want ook die beiden zijn den HEERE, uw God, een gruwel.  
+Spreuken 6:26&nbsp;&nbsp;Want door een vrouw, [die] een hoer is, komt men tot een stuk broods; en eens mans huisvrouw jaagt de kostelijke ziel.  
+Spreuken 7:10&nbsp;&nbsp;En ziet, een vrouw ontmoette hem in hoerenversiersel, en met het hart op haar hoede;  
+Spreuken 23:27&nbsp;&nbsp;Want een hoer is een diepe gracht, en een vreemde vrouw is een enge put.
+Geschiedenissen met betrekking tot hoererij en wetten en profetiën met betrekking tot afgodenhoererij.  
+Spreuken 29:3&nbsp;&nbsp;Een man, die de wijsheid bemint, verblijdt zijn vader; maar die een metgezel der hoeren is, brengt het goed door.  
 Geschiedenissen met betrekking tot hoererij en wetten en profetiën met betrekking tot afgodenhoererij.  
 
 ### lemma.sesb.h:קָדֵשׁ.1 (tempelprosituee)  
@@ -60,10 +65,13 @@ Genesis 38:21-22&nbsp;&nbsp;En hij vraagde de lieden van haar plaats, zeggende: 
 Job 36:14&nbsp;&nbsp;Hun ziel zal in de jonkheid sterven, en hun leven onder de schandjongens.  
 
 ### Een vrouw begeren  
+Exodus 20:17&nbsp;&nbsp;Gij zult niet begeren uws naasten huis; gij zult niet begeren uws naasten vrouw, noch zijn dienstknecht, noch zijn dienstmaagd, noch zijn os, noch zijn ezel, noch iets, dat uws naasten is.  
+Deuteronomium 5:21&nbsp;&nbsp;En gij zult niet begeren uws naasten vrouw; en gij zult u niet laten gelusten uws naasten huis, zijn akker, noch zijn dienstknecht, noch zijn dienstmaagd, zijn os, noch zijn ezel, noch iets, dat uws naasten is.  
 Job 31:1&nbsp;&nbsp;Ik heb een verbond gemaakt met mijn ogen; hoe zou ik dan acht gegeven hebben op een maagd?  
 Spreuken 5:1-23&nbsp;&nbsp;… Want de lippen der vreemde [vrouw] druppen honigzeem, en haar gehemelte is gladder dan olie. … Opdat gij het pad des levens niet zoudt wegen, zijn haar gangen ongestadig, [dat] gij het niet merkt. … Maak uw weg verre van haar, en nader niet tot de deur van haar huis; …  
 Spreuken 6:24-35&nbsp;&nbsp;… Begeer haar schoonheid niet in uw hart, en laat haar niet vangen met haar oogleden. … Zal iemand vuur in zijn boezem nemen, dat zijn klederen niet verbrand worden?... Alzo wie tot zijns naasten huisvrouw ingaat; al wie haar aanroert, zal niet onschuldig gehouden worden. …  
 Spreuken 7:5-27&nbsp;&nbsp;Opdat zij u bewaren voor een vreemde vrouw, voor de onbekende, [die] met haar redenen vleit. … En ziet, een vrouw ontmoette hem in hoerenversiersel, en met het hart op haar hoede; … Zij bewoog hem door de veelheid van haar onderricht, zij dreef hem aan door het gevlei harer lippen. …  
+Spreuken 23:26-33&nbsp;&nbsp;Mijn zoon! geef mij uw hart, en laat uw ogen mijn wegen bewaren.&nbsp;&nbsp;Want een hoer is een diepe gracht, en een vreemde vrouw is een enge put. … Uw ogen zullen naar vreemde vrouwen zien, en uw hart zal verkeerdheden spreken.  
 
 ## Nieuwe Testament  
 ### root.g:μοιχος / moichos (overspel)  
@@ -186,7 +194,7 @@ Openbaring 22:17&nbsp;&nbsp;En de Geest en de Bruid zeggen: Kom! En die het hoor
 &nbsp;&nbsp;&nbsp;--> net zoals in Efeze is het huwelijk een afspiegeling van Gods verbond met Zijn volk. Zie ook alle profetiën waar God het volk Israël hoererij verwijdt als zij andere goden nawandelen. Het gaat de onlosmakelijk verbintenis, om het verbond.  
 
 Heidelbergse Catechismus Zondag 41:  
-Vr. + Antw. 108: Wat leert ons het zevende gebod?&nbsp;&nbsp;Dat alle onkuisheid van God vervloekt is, [Lev. 18:28] en dat wij daarom, haar van harte vijand zijnde, [Jud.:23] kuis en ingetogen leven moeten, [1 Thess. 4:3-5] hetzij in den heiligen huwelijken staat of daarbuiten [ Hebr. 13:4; 1 Kor. 7:7]  
+Vr. + Antw. 108: Wat leert ons het zevende gebod?&nbsp;&nbsp;Dat alle onkuisheid van God vervloekt is, [Lev. 18:28] en dat wij daarom, haar van harte vijand zijnde, [Jud.:23] kuis en ingetogen leven moeten, [1 Thess. 4:3-5] hetzij in den heiligen huwelijken staat of daarbuiten [Hebr. 13:4; 1 Kor. 7:7]  
 Vr. + Antw. 109: Verbiedt God in dit gebod niet meer dan echtbreken en dergelijke schandelijkheden?&nbsp;&nbsp;Dewijl ons lichaam en ziel tempelen des Heiligen Geestes zijn, zo wil Hij, dat wij ze beide zuiver en heilig bewaren; daarom verbiedt Hij alle onkuise daden, gebaren, woorden, [Ef. 5:3-4; 1 Kor. 6:18-19] gedachten, lusten, [Matth. 5:27,28] en wat den mens daartoe trekken kan. [Ef. 5:18; 1 Kor. 15:33]  
 
 ## Masturbatie  
