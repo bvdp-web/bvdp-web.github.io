@@ -1,6 +1,7 @@
 ---
 title: Verhouding tussen man en vrouw
 date: 2026-07-27
+update: 2026-07-31
 description: Gods bedoelde verhouding tussen man en vrouw
 ---
 
