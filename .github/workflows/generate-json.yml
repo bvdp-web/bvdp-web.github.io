@@ -31,6 +31,7 @@ jobs:
             file="{}"
             title=$(grep "^title:" "$file" | sed "s/title: //" | tr -d "\r")
             date=$(grep "^date:" "$file" | sed "s/date: //" | tr -d "\r")
+            update=$(grep "^update:" "$file" | sed "s/update: //" | tr -d "\r")
             description=$(grep "^description:" "$file" | sed "s/description: //" | tr -d "\r")
             filename=$(basename "$file" .md)
       
@@ -38,8 +39,9 @@ jobs:
               --arg title "$title" \
               --arg file "$filename" \
               --arg date "$date" \
+              --arg update "$update" \
               --arg description "$description" \
-              "{title:\$title,file:\$file,date:\$date,description:\$description}"
+              "{title:\$title,file:\$file,date:\$date,update:\$update,description:\$description}"
           ' | jq -s '.' > artikelen/posts.json
 
       # -----------------------------
@@ -54,6 +56,7 @@ jobs:
             file="{}"
             title=$(grep "^title:" "$file" | sed "s/title: //" | tr -d "\r")
             date=$(grep "^date:" "$file" | sed "s/date: //" | tr -d "\r")
+            update=$(grep "^update:" "$file" | sed "s/update: //" | tr -d "\r")
             description=$(grep "^description:" "$file" | sed "s/description: //" | tr -d "\r")
             filename=$(basename "$file" .md)
       
@@ -62,7 +65,7 @@ jobs:
               --arg file "$filename" \
               --arg date "$date" \
               --arg description "$description" \
-              "{title:\$title,file:\$file,date:\$date,description:\$description}"
+              "{title:\$title,file:\$file,date:\$date,update:\$update,description:\$description}"
           ' | jq -s '.' > preken/posts.json
 
       # -----------------------------
