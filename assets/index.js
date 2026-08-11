@@ -76,6 +76,7 @@ function initPosts(section) {
         <div class="card">
           <h2>${post.title}</h2>
           <small>${post.date || "Geen datum beschikbaar"}</small>
+          <small>${post.update}</small>
           <p>${post.description}</p>
           <a href="/${section}/post.html?post=${post.file}" class="button">Lezen</a>
         </div>
