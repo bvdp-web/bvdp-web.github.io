@@ -1,7 +1,7 @@
 ---
 title: Seksualiteit en de Bijbel
 date: 2026-07-11
-update: 2026-08-11
+update: 2026-08-15
 description: Wat heeft de Bijbel te melden over seksualiteit
 ---
 
@@ -73,6 +73,8 @@ Spreuken 5:1-23&nbsp;&nbsp;… Want de lippen der vreemde [vrouw] druppen honigz
 Spreuken 6:24-35&nbsp;&nbsp;… Begeer haar schoonheid niet in uw hart, en laat haar niet vangen met haar oogleden. … Zal iemand vuur in zijn boezem nemen, dat zijn klederen niet verbrand worden?... Alzo wie tot zijns naasten huisvrouw ingaat; al wie haar aanroert, zal niet onschuldig gehouden worden. …  
 Spreuken 7:5-27&nbsp;&nbsp;Opdat zij u bewaren voor een vreemde vrouw, voor de onbekende, [die] met haar redenen vleit. … En ziet, een vrouw ontmoette hem in hoerenversiersel, en met het hart op haar hoede; … Zij bewoog hem door de veelheid van haar onderricht, zij dreef hem aan door het gevlei harer lippen. …  
 Spreuken 23:26-33&nbsp;&nbsp;Mijn zoon! geef mij uw hart, en laat uw ogen mijn wegen bewaren.&nbsp;&nbsp;Want een hoer is een diepe gracht, en een vreemde vrouw is een enge put. … Uw ogen zullen naar vreemde vrouwen zien, en uw hart zal verkeerdheden spreken.  
+
+Leviticus 18 en 20 en Deuteronomium 22:22-30  
 
 ## Nieuwe Testament  
 ### root.g:μοιχος / moichos (overspel)  
