@@ -9,6 +9,7 @@ Dit is een vervolg op [“Seksualiteit”](/artikelen/post?post=Seksualiteit%20e
 
 Online is er veel interessants te vinden. Hier een documentaire die de persoonlijke verhalen van mensen weergeeft in relatie met God en de Bijbel: [LHBTI & God: “Wat is liefde?” | Documentaire](https://www.youtube.com/watch?v=iuLj5kgtflU).  
 ## Oude Testament
+Genesis 19:1-11&nbsp;&nbsp;… En zij riepen Lot toe, en zeiden tot hem: Waar zijn die mannen, die deze nacht tot u gekomen zijn? breng hen uit tot ons, opdat wij ze bekennen. … Ziet toch, ik heb twee dochters, die geen man bekend hebben; …  
 Leviticus 18:22-25&nbsp;&nbsp;Bij een manspersoon zult gij niet liggen met vrouwelijke bijligging; dit is een gruwel.&nbsp;&nbsp;Insgelijks zult gij bij geen beest liggen, om daarmede onrein te worden; een vrouw zal ook niet staan voor een beest, om daarmede te doen te hebben; het is een gruwelijke vermenging.&nbsp;&nbsp;Verontreinigt u niet met enige van deze; want de heidenen, die Ik van uw aangezicht uitwerpe, zijn met alle deze verontreinigd;  
 Leviticus 20:13&nbsp;&nbsp;Wanneer ook een man bij een manspersoon zal gelegen hebben, met vrouwelijke bijligging, zij hebben beiden een gruwel gedaan; zij zullen zekerlijk gedood worden; hun bloed is op hen!  
 Leviticus 20:15-16&nbsp;&nbsp;Daartoe als een man bij enig vee zal gelegen hebben, hij zal zekerlijk gedood worden; ook zult gijlieden het beest doden.&nbsp;&nbsp;Alzo wanneer een vrouw tot enig beest genaderd zal zijn, om daarmede te doen te hebben, zo zult gij die vrouw en dat beest doden; zij zullen zekerlijk gedood worden; hun bloed is op hen!  
@@ -18,6 +19,7 @@ Deuteronomium 22:5&nbsp;&nbsp;Het kleed eens mans zal niet zijn aan een vrouw, e
 Romeinen 1:26-27&nbsp;&nbsp;Daarom heeft God hen overgegeven tot oneerlijke bewegingen; want ook hun vrouwen hebben het natuurlijk gebruik veranderd in het [gebruik] tegen nature;&nbsp;&nbsp;En insgelijks ook de mannen, nalatende het natuurlijk gebruik der vrouw, zijn verhit geworden in hun lust tegen elkander, mannen met mannen schandelijkheid bedrijvende, en de vergelding van hun dwaling, die [daartoe] behoorde, in zichzelven ontvangende.  
 1 Korinthe 6:10 (9)[^2]&nbsp;&nbsp;Dwaalt niet; noch hoereerders, noch afgodendienaars, noch overspelers, noch ontuchtigen, noch die bij mannen liggen, noch dieven, noch gierigaards, noch dronkaards, geen lasteraars, geen rovers zullen het Koninkrijk Gods beërven.  
 1 Timotheüs 1:10&nbsp;&nbsp;Den hoereerders, dien, die bij mannen liggen, den mensendieven, den leugenaars, den meinedigen, en zo er iets anders tegen de gezonde leer is;  
+Judas :7&nbsp;&nbsp;Gelijk Sodoma en Gomorra, en de steden rondom dezelve, die op gelijke wijze als deze gehoereerd hebben, en ander vlees zijn nagegaan, tot een voorbeeld voorgesteld zijn, dragende de straf des eeuwigen vuurs.  
 
 In 1 Korinthe 6 wordt lemma.g:μαλακός en lemma.g:ἀρσενοκοίτης gebruikt. In 1 Timotheüs alleen de laatste.  
 
