@@ -6,6 +6,8 @@ description: Wat heeft de Bijbel te melden over seksualiteit – deel 2
 
 # Seksuele andere gerichtheid  
 Dit is een vervolg op [“Seksualiteit”](/artikelen/post?post=Seksualiteit%20en%20de%20Bijbel). Waar dat stuk vooral ging om seksualiteit in zijn algemeenheid en heteroseksueel in het bijzonder, wil ik me in dit stuk focussen op de non-heteroseksuele gerichtheid en handelingen en wat de Bijbel te melden heeft over Gods visie daarin door de tijd heen.  
+
+Online is er veel interessants te vinden. Hier een documentaire die de persoonlijke verhalen van mensen weergeeft in relatie met God en de Bijbel: [LHBTI & God: “Wat is liefde?” | Documentaire](https://www.youtube.com/watch?v=iuLj5kgtflU).  
 ## Oude Testament
 Leviticus 18:22-25&nbsp;&nbsp;Bij een manspersoon zult gij niet liggen met vrouwelijke bijligging; dit is een gruwel.&nbsp;&nbsp;Insgelijks zult gij bij geen beest liggen, om daarmede onrein te worden; een vrouw zal ook niet staan voor een beest, om daarmede te doen te hebben; het is een gruwelijke vermenging.&nbsp;&nbsp;Verontreinigt u niet met enige van deze; want de heidenen, die Ik van uw aangezicht uitwerpe, zijn met alle deze verontreinigd;  
 Leviticus 20:13&nbsp;&nbsp;Wanneer ook een man bij een manspersoon zal gelegen hebben, met vrouwelijke bijligging, zij hebben beiden een gruwel gedaan; zij zullen zekerlijk gedood worden; hun bloed is op hen!  
