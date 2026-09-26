@@ -52,11 +52,11 @@ Deuteronomium 23:18&nbsp;&nbsp;Gij zult geen hoerenloon noch hondenprijs in het 
 Spreuken 6:26&nbsp;&nbsp;Want door een vrouw, [die] een hoer is, komt men tot een stuk broods; en eens mans huisvrouw jaagt de kostelijke ziel.  
 Spreuken 7:10&nbsp;&nbsp;En ziet, een vrouw ontmoette hem in hoerenversiersel, en met het hart op haar hoede;  
 Spreuken 23:27&nbsp;&nbsp;Want een hoer is een diepe gracht, en een vreemde vrouw is een enge put.
-Geschiedenissen met betrekking tot hoererij en wetten en profetiën met betrekking tot afgodenhoererij.  
+Geschiedenissen met betrekking tot hoererij en wetten en profetieën met betrekking tot afgodenhoererij.  
 Spreuken 29:3&nbsp;&nbsp;Een man, die de wijsheid bemint, verblijdt zijn vader; maar die een metgezel der hoeren is, brengt het goed door.  
-Geschiedenissen met betrekking tot hoererij en wetten en profetiën met betrekking tot afgodenhoererij.  
+Geschiedenissen met betrekking tot hoererij en wetten en profetieën met betrekking tot afgodenhoererij.  
 
-### lemma.sesb.h:קָדֵשׁ.1 (tempelprosituee)  
+### lemma.sesb.h:קָדֵשׁ.1 (tempelprostituee)  
 BHS: 11x in 9 versen  
 
 lemma.sesb.h:קָדֵשׁ.1 NOT lemma.sesb.h:זְנוּנִים NOT lemma.sesb.h:זנה.1 NOT lemma.sesb.h:נאף NOT lemma.sesb.h:נַאֲפוּפִים NOT lemma.sesb.h:נִאֻפִים:  
