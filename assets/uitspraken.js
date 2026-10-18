@@ -4,11 +4,13 @@ function updateQuote(lines) {
   let selectedLine;
   if (storedDate === today) {
     selectedLine = localStorage.getItem('dailyLine');
+    console.log("QUOTE: Uitspraak uit de cache geladen");
   } else {
     const randomIndex = Math.floor(Math.random() * lines.length);
     selectedLine = lines[randomIndex];
     localStorage.setItem('dailyLine', selectedLine);
     localStorage.setItem('lineDate', today);
+    console.log("QUOTE: Uitspraak willekeurig gekozen voor vandaag")
   }
   document.getElementById('uitspraak').textContent = selectedLine;
 }
