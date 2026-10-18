@@ -4,14 +4,14 @@
   font-style: italic;
   font-weight: 100 400;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/playwriteat/v6/Gw6jwc7n6kfJN4fVoKON7HIuDDxu.woff2) format('woff2');
+  src: url(/assets/Playwrite_AT_italic.woff2) format('woff2');
 }
 @font-face {
   font-family: 'Playwrite AT';
   font-style: normal;
   font-weight: 100 400;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/playwriteat/v6/Gw69wc7n6kfJN4fVoKON7HIeCw.woff2) format('woff2');
+  src: url(/assets/Playwrite_AT.woff2) format('woff2');
 }
 @font-face {
   font-family: 'SBL Hebrew';
