@@ -11,7 +11,7 @@ function loadPartial(id, file, callback) {
       document.getElementById(id).innerHTML = data;
       if (callback) callback();
     })
-    .catch(error => console.error("MENU Error loading", file, error));
+    .catch(error => console.error("MENU Error loading:", file, error));
 }
 document.addEventListener("DOMContentLoaded", function() {
   loadPartial("navbar", "/navfooter/navbar.html", function() {
