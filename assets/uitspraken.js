@@ -28,5 +28,5 @@ fetch('uitspraken.txt')
   })
   .catch(error => {
     document.getElementById('uitspraak').textContent = "Kan mijn uitspraak van de dag niet weergeven.";
-    console.error("Daily Quote:", error);
+    console.error("QUOTE:", error);
   });
