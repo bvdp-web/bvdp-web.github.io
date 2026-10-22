@@ -12,34 +12,34 @@ function resetStations() {
   buttons.forEach(button => {
     button.textContent = "▶ Play";
   });
-  if (debugRadio) { console.log("RADIO DEBUG: resetStations()"); }
+  if (debugRadio) { console.log("RADIO: DEBUG: resetStations()"); }
 }
 function updateCurrentButton() {
   if (!currentCard) return;
   const button = currentCard.querySelector(".play-btn");
   button.textContent = player.paused ? "▶ Play" : "⏹ Stop";
-  if (debugRadio) { console.log("RADIO DEBUG: updateCurrentButton()"); }
+  if (debugRadio) { console.log("RADIO: DEBUG: updateCurrentButton()"); }
 }
 
 // --- Always restart stream from live position ---
 async function PlayStream() {
   if (!currentCard || restartLock) return;
   restartLock = true;
-  if (debugRadio) { console.log("RADIO DEBUG: restartLock = true"); }
+  if (debugRadio) { console.log("RADIO: DEBUG: restartLock = true"); }
   const stream = currentCard.dataset.stream;
   player.pause();
-  if (debugRadio) { console.log("RADIO DEBUG: player.pause();"); }
+  if (debugRadio) { console.log("RADIO: DEBUG: player.pause();"); }
   player.removeAttribute("src");
-  if (debugRadio) { console.log("RADIO DEBUG: player.removeAttribute();"); }
+  if (debugRadio) { console.log("RADIO: DEBUG: player.removeAttribute();"); }
   player.src = `${stream}?t=${Date.now()}`;
   player.load();
-  if (debugRadio) { console.log("RADIO DEBUG: player.load();"); }
+  if (debugRadio) { console.log("RADIO: DEBUG: player.load();"); }
   try {
     await player.play();
     console.log("RADIO: Playing stream");
   } finally {
     restartLock = false;
-    if (debugRadio) { console.log("RADIO DEBUG: restartLock = false"); }
+    if (debugRadio) { console.log("RADIO: DEBUG: restartLock = false"); }
   }
 }
 
@@ -51,10 +51,10 @@ buttons.forEach(button => {
     // Same station
     if (currentCard === card) {
       if (!player.paused) {
-        console.log("RADIO Button eventListener: pause current station");
+        console.log("RADIO: Button eventListener: pause current station");
         player.pause();
       } else {
-        console.log("RADIO Button eventListener: play current station");
+        console.log("RADIO: Button eventListener: play current station");
         await PlayStream();
       }
       return;
@@ -65,7 +65,7 @@ buttons.forEach(button => {
     resetStations();
     currentCard = card;
     card.classList.add("active");
-    console.log("RADIO Button eventListener: selected new station");
+    console.log("RADIO: Button eventListener: selected new station");
     await PlayStream();
     changingStation = false;
   });
@@ -74,7 +74,7 @@ buttons.forEach(button => {
 // --- If anything starts playback after a pause,
 // force a reconnect to the live stream ---
 player.addEventListener("play", async () => {
-  if (debugRadio) { console.log("RADIO DEBUG: Play eventListener before `if (!changingStation && !restartLock)`"); }
+  if (debugRadio) { console.log("RADIO: DEBUG: Play eventListener before `if (!changingStation && !restartLock)`"); }
   if (!changingStation && !restartLock) {
     console.log("RADIO Play eventListener: play station");
     await PlayStream();
@@ -91,7 +91,7 @@ player.addEventListener("pause", () => {
 if (debugRadio) {
   ["stalled", "waiting", "error"].forEach(type => {
     player.addEventListener(type, (e) => {
-      console.log("RADIO DEBUG: ", e.type, e);
+      console.log("RADIO: DEBUG: ", e.type, e);
     });
   });
 }
@@ -110,7 +110,7 @@ function updateMediaSession(card, s = {}) {
            "/assets/images/favicon.png"
     }]
   });
-  if (debugRadio) { console.log("RADIO DEBUG: ", navigator.mediaSession.metadata); }
+  if (debugRadio) { console.log("RADIO: DEBUG: ", navigator.mediaSession.metadata); }
 }
 navigator.mediaSession.setActionHandler('play', () => {
   player.play();
@@ -163,7 +163,7 @@ async function updateNowPlaying() {
 }
 function startMetadataUpdates() {
   if (metadataIntervalId) return;
-  console.log("RADIO Started metadata updates");
+  console.log("RADIO: Started metadata updates");
   updateNowPlaying();
   metadataIntervalId = setInterval(updateNowPlaying, METADATA_INTERVAL);
 }
@@ -171,7 +171,7 @@ function stopMetadataUpdates() {
   if (metadataIntervalId) {
     clearInterval(metadataIntervalId);
     metadataIntervalId = null;
-    console.log("RADIO Stopped metadata updates");
+    console.log("RADIO: Stopped metadata updates");
   }
 }
 function onVisibilityChange() {
@@ -179,7 +179,7 @@ function onVisibilityChange() {
     const now = Date.now();
     if (now - lastImmediateFetch > VISIBILITY_COOLDOWN) {
       lastImmediateFetch = now;
-      console.log("RADIO Visibility change");
+      console.log("RADIO: Visibility change");
       updateNowPlaying();
       if (metadataIntervalId) {
         clearInterval(metadataIntervalId);
@@ -192,7 +192,7 @@ document.addEventListener("DOMContentLoaded", updateNowPlaying);
 document.addEventListener("click", (event) => {
   const activeStation = event.target.closest(".station-card.active");
   if (activeStation && !event.target.closest("button")) {
-    console.log("RADIO Manual update metadata");
+    console.log("RADIO: Manual update metadata");
     updateNowPlaying();
   }
 });
