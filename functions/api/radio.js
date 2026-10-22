@@ -33,19 +33,15 @@ function errorResponse(name, err) {
 // =========================
 // RO
 // =========================
-function lastSunday(year, month) {
-  const d = new Date(Date.UTC(year, month + 1, 0));
-  d.setUTCDate(d.getUTCDate() - d.getUTCDay());
-  return d;
-}
-function getDSTBounds(year) {
-  const start = lastSunday(year, 2);
-  start.setUTCHours(1);
-  const end = lastSunday(year, 9);
-  end.setUTCHours(1);
+function getWinterSummerTime(year) {
+  function lastSunday(month) {
+    const d = new Date(Date.UTC(year, month, 0, 1));
+    d.setUTCDate(d.getUTCDate() - d.getUTCDay());
+    return d.getTime();
+  }
   return {
-    start: start.getTime(),
-    end: end.getTime()
+    start: lastSunday(3),  // Last Sunday of March, 01:00 UTC
+    end: lastSunday(10)    // Last Sunday of October, 01:00 UTC
   };
 }
 function parseTime(t) {
@@ -53,10 +49,10 @@ function parseTime(t) {
   const [date, time] = t.split(" ");
   const [y, m, d] = date.split("-").map(Number);
   const [hh, mm, ss] = time.split(":").map(Number);
-  const utc = Date.UTC(y, m - 1, d, hh, mm, ss);
-  const { start, end } = getDSTBounds(y);
-  const offset = utc >= start && utc < end ? 2 : 1;
-  return utc - offset * 3600 * 1000;
+  const localAsUtc = Date.UTC(y, m - 1, d, hh, mm, ss);
+  const { start, end } = getWinterSummerTime(y);
+  const offset = localAsUtc >= start && localAsUtc < end ? 2 : 1;
+  return localAsUtc - offset * 3600 * 1000;
 }
 async function fetchRO() {
   const res = await fetch("https://beheer.reformatorischeomroep.nl/graphql", {
