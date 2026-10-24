@@ -35,8 +35,8 @@ function errorResponse(name, err) {
 // =========================
 function getWinterSummerTime(year) {
   function lastSunday(month) {
-    const d = new Date(Date.UTC(year, month, 0, 1));
-    d.setUTCDate(d.getUTCDate() - d.getUTCDay());
+    const d = new Date(Date.UTC(year, month, 0, 1));  // Creates a date at 01:00 UTC on the last day of the month. In JS, day 0 means the last day of the previous month.
+    d.setUTCDate(d.getUTCDate() - d.getUTCDay());     // Moves backward to the most recent Sunday. getUTCDay() returns 0 for Sunday, 1 for Monday, etc.
     return d.getTime();
   }
   return {
@@ -49,7 +49,7 @@ function parseTime(t) {
   const [date, time] = t.split(" ");
   const [y, m, d] = date.split("-").map(Number);
   const [hh, mm, ss] = time.split(":").map(Number);
-  const localAsUtc = Date.UTC(y, m - 1, d, hh, mm, ss);
+  const localAsUtc = Date.UTC(y, m - 1, d, hh, mm, ss);  // Need m-1, because RO JSON input gives 1-12 but JS months are 0-11.
   const { start, end } = getWinterSummerTime(y);
   const offset = localAsUtc >= start && localAsUtc < end ? 2 : 1;
   return localAsUtc - offset * 3600 * 1000;
