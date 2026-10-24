@@ -76,7 +76,7 @@ buttons.forEach(button => {
 player.addEventListener("play", async () => {
   if (debugRadio) { console.log("RADIO: DEBUG: Play eventListener before `if (!changingStation && !restartLock)`"); }
   if (!changingStation && !restartLock) {
-    console.log("RADIO Play eventListener: play station");
+    console.log("RADIO: Play eventListener: play station");
     await PlayStream();
     return;
   }
@@ -84,7 +84,7 @@ player.addEventListener("play", async () => {
   updateCurrentButton();
 });
 player.addEventListener("pause", () => {
-  console.log("RADIO Play eventListener: pause station");
+  console.log("RADIO: Play eventListener: pause station");
   navigator.mediaSession.playbackState = "paused";
   updateCurrentButton();
 });
@@ -152,12 +152,12 @@ async function updateNowPlaying() {
         updateMediaSession(card, s);
       }
     })
-    console.log("RADIO Metadata updated");
+    console.log("RADIO: Metadata updated");
   } catch (err) {
     if (err.name === "AbortError") {
-      console.warn("RADIO Metadata fetch aborted due to timeout");
+      console.warn("RADIO: Metadata fetch aborted due to timeout");
     } else {
-      console.error("RADIO Now Playing error:", err);
+      console.error("RADIO: Now Playing error:", err);
     }
   }
 }
