@@ -64,6 +64,7 @@ jobs:
               --arg title "$title" \
               --arg file "$filename" \
               --arg date "$date" \
+              --arg update "$update" \
               --arg description "$description" \
               "{title:\$title,file:\$file,date:\$date,update:\$update,description:\$description}"
           ' | jq -s '.' > preken/posts.json
