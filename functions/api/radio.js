@@ -46,7 +46,7 @@ function getWinterSummerTime(year) {
 }
 function parseTime(t) {
   if (!t) return NaN;
-  const [date, time] = t.split(" ");
+  const [date, time] = t.split(" ");                     // date "2026-10-24" start "2026-10-24 15:03:09" end "2026-10-24 15:06:39"
   const [y, m, d] = date.split("-").map(Number);
   const [hh, mm, ss] = time.split(":").map(Number);
   const localAsUtc = Date.UTC(y, m - 1, d, hh, mm, ss);  // Need m-1, because RO JSON input gives 1-12 but JS months are 0-11.
