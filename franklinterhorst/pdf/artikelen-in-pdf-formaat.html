@@ -10,125 +10,75 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="preload" href="../0home/css/Lato-Bold.woff2" as="font" crossorigin>
     <style>
-      :root {
-        color-scheme: light;
-        --panel-bg: rgba(30, 35, 40, 0.78);
-        --panel-border: rgba(255, 255, 255, 0.45);
-        --link-color: #fff;
-        --link-hover: #dceefa;
-      }
-      * {
-        box-sizing: border-box;
-      }
-      html,
+      @font-face{font-display:block;font-family:"Lato";src:url('../0home/css/Lato-Bold.woff2') format('woff2'),url('../0home/css/Lato-Bold.woff') format('woff');font-weight:700}
+      @font-face{font-display:block;font-family:"Lato";src:url('../0home/css/Lato-Light.woff2') format('woff2'),url('../0home/css/Lato-Light.woff') format('woff');font-weight:300}
+      @font-face{font-display:block;font-family:"Lato";src:url('../0home/css/Lato-Regular.woff2') format('woff2'),url('../0home/css/Lato-Regular.woff') format('woff');font-weight:400}
+      * { box-sizing: border-box; }
+      html, body { margin: 0; min-height: 100%; }
       body {
-        width: 100%;
-        min-height: 100%;
-        margin: 0;
+        font-family: Lato, Arial, sans-serif;
+        color: #fff;
+        background: #24242b url("../0home/images/untitled-1200-27.jpg") center / cover fixed no-repeat;
+        padding: 76px 16px 24px;
       }
-      body {
-        min-height: 100vh;
-        font-family: Arial, Helvetica, sans-serif;
-        color: var(--link-color);
-        background-color: #fff;
-        background-image: url("../0home/images/untitled-1200-27.jpg");
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
+      .topbar {
+        position: fixed; z-index: 5; top: 0; left: 0; right: 0;
+        min-height: 58px; display: flex; align-items: center; gap: 14px;justify-content: center;
+        padding: 10px 22px;
+        background: rgba(48,48,57,.88);
+        border-top: 1px solid rgba(103,122,133,.97);
+        border-bottom: 1px solid #fff;
+        box-shadow: 0 3px 18px rgba(255,255,255,.55);
       }
-      .site-header {
-        min-height: 64px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 16px;
-        padding: 12px 20px;
-        background: rgba(55, 60, 68, 0.72);
-        border-bottom: 1px solid var(--panel-border);
+      .home-link { display: inline-flex; flex: 0 0 auto; }
+      .home-link img { display: block; width: 38px; height: 38px; }
+      h1 { margin: 0; font-size: clamp(21px, 2.2vw, 28px); line-height: 1.2; }
+      .list-box {
+        position: relative;
+        width: min(350px, 100%);
+        height: min(35vh, 680px);
+        min-height: 260px;
+        margin: 32px auto 0;
+        overflow: hidden;
+        border: 1px solid rgba(255,255,255,.7);
+        border-radius: 7px;
+        background: rgba(0,0,0,.36);
+        box-shadow: 0 4px 24px rgba(0,0,0,.25);
+        backdrop-filter: blur(2px);
+        z-index: 9999;
       }
-      .home-link {
-        display: inline-flex;
-        align-items: center;
-        flex: 0 0 auto;
+      .scroll-area {
+        height: 102%;
+        overflow-y: auto;
+        padding: 18px 28px 18px 28px;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255,255,255,.65) rgba(0,0,0,.15);
       }
-      .home-link img {
-        display: block;
-        width: 36px;
-        height: 36px;
-        object-fit: contain;
-      }
-      h1 {
-        margin: 0;
-        font-size: clamp(1.15rem, 2.4vw, 1.65rem);
-        line-height: 1.25;
-        text-align: center;
-      }
-      main {
-        width: min(100% - 32px, 440px);
-        margin: clamp(24px, 8vh, 72px) auto 0;
-        padding: 28px 24px;
-        border: 1px solid var(--panel-border);
-        border-radius: 8px;
-        background: var(--panel-bg);
-        -webkit-backdrop-filter: blur(3px);
-        backdrop-filter: blur(3px);
-      }
-      .article-links {
-        display: grid;
-        gap: 16px;
-        margin: 0;
-        padding: 0;
-        list-style: none;
-      }
-      .article-links a {
-        display: block;
-        color: var(--link-color);
-        font-size: clamp(1rem, 2vw, 1.25rem);
-        line-height: 1.4;
-        text-decoration: none;
-        overflow-wrap: anywhere;
-      }
-      .article-links a:hover,
-      .article-links a:focus-visible {
-        color: var(--link-hover);
-        text-decoration: underline;
-        text-underline-offset: 3px;
-      }
-      .article-links a:focus-visible,
-      .home-link:focus-visible {
-        outline: 2px solid #fff;
-        outline-offset: 4px;
-      }
-      @media (max-width: 480px) {
-        .site-header {
-          gap: 10px;
-          padding: 10px 12px;
-        }
-        .home-link img {
-          width: 30px;
-          height: 30px;
-        }
-        main {
-          width: calc(100% - 24px);
-          margin-top: 24px;
-          padding: 22px 18px;
-        }
-        .article-links {
-          gap: 14px;
-        }
+      ul { margin: 0; padding-left: 0px; list-style: none; }
+      li { margin: 0 0 10px; padding-left: 2px; line-height: 1.45; overflow-wrap: anywhere; }
+      li::marker { color: #fff; }
+      li a { color: #fff; text-decoration: none; font-size: clamp(1rem, 2vw, 1.25rem); }
+      li a:hover, li a:focus { text-decoration: underline; }
+      @media (max-width: 520px) {
+        body { padding: 70px 10px 14px; }
+        .topbar { padding: 9px 14px; }
+        .home-link img { width: 34px; height: 34px; }
+        .list-box { height: 76vh; }
+        .scroll-area { padding: 15px 20px 15px 20px }
+        li a { font-size: 16px; }
       }
     </style>
   </head>
   <body>
-    <header class="site-header">
+    <header class="topbar">
       <a class="home-link" href="/" aria-label="Naar de homepage">
         <img src="../0home/images/homew-80.png" alt="">
       </a>
       <h1>Artikelen in PDF-formaat</h1>
     </header>
-    <main>
-      <nav aria-label="Artikelen">
-        <ul class="article-links">
+    <main class="list-box" aria-label="Lijst met diverse artikelen">
+      <div class="scroll-area">
+        <ul>
           <li><a href="openbaring.html">Het boek Openbaring</a></li>
           <li><a href="diverse-artikelen.html">Diverse artikelen</a></li>
           <li><a href="fake-palestijnen.html">Fake Palestijnen</a></li>
@@ -137,7 +87,7 @@
           <li><a href="interview-met-franklin.html">Interview met Franklin</a></li>
           <li><a href="bijbelse-onderwerpen.html">Bijbelse onderwerpen</a></li>
         </ul>
-      </nav>
+      </div>
     </main>
   </body>
 </html>
