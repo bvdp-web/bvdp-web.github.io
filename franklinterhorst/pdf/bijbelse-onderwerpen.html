@@ -10,171 +10,82 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="preload" href="../0home/css/Lato-Bold.woff2" as="font" crossorigin>
     <style>
-      :root {
-        color-scheme: light;
-        --panel-bg: rgba(30, 35, 40, 0.82);
-        --panel-border: rgba(255, 255, 255, 0.45);
-        --text-color: #fff;
-        --link-hover: #dceefa;
-      }
-      * {
-        box-sizing: border-box;
-      }
-      html,
+      * { box-sizing: border-box; }
+      html, body { margin: 0; min-height: 100%; }
       body {
-        width: 100%;
+        font-family: Lato, Arial, sans-serif;
+        color: #fff;
+        background: #24242b url("../0home/images/untitled-1200.jpg") center / cover fixed no-repeat;
+        padding: 76px 16px 24px;
+      }
+      .topbar {
+        position: fixed; z-index: 5; top: 0; left: 0; right: 0;
+        min-height: 58px; display: flex; align-items: center; gap: 14px;justify-content: center;
+        padding: 10px 22px;
+        background: rgba(48,48,57,.88);
+        border-top: 1px solid rgba(103,122,133,.97);
+        border-bottom: 1px solid #fff;
+        box-shadow: 0 3px 18px rgba(255,255,255,.55);
+      }
+      .home-link { display: inline-flex; flex: 0 0 auto; }
+      .home-link img { display: block; width: 38px; height: 38px; }
+      h1 { margin: 0; font-size: clamp(21px, 2.2vw, 28px); line-height: 1.2; }
+      .list-box {
+        position: relative;
+        width: min(700px, 100%);
+        height: min(72vh, 680px);
+        min-height: 260px;
+        margin: 16px auto 0;
+        overflow: hidden;
+        border: 1px solid rgba(255,255,255,.7);
+        border-radius: 7px;
+        background: rgba(0,0,0,.36);
+        box-shadow: 0 4px 24px rgba(0,0,0,.25);
+        backdrop-filter: blur(2px);
+      }
+      .scroll-area {
         height: 100%;
-        margin: 0;
-      }
-      body {
-        overflow: hidden; /* The page itself does not scroll. The article list scrolls inside its panel. */
-        display: flex;
-        flex-direction: column;
-        font-family: Arial, Helvetica, sans-serif;
-        color: var(--text-color);
-        background: #30343a url("../0home/images/untitled-1200.jpg") center / cover no-repeat;
-      }
-      .site-header {
-        flex: 0 0 auto;
-        min-height: 64px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 14px;
-        padding: 12px 20px;
-        background: rgba(55, 60, 68, 0.76);
-        border-bottom: 1px solid var(--panel-border);
-      }
-      .home-link {
-        display: inline-flex;
-        flex: 0 0 auto;
-        align-items: center;
-      }
-      .home-link img {
-        display: block;
-        width: 36px;
-        height: 36px;
-        object-fit: contain;
-      }
-      h1 {
-        margin: 0;
-        font-size: clamp(1.15rem, 2.4vw, 1.65rem);
-        line-height: 1.25;
-        text-align: center;
-      }
-      main {
-        width: min(100% - 32px, 720px);
-        min-height: 0;
-        margin: 24px auto;
-        padding: 22px 26px;
         overflow-y: auto;
-        overscroll-behavior: contain;
+        padding: 18px 52px 62px 28px;
         scrollbar-width: thin;
-        border: 1px solid var(--panel-border);
-        border-radius: 8px;
-        background: var(--panel-bg);
-        -webkit-backdrop-filter: blur(3px);
-        backdrop-filter: blur(3px);
+        scrollbar-color: rgba(255,255,255,.65) rgba(0,0,0,.15);
       }
-      .article-links {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 12px 28px;
-        margin: 0;
-        padding: 0 0 0 1.25rem;
-        list-style: disc;
+      ul { margin: 0; padding-left: 22px; list-style: disc; }
+      li { margin: 0 0 10px; padding-left: 2px; line-height: 1.45; overflow-wrap: anywhere; }
+      li::marker { color: #fff; }
+      li a { color: #fff; text-decoration: none; font-size: 17px; }
+      li a:hover, li a:focus { text-decoration: underline; }
+      .download-link {
+        position: absolute; z-index: 2; right: 12px; bottom: 12px;
+        display: grid; place-items: center;
+        width: 42px; height: 42px;
+        color: #fff; background: rgba(48,48,57,.96);
+        border: 1px solid rgba(255,255,255,.8); border-radius: 50%;
+        box-shadow: 0 2px 10px rgba(0,0,0,.4);
       }
-      .article-links li {
-        padding-left: 0.1rem;
-      }
-      .article-links a {
-        display: inline-block;
-        color: var(--text-color);
-        font-size: 1rem;
-        line-height: 1.4;
-        text-decoration: none;
-        overflow-wrap: anywhere;
-      }
-      .article-links a:hover,
-      .article-links a:focus-visible {
-        color: var(--link-hover);
-        text-decoration: underline;
-        text-underline-offset: 3px;
-      }
-      a:focus-visible {
-        outline: 2px solid #fff;
-        outline-offset: 3px;
-      }
-      .page-footer {
-        position: sticky;
-        bottom: -22px;
-        display: flex;
-        justify-content: flex-end;
-        margin: 22px -26px -22px;
-        padding: 12px 20px;
-        border-top: 1px solid rgba(255, 255, 255, 0.25);
-        background: rgba(30, 35, 40, 0.96);
-      }
-      .download-icon {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 42px;
-        height: 42px;
-        border: 1px solid rgba(255, 255, 255, 0.55);
-        border-radius: 50%;
-        color: var(--text-color);
-        text-decoration: none;
-      }
-      .download-icon svg {
-        width: 22px;
-        height: 22px;
-        fill: none;
-        stroke: currentColor;
-        stroke-width: 1.8;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-      }
-      .download-icon:hover,
-      .download-icon:focus-visible {
-        color: var(--link-hover);
-        background: rgba(255, 255, 255, 0.1);
-      }
-      @media (max-width: 600px) {
-        .site-header {
-          gap: 10px;
-          padding: 10px 12px;
-        }
-        .home-link img {
-          width: 30px;
-          height: 30px;
-        }
-        main {
-          width: calc(100% - 20px);
-          margin: 12px auto;
-          padding: 18px 16px;
-        }
-        .article-links {
-          grid-template-columns: 1fr;
-          gap: 11px;
-        }
-        .page-footer {
-          margin-right: -16px;
-          margin-left: -16px;
-        }
+      .download-link:hover, .download-link:focus { background: #454550; }
+      .download-link svg { width: 23px; height: 23px; fill: currentColor; }
+      .download-link:focus-visible, a:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+      @media (max-width: 520px) {
+        body { padding: 70px 10px 14px; }
+        .topbar { padding: 9px 14px; }
+        .home-link img { width: 34px; height: 34px; }
+        .list-box { height: 76vh; }
+        .scroll-area { padding: 15px 48px 60px 20px; }
+        li a { font-size: 16px; }
       }
     </style>
   </head>
   <body>
-    <header class="site-header">
-      <a class="home-link" href="artikelen-in-pdf-formaat.html" aria-label="Terug naar Artikelen in PDF-formaat">
+    <header class="topbar">
+      <a class="home-link" href="artikelen-in-pdf-formaat.html" aria-label="Terug naar artikelen in PDF-formaat">
         <img src="../0home/images/homew-80.png" alt="">
       </a>
       <h1>Bijbelse onderwerpen</h1>
     </header>
-    <main>
-      <nav aria-label="PDF-artikelen">
-        <ul class="article-links">
+    <main class="list-box" aria-label="Lijst met diverse artikelen">
+      <div class="scroll-area">
+        <ul>
           <li><a href="../download/aardbevingsactiviteit-in-en-rondom-israel.pdf" target="_blank" rel="noopener">Aardbevingsactiviteit in en rondom Israël</a></li>
           <li><a href="../download/abortus-noemt-men-een-fundamenteel-recht.pdf" target="_blank" rel="noopener">Abortus noemt men een fundamenteel recht</a></li>
           <li><a href="../download/archeologische-vondsten-bevestigen-de-bijbel.pdf" target="_blank" rel="noopener">Archeologische vondsten bevestigen de Bijbel</a></li>
@@ -278,15 +189,12 @@
           <li><a href="../download/ze-noemen-jezus-een-palestijnse-vrijheidstrijder.pdf" target="_blank" rel="noopener">Ze noemen Jezus een Palestijnse vrijheidstrijder</a></li>
           <li><a href="../download/zijn-olie-en-gasvondsten-in-israel-een-profetisch-signaal.pdf" target="_blank" rel="noopener">Zijn olie en gasvondsten in Israël een profetisch signaal</a></li>
         </ul>
-      </nav>
-      <footer class="page-footer">
-        <a class="download-icon" href="download.html" aria-label="Overzicht downloads" title="Overzicht downloads">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 3v12m-5-5 5 5 5-5" />
-            <path d="M5 16v4h14v-4" />
-          </svg>
-        </a>
-      </footer>
+      </div>
+      <a class="download-link" href="download.html" aria-label="Overzicht downloads" title="Overzicht downloads">
+        <svg viewBox="0 0 512 512" role="img" aria-hidden="true">
+          <path d="M480 352H346.5l-45.25 45.25C289.2 409.3 273.1 416 256 416s-33.16-6.656-45.25-18.75L165.5 352H32c-17.67 0-32 14.33-32 32v96c0 17.67 14.33 32 32 32h448c17.67 0 32-14.33 32-32v-96c0-17.67-14.33-32-32-32zM432 456c-13.2 0-24-10.8-24-24s10.8-24 24-24 24 10.8 24 24-10.8 24-24 24zM233.4 374.6c6.2 6.3 14.4 9.4 22.6 9.4s16.38-3.125 22.62-9.375l128-128c12.49-12.5 12.49-32.75 0-45.25-12.5-12.5-32.76-12.5-45.25 0L288 274.8V32c0-17.67-14.33-32-32-32s-32 14.33-32 32v242.8l-73.4-73.4c-12.49-12.49-32.75-12.49-45.25 0s-12.49 32.75 0 45.25l128 128z"/>
+        </svg>
+      </a>
     </main>
   </body>
 </html>
