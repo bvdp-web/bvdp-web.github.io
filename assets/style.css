@@ -224,6 +224,9 @@ footer {
   color: var(--footer-color);
   margin-top: 60px;
 }
+html.dark footer a {
+  color: lightblue;
+}
 
 /* Home */
 /* Daily Verses */
