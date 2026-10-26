@@ -62,7 +62,7 @@ In de Bijbel wordt naakt (γυμνός) gebruikt wanneer personen in het ondergo
 Dat er consequent van lange witte klederen wordt gesproken, geeft een onderscheid aan. God geeft de heiligen volledig lichaamsbedekkende kleding. Christenen zijn anders dan de verlorenen.  
 
 ## Eerbaar
-Efeze 5:4  Noch oneerbaarheid, noch zot geklap, of gekkernij, welke niet betamen; maar veelmeer dankzegging.  
+Efeze 5:4&nbsp;&nbsp;Noch oneerbaarheid, noch zot geklap, of gekkernij, welke niet betamen; maar veelmeer dankzegging.  
 1 Timotheüs 2:9&nbsp;&nbsp;Desgelijks ook, dat de vrouwen, in een eerbaar gewaad, met schaamte en matigheid zichzelven versieren, niet in vlechtingen [des] [haars], of goud, of paarlen, of kostelijke kleding;  
 1 Petrus 3:3&nbsp;&nbsp;Welker versiersel zij, niet hetgeen uiterlijk is, [bestaande] in het vlechten des haars, en omhangen van goud, of van klederen aan te trekken;  
 
