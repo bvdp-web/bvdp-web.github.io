@@ -101,7 +101,7 @@ if (debugRadio) {
 // --- Set MediaSessiondata ---
 function updateMediaSession(card, s = {}) {
   navigator.mediaSession.metadata = new MediaMetadata({
-    title: s.title || "Loading…",
+    title: s.title || "",
     artist: s.artist || "",
     album: card.querySelector("h3")?.textContent?.trim() || "Radio",
     artwork: [{
