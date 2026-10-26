@@ -166,7 +166,7 @@
   const md = window.markdownit({
     html: true,
     linkify: true,
-    typographer: false
+    typographer: true
   }).use(window.markdownitFootnote)
     .use(window.markdownitMark)
     .use(window.markdownitSub)
