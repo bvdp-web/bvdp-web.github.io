@@ -170,7 +170,7 @@ html, body {
 }
 #hamburger {
   display: none;
-  heigth: var(--nav-items-height);
+  height: var(--nav-items-height);
   color: var(--nav-color);
 }
 /* 📱 MOBILE */
