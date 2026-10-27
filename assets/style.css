@@ -100,10 +100,17 @@ html, body {
 }
 .navbar {
   background: var(--nav-bg);
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
   z-index: 1000;
+  width: 100%;
   transition: all 0.3s ease;
+}
+.navbar button {
+  cursor: pointer;
+  border: none;
+  background: none;
 }
 .nav-container {
   max-width: 1200px;
@@ -139,7 +146,7 @@ html, body {
   transition: 0.3s;
 }
 .nav-links a:hover,
-.hamburger {
+#hamburger:hover {
   color: var(--nav-active-hover);
 }
 .nav-links a.active {
@@ -147,27 +154,17 @@ html, body {
   border-bottom: 2px solid #3b82f6;
   padding-bottom: 4px;
 }
-.nav-links button {
-  cursor: pointer;
-  border: none;
-  background: none;
-  font-size: 18px;
-}
 #darkToggle {
-  background: none;
-  border: none;
   color: #fff;
-  cursor: pointer;
   font-size: 1rem;
   min-width: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.hamburger {
+#hamburger {
   display: none;
   font-size: 26px;
-  cursor: pointer;
   color: var(--nav-color);
 }
 /* 📱 MOBILE */
@@ -187,7 +184,7 @@ html, body {
   .nav-links.active {
     display: flex;
   }
-  .hamburger {
+  #hamburger {
     display: block;
   }
 }
