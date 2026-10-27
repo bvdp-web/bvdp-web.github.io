@@ -146,7 +146,7 @@ html, body {
   transition: 0.3s;
 }
 .nav-links a:hover,
-.hamburger:hover {
+#hamburger:hover {
   color: var(--nav-active-hover);
 }
 .nav-links a.active {
@@ -162,7 +162,7 @@ html, body {
   align-items: center;
   justify-content: center;
 }
-.hamburger {
+#hamburger {
   display: none;
   font-size: 26px;
   color: var(--nav-color);
@@ -184,7 +184,7 @@ html, body {
   .nav-links.active {
     display: flex;
   }
-  .hamburger {
+  #hamburger {
     display: block;
   }
 }
