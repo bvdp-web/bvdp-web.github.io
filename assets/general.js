@@ -51,10 +51,12 @@ function initNavbar() {
   hamburger.addEventListener("click", function (event) {
     event.stopPropagation();
     navLinks.classList.toggle("hamburger");
+    hamburger.classList.toggle("active");
   });
   document.addEventListener("click", function (event) {
     if (!navbar.contains(event.target)) {
       navLinks.classList.remove("hamburger");
+      hamburger.classList.remove("active");
     }
   });
   // Dark mode toggle
