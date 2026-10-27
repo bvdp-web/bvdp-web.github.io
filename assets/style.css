@@ -177,7 +177,7 @@ html, body {
 @media (max-width: 768px) {
   .nav-links {
     position: absolute;
-    top: 60px;
+    top: var(--nav-height);
     left: 0;
     width: 100%;
     background: var(--nav-bg);
