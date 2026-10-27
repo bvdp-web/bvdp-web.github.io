@@ -50,11 +50,6 @@ function initNavbar() {
       navLinks.classList.remove("active");
     }
   });
-  navbar.querySelectorAll("a").forEach(function (link) {
-    link.addEventListener("click", function () {
-      navLinks.classList.remove("active");
-    });
-  });
   // Dark mode toggle
   const toggle = document.getElementById("darkToggle");
   toggle?.addEventListener("click", () => {
