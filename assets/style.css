@@ -34,6 +34,7 @@
   --nav-color: #d1d5db;
   --nav-active-hover: #ffffff;
   --card-bg: #ffffff;
+  --footer-height: 86px;
   --footer-bg: #111827;
   --footer-color: #9ca3af;
   --dailyverses-bg: #f4ecd8;
@@ -221,6 +222,11 @@ p {
 
 /* Footer */
 footer {
+  width: 100%;
+  min-height: inherit;
+  position: sticky;
+  bottom: 0;
+  left: 0;
   text-align: center;
   padding: 30px;
   background: var(--footer-bg);
