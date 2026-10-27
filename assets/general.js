@@ -50,11 +50,11 @@ function initNavbar() {
   const navLinks = document.querySelector(".nav-links");
   hamburger.addEventListener("click", function (event) {
     event.stopPropagation();
-    navLinks.classList.toggle("active");
+    navLinks.classList.toggle("hamburger");
   });
   document.addEventListener("click", function (event) {
     if (!navbar.contains(event.target)) {
-      navLinks.classList.remove("active");
+      navLinks.classList.remove("hamburger");
     }
   });
   // Dark mode toggle
