@@ -32,6 +32,13 @@ function initNavbar() {
     const normalizedHref = href.endsWith("/") ? href : href + "/";
     // Normalize current path for comparison
     const normalizedPath = currentPath.endsWith("/") ? currentPath : currentPath + "/";
+    // Homepage: only active on the homepage
+    if (href === "/") {
+      if (currentPath === "/") {
+        link.classList.add("active");
+      }
+      return;
+    }
     // Check if current path starts with href
     if (normalizedPath.startsWith(normalizedHref)) {
       link.classList.add("active");
