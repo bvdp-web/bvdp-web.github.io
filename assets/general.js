@@ -38,10 +38,22 @@ function initNavbar() {
     }
   });
   // Hamburger toggle
-  document.getElementById("hamburger")
-    .addEventListener("click", function() {
-      document.querySelector(".nav-links")
-        .classList.toggle("active");
+  const navbar = document.getElementById("navbar");
+  const hamburger = document.getElementById("hamburger");
+  const navLinks = document.querySelector(".nav-links");
+  hamburger.addEventListener("click", function (event) {
+    event.stopPropagation();
+    navLinks.classList.toggle("active");
+  });
+  document.addEventListener("click", function (event) {
+    if (!navbar.contains(event.target)) {
+      navLinks.classList.remove("active");
+    }
+  });
+  navbar.querySelectorAll("a").forEach(function (link) {
+    link.addEventListener("click", function () {
+      navLinks.classList.remove("active");
+    });
   });
   // Dark mode toggle
   const toggle = document.getElementById("darkToggle");
