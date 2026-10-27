@@ -26,7 +26,10 @@
 :root {
   --transform-hover: translateY(-4px);
   --body-bg: #f4f6f9;
-  --body-color: #333; 
+  --body-color: #333;
+  --nav-height: 56px;
+  --nav-items-height: 26px;
+  --nav-padding-topbottom: 15px;
   --nav-bg: #111827;
   --nav-color: #d1d5db;
   --nav-active-hover: #ffffff;
@@ -92,7 +95,7 @@ html, body {
 }
 #navbar {
   height: auto;
-  min-height: 56px;
+  min-height: var(--nav-height);
 }
 #footer {
   height: auto;
@@ -105,32 +108,42 @@ html, body {
   left: 0;
   z-index: 1000;
   width: 100%;
+  min-height: inherit;
   transition: all 0.3s ease;
+}
+.nav-container {
+  max-width: 1200px;
+  min-height: inherit;
+  margin: auto;
+  padding: var(--nav-padding-topbottom) 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.navbar a {
+  text-decoration: none;
+  color: var(--nav-color);
+}
+.navbar a:hover,
+#hamburger:hover,
+.navbar a.active,
+#hamburger.active {
+  color: var(--nav-active-hover);
 }
 .navbar button {
   cursor: pointer;
   border: none;
   background: none;
 }
-.nav-container {
-  max-width: 1200px;
-  margin: auto;
-  padding: 15px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
 .logo {
   font-weight: bold;
-  text-decoration: none;
-  color: var(--nav-color);
   display: flex;
   align-content: center;
   gap: 8px;
 }
 .logo img {
   display: block;
-  height: 24px;
+  height: var(--nav-items-height);
 }
 .nav-links {
   display: flex;
@@ -140,17 +153,10 @@ html, body {
   margin: 0;
 }
 .nav-links a {
-  text-decoration: none;
-  color: var(--nav-color);
   font-weight: 500;
   transition: 0.3s;
 }
-.nav-links a:hover,
-#hamburger:hover {
-  color: var(--nav-active-hover);
-}
 .nav-links a.active {
-  color: var(--nav-active-hover);
   border-bottom: 2px solid #3b82f6;
   padding-bottom: 4px;
 }
@@ -164,7 +170,7 @@ html, body {
 }
 #hamburger {
   display: none;
-  font-size: 26px;
+  heigth: var(--nav-items-height);
   color: var(--nav-color);
 }
 /* 📱 MOBILE */
@@ -181,7 +187,7 @@ html, body {
     display: none;
     box-shadow: 0 6px 15px rgba(0,0,0,0.1);
   }
-  .nav-links.active {
+  .nav-links.hamburger {
     display: flex;
   }
   #hamburger {
