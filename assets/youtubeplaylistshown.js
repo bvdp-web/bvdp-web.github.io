@@ -83,12 +83,12 @@ pentecostEnd.setDate(pentecost.getDate() + 7);
 
 const month = today.getMonth();
 const day = today.getDate();
-// New Year: Dec 30 → Jan 7
-if ((month === 11 && day >= 30) || (month === 0 && day <= 7)) {
+// New Year: Dec 29 → Jan 7
+if ((month === 11 && day >= 29) || (month === 0 && day <= 7)) {
   showCard("on");
 }
-// Christmas: Dec 1 → Dec 29
-else if (month === 11 && day >= 1 && day <= 29) {
+// Christmas: Dec 1 → Dec 28
+else if (month === 11 && day >= 1 && day <= 28) {
   showCard("kerst");
 }
 // Easter season
