@@ -255,16 +255,6 @@
         totalStars += repo.stargazers_count;
         totalForks += repo.forks_count;
         // Aggregate language statistics
-        //for (const lang in repoLanguages) {
-        //  if (!languages[lang]) {
-        //    languages[lang] = {
-        //      bytes: 0,
-        //      count: 0
-        //    };
-        //  }
-        //  languages[lang].bytes += Number(repoLanguages[lang]) || 0;
-        //  languages[lang].count++;
-        //}
         for (const lang in repoLanguages) {
           if (!languages[lang]) {
             languages[lang] = {
