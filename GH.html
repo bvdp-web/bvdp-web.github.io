@@ -211,24 +211,59 @@
       }
       return null; // Return null if no release or error occurs
     }
+    // Fetch actual language byte counts from GitHub
+    async function getRepoLanguages(repo) {
+      try {
+        const response = await fetch(`${repo.url}/languages`, {
+          headers: {
+            Accept: "application/vnd.github+json"
+          }
+        });
+        if (!response.ok) {
+          console.error(`Language request failed: ${repo.full_name}`);
+          return {};
+        }
+        return await response.json();
+      } catch (error) {
+        console.error(`Failed to fetch languages: ${repo.full_name}`, error);
+        return {};
+      }
+    }
     // Rendering function for repositories and stats
     async function render(allRepos) {
       let userContainer = document.getElementById("userRepos");
       let orgContainer = document.getElementById("orgRepos");
       let archContainer = document.getElementById("archivedRepos");
+      userContainer.innerHTML = "";
+      orgContainer.innerHTML = "";
+      archContainer.innerHTML = "";
       let totalStars = 0;
       let totalForks = 0;
       let languages = {};
-      // Fetch the latest release for each repo
-      const releasePromises = allRepos.map(async (repo) => {
-        const latestRelease = await getLatestRelease(repo);
-        return { repo, latestRelease };
+    
+      // Fetch release and language information
+      const repoPromises = allRepos.map(async (repo) => {
+        const [latestRelease, repoLanguages] = await Promise.all([
+          getLatestRelease(repo),
+          getRepoLanguages(repo)
+        ]);
+        return { repo, latestRelease, repoLanguages };
       });
-      const reposWithReleases = await Promise.all(releasePromises);
-      reposWithReleases.forEach(({ repo, latestRelease }) => {
+      const results = await Promise.all(repoPromises);
+      results.forEach(({ repo, latestRelease, repoLanguages }) => {
         totalStars += repo.stargazers_count;
         totalForks += repo.forks_count;
-        if (repo.language) languages[repo.language] = (languages[repo.language] || 0) + 1;
+        // Aggregate language statistics
+        for (const lang in repoLanguages) {
+          if (!languages[lang]) {
+            languages[lang] = {
+              bytes: 0,
+              count: 0
+            };
+          }
+          languages[lang].bytes += Number(repoLanguages[lang]) || 0;
+          languages[lang].count++;
+        }
         let html = repoCard(repo, latestRelease);
         if (repo.archived) {
           archContainer.innerHTML += html;
@@ -238,7 +273,12 @@
           orgContainer.innerHTML += html;
         }
       });
-      renderStats(allRepos, totalStars, totalForks, Object.keys(languages).length);
+      renderStats(
+        allRepos,
+        totalStars,
+        totalForks,
+        Object.keys(languages).length
+      );
       renderLangChart(languages);
     }
     // Rendering statistics
@@ -255,17 +295,28 @@
       const container = document.getElementById("langChart");
       container.innerHTML = "";
       const colors = ["#c3b01e","#3572A5","#563d7c","#c6538c","#f34b7d","#2b7489","#701516","#b07219"];
-      // GitHub Stats Extended weighting
+      // GitHub Stats Extended settings
       const SIZE_WEIGHT = 0.2;
       const COUNT_WEIGHT = 0.8;
-      // Calculate language scores
+      // Calculate weighted language scores
       const rankedLanguages = Object.entries(languages)
-        .map(([lang, data]) => ({
-          lang,
-          score:
-            Math.pow(data.bytes, SIZE_WEIGHT) *
-            Math.pow(data.count, COUNT_WEIGHT)
-        }))
+        .map(([lang, data]) => {
+          const bytes = Number(data.bytes);
+          const count = Number(data.count);
+          if (!Number.isFinite(bytes) || !Number.isFinite(count)) {
+            return null;
+          }
+          if (bytes <= 0 || count <= 0) {
+            return null;
+          }
+          return {
+            lang,
+            score:
+              Math.pow(bytes, SIZE_WEIGHT) *
+              Math.pow(count, COUNT_WEIGHT)
+          };
+        })
+        .filter(item => item && Number.isFinite(item.score))
         .sort((a, b) => b.score - a.score)
         .slice(0, 5);
       // Calculate total score
@@ -273,7 +324,10 @@
         (sum, item) => sum + item.score,
         0
       );
-      if (total === 0) return;
+      if (!total) {
+        container.textContent = "No language data available.";
+        return;
+      }
       // Render language bars
       rankedLanguages.forEach(({ lang, score }, i) => {
         const perc = score / total * 100;
