@@ -252,17 +252,38 @@
     }
     // Rendering language chart
     function renderLangChart(languages) {
-      let container = document.getElementById("langChart");
+      const container = document.getElementById("langChart");
       container.innerHTML = "";
-      let total = Object.values(languages).reduce((a, b) => a + b, 0);
-      const colors = ["#c3b01e", "#3572A5", "#563d7c", "#c6538c", "#f34b7d", "#2b7489", "#701516", "#b07219"];
-      let i = 0;
-      for (let lang in languages) {
-        let perc = Math.round(languages[lang] / total * 100);
-        let color = colors[i % colors.length];
-        container.innerHTML += `<div class="lang-bar" style="width:${perc}%; background:${color}">${lang} ${perc}%</div>`;
-        i++;
-      }
+      const colors = ["#c3b01e","#3572A5","#563d7c","#c6538c","#f34b7d","#2b7489","#701516","#b07219"];
+      // GitHub Stats Extended weighting
+      const SIZE_WEIGHT = 0.2;
+      const COUNT_WEIGHT = 0.8;
+      // Calculate language scores
+      const rankedLanguages = Object.entries(languages)
+        .map(([lang, data]) => ({
+          lang,
+          score:
+            Math.pow(data.bytes, SIZE_WEIGHT) *
+            Math.pow(data.count, COUNT_WEIGHT)
+        }))
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 5);
+      // Calculate total score
+      const total = rankedLanguages.reduce(
+        (sum, item) => sum + item.score,
+        0
+      );
+      if (total === 0) return;
+      // Render language bars
+      rankedLanguages.forEach(({ lang, score }, i) => {
+        const perc = score / total * 100;
+        const bar = document.createElement("div");
+        bar.className = "lang-bar";
+        bar.style.width = `${perc}%`;
+        bar.style.background = colors[i % colors.length];
+        bar.textContent = `${lang} ${perc.toFixed(1)}%`;
+        container.appendChild(bar);
+      });
     }
     // Load data from GitHub API and render the dashboard
     async function loadRepos() {
