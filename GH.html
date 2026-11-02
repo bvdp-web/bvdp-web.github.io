@@ -357,35 +357,83 @@
       });
     }
     // Load data from GitHub API and render the dashboard
-    async function loadRepos() {
-      let cached = localStorage.getItem(CACHE_KEY);
-      if (cached) {
-        let obj = JSON.parse(cached);
-        if (Date.now() - obj.time < CACHE_TIME) {
-          // If cached data is still valid, use it
-          console.log("Using cached data");
-          render(obj.data);
-          return;
+    async function fetchGitHub(url) {
+      const response = await fetch(url, {
+        headers: {
+          Accept: "application/vnd.github+json"
         }
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(
+          `GitHub API error (${response.status}): ${data.message || "Unknown error"}`
+        );
       }
-      // If no cache or cache expired, attempt to fetch new data
-      let userReposFetch = fetch(
-        "https://api.github.com/users/Ignotum77/repos?per_page=100",
-        { headers: { Accept: "application/vnd.github.mercy-preview+json" } }
-      ).then((r) => r.json());
-      let orgsFetch = fetch("https://api.github.com/users/Ignotum77/orgs").then((r) => r.json());
-      let [userRepos, orgs] = await Promise.all([userReposFetch, orgsFetch]);
-      let orgRepoPromises = orgs.map((org) =>
-        fetch(`https://api.github.com/orgs/${org.login}/repos?per_page=100`, {
-          headers: { Accept: "application/vnd.github.mercy-preview+json" },
-        }).then((r) => r.json())
-      );
-      let orgRepos = (await Promise.all(orgRepoPromises)).flat();
-      let allRepos = [...userRepos, ...orgRepos];
-      allRepos.sort((a, b) => new Date(b.pushed_at) - new Date(a.pushed_at));
-      // Cache the fetched data for future use
-      localStorage.setItem(CACHE_KEY, JSON.stringify({ time: Date.now(), data: allRepos }));
-      render(allRepos);
+      return data;
+    }
+    async function loadRepos() {
+      try {
+        let cached = localStorage.getItem(CACHE_KEY);
+        if (cached) {
+          let obj = JSON.parse(cached);
+          if (Date.now() - obj.time < CACHE_TIME && Array.isArray(obj.data)) {
+            console.log("Using cached data");
+            await render(obj.data);
+            return;
+          }
+        }
+        // Fetch personal repositories
+        const userRepos = await fetchGitHub(
+          "https://api.github.com/users/Ignotum77/repos?per_page=100"
+        );
+        if (!Array.isArray(userRepos)) {
+          throw new Error("Personal repositories response is not an array.");
+        }
+        // Fetch organizations
+        let orgs = [];
+        try {
+          orgs = await fetchGitHub(
+            "https://api.github.com/users/Ignotum77/orgs"
+          );
+          if (!Array.isArray(orgs)) {
+            console.error("Unexpected organizations response:", orgs);
+            orgs = [];
+          }
+        } catch (error) {
+          console.error("Could not fetch organizations:", error);
+        }
+        // Fetch organization repositories
+        const orgRepoPromises = orgs.map(org =>
+          fetchGitHub(
+            `https://api.github.com/orgs/${org.login}/repos?per_page=100`
+          ).catch(error => {
+            console.error(`Could not fetch repositories for ${org.login}:`, error);
+            return [];
+          })
+        );
+        const orgRepos = (await Promise.all(orgRepoPromises)).flat();
+        // Combine repositories and remove duplicates
+        const allRepos = [
+          ...new Map(
+            [...userRepos, ...orgRepos].map(repo => [repo.full_name, repo])
+          ).values()
+        ];
+    
+        allRepos.sort(
+          (a, b) => new Date(b.pushed_at) - new Date(a.pushed_at)
+        );
+        // Cache results
+        localStorage.setItem(
+          CACHE_KEY,
+          JSON.stringify({
+            time: Date.now(),
+            data: allRepos
+          })
+        );
+        await render(allRepos);
+      } catch (error) {
+        console.error("Failed to load GitHub repositories:", error);
+      }
     }
     loadRepos();
   </script>
