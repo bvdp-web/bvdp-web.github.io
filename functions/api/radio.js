@@ -2,7 +2,7 @@
 // SHARED CONSTANTS
 // =========================
 const roStations = Object.freeze({
-  1: "RO Algmeen"
+  1: "RO Algemeen"
   2: "RO Psalmen",
   3: "RO Klassiek",
   5: "RO Orgel",
