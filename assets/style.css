@@ -363,6 +363,9 @@ html.dark footer a {
 }
 
 /* Artikelen + Preken */
+.card:first-of-type ul {
+  padding-left: calc(var(--card-padding) - 10px);
+}
 /* Search */
 #search {
   padding: 10px;
