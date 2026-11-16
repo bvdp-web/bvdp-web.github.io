@@ -63,7 +63,25 @@ async function fetchRO() {
       query: `{ playlists { id playlist { title author date start end } } }`
     })
   });
-  return res.json();
+//  return res.json();
+//}
+  const contentType = res.headers.get("content-type");
+  const body = await res.text();
+  if (!res.ok || !contentType?.includes("application/json")) {
+    throw new Error(
+      `RO GraphQL failure: HTTP ${res.status}, ` +
+      `Content-Type: ${contentType}, ` +
+      `URL: ${res.url}, ` +
+      `Body: ${body.slice(0, 500)}`
+    );
+  }
+  try {
+    return JSON.parse(body);
+  } catch {
+    throw new Error(
+      `RO returned invalid JSON: ${body.slice(0, 500)}`
+    );
+  }
 }
 function parseRO(data, now) {
   const playlists = data?.data?.playlists;
