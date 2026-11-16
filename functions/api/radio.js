@@ -112,10 +112,18 @@ async function fetchRO(env, now) {
   try {
     const url = new URL("https://beheer.reformatorischeomroep.nl/graphql");
     const query = `{ playlists { id playlist { title author date start end } } }`;
-    url.searchParams.set("query", query);
-    const res = await fetch(url.toString(), {
-      method: "GET",
-      headers: { "Accept": "application/json" }
+    //url.searchParams.set("query", query);
+    //const res = await fetch(url.toString(), {
+    //  method: "GET",
+    //  headers: { "Accept": "application/json" }
+    //});
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify({ query })
     });
     const body = await res.text();
     if (!res.ok) {
