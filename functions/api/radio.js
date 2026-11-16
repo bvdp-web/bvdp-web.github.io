@@ -159,11 +159,12 @@ async function fetchRO(env, now) {
     } catch (kvError) {
       console.error("Failed to store RO error in KV:", kvError);
     }
-    // If previous data exists, retain it as fallback
-    if (cached?.data) {
+    // Only use previous data if it still covers the current timestamp
+    if (cached?.data && hasROCoverage(cached.data, now)) {
       console.warn("Using previous RO cache");
       return cached.data;
     }
+    console.warn("No current RO fallback available. Returning error.");
     throw error;
   }
 }
