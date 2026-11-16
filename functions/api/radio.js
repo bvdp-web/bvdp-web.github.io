@@ -143,7 +143,7 @@ async function fetchRO(env, now) {
     console.error("RO fetch failed:", error);
     // If RO is unavailable, retain the previous data.
     if (cached?.data) {
-      console.error("Using previous RO cache");
+      console.warn("Using previous RO cache");
       return cached.data;
     }
     throw error;
