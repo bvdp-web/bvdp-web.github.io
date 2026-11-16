@@ -106,6 +106,11 @@ function hasROCoverage(data, now) {
 }
 
 async function fetchRO(env, now) {
+  if (!env?.RO_CACHE) {
+    throw new Error(
+      "RO_CACHE KV binding is missing. Check Cloudflare Pages bindings."
+    );
+  }
   const CACHE_KEY = "ro-playlists";
   const BACKUP_DURATION = 12 * 60 * 60;  // 12 hours
   // Read cached GraphQL response
