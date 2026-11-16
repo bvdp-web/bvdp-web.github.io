@@ -55,31 +55,55 @@ function parseTime(t) {
   const offset = localAsUtc >= start && localAsUtc < end ? 2 : 1;
   return localAsUtc - offset * 3600 * 1000;
 }
-async function fetchRO() {
-  const res = await fetch("https://beheer.reformatorischeomroep.nl/graphql", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      query: `{ playlists { id playlist { title author date start end } } }`
-    })
-  });
-//  return res.json();
+//async function fetchRO() {
+//  const res = await fetch("https://beheer.reformatorischeomroep.nl/graphql", {
+//    method: "POST",
+//    headers: { "Content-Type": "application/json" },
+//    body: JSON.stringify({
+//      query: `{ playlists { id playlist { title author date start end } } }`
+//    })
+//  });
+////  return res.json();
+////}
+//  const contentType = res.headers.get("content-type");
+//  const body = await res.text();
+//  if (!res.ok || !contentType?.includes("application/json")) {
+//    throw new Error(
+//      `RO GraphQL failure: HTTP ${res.status}, ` +
+//      `Content-Type: ${contentType}, ` +
+//      `URL: ${res.url}, ` +
+//      `Body: ${body.slice(0, 500)}`
+//    );
+//  }
+//  try {
+//    return JSON.parse(body);
+//  } catch {
+//    throw new Error(
+//      `RO returned invalid JSON: ${body.slice(0, 500)}`
+//    );
+//  }
 //}
-  const contentType = res.headers.get("content-type");
+async function fetchRO() {
+  const url = new URL("https://beheer.reformatorischeomroep.nl/graphql");
+  const query = `{ playlists { id playlist { title author date start end } } }`;
+  url.searchParams.set("query", query);
+  const res = await fetch(url.toString(), {
+    method: "GET",
+    headers: {
+      "Accept": "application/json"
+    }
+  });
   const body = await res.text();
-  if (!res.ok || !contentType?.includes("application/json")) {
+  if (!res.ok) {
     throw new Error(
-      `RO GraphQL failure: HTTP ${res.status}, ` +
-      `Content-Type: ${contentType}, ` +
-      `URL: ${res.url}, ` +
-      `Body: ${body.slice(0, 500)}`
+      `RO HTTP ${res.status}: ${body.slice(0, 500)}`
     );
   }
   try {
     return JSON.parse(body);
   } catch {
     throw new Error(
-      `RO returned invalid JSON: ${body.slice(0, 500)}`
+      `RO returned HTML or invalid JSON: ${body.slice(0, 500)}`
     );
   }
 }
