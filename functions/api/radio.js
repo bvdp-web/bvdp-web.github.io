@@ -175,7 +175,7 @@ async function fetchRO(env, now) {
 function parseRO(data, now) {
   const playlists = data?.data?.playlists;
   if (!Array.isArray(playlists)) {
-    throw new Error("Invalid RO response shape");
+    throw new Error("Invalid RO response shape" + JSON.stringify(data).slice(0, 1000));
   }
   const out = [];
   for (const station of playlists) {
