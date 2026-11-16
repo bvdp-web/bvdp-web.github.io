@@ -83,28 +83,88 @@ function parseTime(t) {
 //    );
 //  }
 //}
-async function fetchRO() {
-  const url = new URL("https://beheer.reformatorischeomroep.nl/graphql");
-  const query = `{ playlists { id playlist { title author date start end } } }`;
-  url.searchParams.set("query", query);
-  const res = await fetch(url.toString(), {
-    method: "GET",
-    headers: {
-      "Accept": "application/json"
+function hasROCoverage(data, now) {
+  const playlists = data?.data?.playlists;
+  if (!Array.isArray(playlists)) return false;
+  // Every configured RO station must have a track
+  // covering the requested timestamp.
+  for (const id of Object.keys(roStations)) {
+    const station = playlists.find(
+      s => String(s.id) === id
+    );
+    if (!station || !Array.isArray(station.playlist)) {
+      return false;
     }
-  });
-  const body = await res.text();
-  if (!res.ok) {
-    throw new Error(
-      `RO HTTP ${res.status}: ${body.slice(0, 500)}`
-    );
+    const hasCurrentTrack = station.playlist.some(t => {
+      const start = parseTime(t.start);
+      const end = parseTime(t.end);
+      return start <= now && now < end;
+    });
+    if (!hasCurrentTrack) return false;
   }
+  return true;
+}
+
+async function fetchRO(env, now) {
+  const CACHE_KEY = "ro-playlists";
+  const BACKUP_DURATION = 12 * 60 * 60;  // 12 hours
+  // Read cached GraphQL response
+  const cachedRaw = await env.RO_CACHE.get(CACHE_KEY);
+  let cached = null;
+  if (cachedRaw) {
+    try {
+      cached = JSON.parse(cachedRaw);
+    } catch {
+      cached = null;
+    }
+  }
+  // Check whether cached data covers the requested timestamp
+  if (cached?.data && hasROCoverage(cached.data, now)) {
+    return cached.data;
+  }
+  // Cache is missing or does not cover the requested timestamp.
+  // Fetch fresh data from RO.
   try {
-    return JSON.parse(body);
-  } catch {
-    throw new Error(
-      `RO returned HTML or invalid JSON: ${body.slice(0, 500)}`
+    const url = new URL("https://beheer.reformatorischeomroep.nl/graphql");
+    const query = `{ playlists { id playlist { title author date start end } } }`;
+    url.searchParams.set("query", query);
+    const res = await fetch(url.toString(), {
+      method: "GET",
+      headers: {
+        "Accept": "application/json"
+      }
+    });
+    const body = await res.text();
+    if (!res.ok) {
+      throw new Error(
+        `RO HTTP ${res.status}: ${body.slice(0, 500)}`
+      );
+    }
+    const data = JSON.parse(body);
+    if (!Array.isArray(data?.data?.playlists)) {
+      throw new Error("Invalid RO response shape");
+    }
+    // Store the complete GraphQL response.
+    // Keep it for up to 7 days as a fallback.
+    await env.RO_CACHE.put(
+      CACHE_KEY,
+      JSON.stringify({
+        fetchedAt: Date.now(),
+        data
+      }),
+      {
+        expirationTtl: BACKUP_DURATION
+      }
     );
+    return data;
+  } catch (error) {
+    console.error("RO fetch failed:", error);
+    // If RO is unavailable, retain the previous data.
+    if (cached?.data) {
+      console.warn("Using previous RO cache");
+      return cached.data;
+    }
+    throw error;
   }
 }
 function parseRO(data, now) {
@@ -193,9 +253,21 @@ function parseCNL(data) {
 // =========================
 // RUN WRAPPER
 // =========================
-async function run(fetchFn, parseFn, fallback, ...args) {
+//async function run(fetchFn, parseFn, fallback, ...args) {
+//  try {
+//    const raw = await fetchFn();
+//    return parseFn(raw, ...args);
+//  } catch (err) {
+//    return fallback.map(name =>
+//      typeof name === "string"
+//        ? errorResponse(name, err)
+//        : { ...name, error: true, raw: String(err) }
+//    );
+//  }
+//}
+async function run(fetchFn, parseFn, fallback, env, ...args) {
   try {
-    const raw = await fetchFn();
+    const raw = await fetchFn(env, ...args);
     return parseFn(raw, ...args);
   } catch (err) {
     return fallback.map(name =>
@@ -217,11 +289,17 @@ export async function onRequest(context) {
   if (cached) return cached;
   const now = Date.now() + 45000;
 
+  //const [gnr, co, ro, cnl] = await Promise.all([
+  //  run(fetchRO, parseRO, Object.entries(roStations), now),
+  //  run(fetchGNR, parseGNR, Object.values(gnrStations)),
+  //  run(fetchCO, parseCO, Object.values(coStations)),
+  //  run(fetchCNL, parseCNL, Object.values(cnlStations))
+  //]);
   const [gnr, co, ro, cnl] = await Promise.all([
-    run(fetchRO, parseRO, Object.entries(roStations), now),
-    run(fetchGNR, parseGNR, Object.values(gnrStations)),
-    run(fetchCO, parseCO, Object.values(coStations)),
-    run(fetchCNL, parseCNL, Object.values(cnlStations))
+    run(fetchRO, parseRO, Object.values(roStations), context.env, now),
+    run(fetchGNR, parseGNR, Object.values(gnrStations), context.env),
+    run(fetchCO, parseCO, Object.values(coStations), context.env),
+    run(fetchCNL, parseCNL, Object.values(cnlStations), context.env)
   ]);
   const result = {
     updatedAt: Date.now(),
