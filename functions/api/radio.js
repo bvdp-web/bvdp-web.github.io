@@ -63,25 +63,7 @@ function parseTime(t) {
 //      query: `{ playlists { id playlist { title author date start end } } }`
 //    })
 //  });
-////  return res.json();
-////}
-//  const contentType = res.headers.get("content-type");
-//  const body = await res.text();
-//  if (!res.ok || !contentType?.includes("application/json")) {
-//    throw new Error(
-//      `RO GraphQL failure: HTTP ${res.status}, ` +
-//      `Content-Type: ${contentType}, ` +
-//      `URL: ${res.url}, ` +
-//      `Body: ${body.slice(0, 500)}`
-//    );
-//  }
-//  try {
-//    return JSON.parse(body);
-//  } catch {
-//    throw new Error(
-//      `RO returned invalid JSON: ${body.slice(0, 500)}`
-//    );
-//  }
+//  return res.json();
 //}
 function hasROCoverage(data, now) {
   const playlists = data?.data?.playlists;
@@ -89,9 +71,7 @@ function hasROCoverage(data, now) {
   // Every configured RO station must have a track
   // covering the requested timestamp.
   for (const id of Object.keys(roStations)) {
-    const station = playlists.find(
-      s => String(s.id) === id
-    );
+    const station = playlists.find(s => String(s.id) === id);
     if (!station || !Array.isArray(station.playlist)) {
       return false;
     }
@@ -104,7 +84,6 @@ function hasROCoverage(data, now) {
   }
   return true;
 }
-
 async function fetchRO(env, now) {
   if (!env?.RO_CACHE) {
     throw new Error(
@@ -135,9 +114,7 @@ async function fetchRO(env, now) {
     url.searchParams.set("query", query);
     const res = await fetch(url.toString(), {
       method: "GET",
-      headers: {
-        "Accept": "application/json"
-      }
+      headers: { "Accept": "application/json" }
     });
     const body = await res.text();
     if (!res.ok) {
@@ -147,10 +124,10 @@ async function fetchRO(env, now) {
     }
     const data = JSON.parse(body);
     if (!Array.isArray(data?.data?.playlists)) {
-      throw new Error("Invalid RO response shape");
+      throw new Error("Invalid RO response shape: " + JSON.stringify(data).slice(0, 500));
     }
     // Store the complete GraphQL response.
-    // Keep it for up to 7 days as a fallback.
+    // Keep it for up to 12 hours as a fallback.
     await env.RO_CACHE.put(
       CACHE_KEY,
       JSON.stringify({
@@ -175,7 +152,7 @@ async function fetchRO(env, now) {
 function parseRO(data, now) {
   const playlists = data?.data?.playlists;
   if (!Array.isArray(playlists)) {
-    throw new Error("Invalid RO response shape" + JSON.stringify(data).slice(0, 1000));
+    throw new Error("Invalid RO response shape: " + JSON.stringify(data).slice(0, 500));
   }
   const out = [];
   for (const station of playlists) {
@@ -206,7 +183,7 @@ async function fetchGNR() {
 function parseGNR(data) {
   const stations = data?.stations;
   if (!stations || typeof stations !== "object") {
-    throw new Error("Invalid GNR response shape");
+    throw new Error("Invalid GNR response shape: " + JSON.stringify(data).slice(0, 500));
   }
   const out = [];
   for (const [id, station] of Object.entries(stations)) {
@@ -229,6 +206,9 @@ async function fetchCO() {
   return res.text();
 }
 function parseCO(raw) {
+  if (typeof raw !== "string" || !raw.trim()) {
+    throw new Error("Invalid CO response: " + String(raw).slice(0, 500));
+  }
   const parts = raw.trim().split(" - ");
   return [{
     name: coStations["co"],
@@ -245,8 +225,8 @@ async function fetchCNL() {
   return res.json();
 }
 function parseCNL(data) {
-  if (!data?.current) {
-    throw new Error("Invalid CNL response shape");
+  if (!data?.current || typeof data.current !== "object") {
+    throw new Error("Invalid CNL response shape: " + JSON.stringify(data).slice(0, 500));
   }
   return [{
     name: cnlStations["cnl"],
