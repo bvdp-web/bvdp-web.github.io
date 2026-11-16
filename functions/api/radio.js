@@ -91,7 +91,8 @@ async function fetchRO(env, now) {
     );
   }
   const CACHE_KEY = "ro-playlists";
-  const BACKUP_DURATION = 12 * 60 * 60;  // 12 hours
+  const ERROR_KEY = "ro-playlists-error";
+  const BACKUP_DURATION = 12 * 60 * 60; // 12 hours
   // Read cached GraphQL response
   const cachedRaw = await env.RO_CACHE.get(CACHE_KEY);
   let cached = null;
@@ -117,17 +118,17 @@ async function fetchRO(env, now) {
       headers: { "Accept": "application/json" }
     });
     const body = await res.text();
-    //if (!res.ok) {
-    //  throw new Error(
-    //    `RO HTTP ${res.status}: ${body.slice(0, 500)}`
-    //  );
-    //}
+    if (!res.ok) {
+      throw new Error(
+        `RO HTTP ${res.status}: ${body.slice(0, 500)}`
+      );
+    }
     const data = JSON.parse(body);
-    //if (!Array.isArray(data?.data?.playlists)) {
-    //  throw new Error("Invalid RO response shape: " + JSON.stringify(data).slice(0, 500));
-    //}
-    // Store the complete GraphQL response.
-    // Keep it for up to 12 hours as a fallback.
+    // Validate response structure
+    if (!Array.isArray(data?.data?.playlists)) {
+      throw new Error("Invalid RO response shape: " + JSON.stringify(data).slice(0, 500));
+    }
+    // Store the complete valid GraphQL response
     await env.RO_CACHE.put(
       CACHE_KEY,
       JSON.stringify({
@@ -138,10 +139,27 @@ async function fetchRO(env, now) {
         expirationTtl: BACKUP_DURATION
       }
     );
+    // Clear previous error after successful fetch
+    await env.RO_CACHE.delete(ERROR_KEY);
     return data;
   } catch (error) {
     console.error("RO fetch failed:", error);
-    // If RO is unavailable, retain the previous data.
+    // Store error separately in KV
+    try {
+      await env.RO_CACHE.put(
+        ERROR_KEY,
+        JSON.stringify({
+          timestamp: Date.now(),
+          message: error.message
+        }),
+        {
+          expirationTtl: BACKUP_DURATION
+        }
+      );
+    } catch (kvError) {
+      console.error("Failed to store RO error in KV:", kvError);
+    }
+    // If previous data exists, retain it as fallback
     if (cached?.data) {
       console.warn("Using previous RO cache");
       return cached.data;
