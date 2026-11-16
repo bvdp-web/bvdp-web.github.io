@@ -278,7 +278,6 @@ async function run(fetchFn, parseFn, fallback, env, ...args) {
   }
 }
 
-
 // =========================
 // WORKER
 // =========================
