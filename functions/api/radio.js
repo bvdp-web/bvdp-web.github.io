@@ -117,15 +117,15 @@ async function fetchRO(env, now) {
       headers: { "Accept": "application/json" }
     });
     const body = await res.text();
-    if (!res.ok) {
-      throw new Error(
-        `RO HTTP ${res.status}: ${body.slice(0, 500)}`
-      );
-    }
+    //if (!res.ok) {
+    //  throw new Error(
+    //    `RO HTTP ${res.status}: ${body.slice(0, 500)}`
+    //  );
+    //}
     const data = JSON.parse(body);
-    if (!Array.isArray(data?.data?.playlists)) {
-      throw new Error("Invalid RO response shape: " + JSON.stringify(data).slice(0, 500));
-    }
+    //if (!Array.isArray(data?.data?.playlists)) {
+    //  throw new Error("Invalid RO response shape: " + JSON.stringify(data).slice(0, 500));
+    //}
     // Store the complete GraphQL response.
     // Keep it for up to 12 hours as a fallback.
     await env.RO_CACHE.put(
