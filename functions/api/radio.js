@@ -130,10 +130,11 @@ async function fetchRO(env, now) {
       throw new Error("Invalid RO response shape: " + JSON.stringify(data).slice(0, 500));
     }
     // Store the complete valid GraphQL response
+    const fetchedAt = Date.now();
     await env.RO_CACHE.put(
       CACHE_KEY,
       JSON.stringify({
-        fetchedAt: Date.now(),
+        fetchedAt,
         data
       }),
       {
