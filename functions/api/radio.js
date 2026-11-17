@@ -58,8 +58,7 @@ function parseTime(t) {
 function hasROCoverage(data, now) {
   const playlists = data?.data?.playlists;
   if (!Array.isArray(playlists)) return false;
-  // Every configured RO station must have a track
-  // covering the requested timestamp.
+  // Every configured RO station must have a track covering the requested timestamp.
   for (const id of Object.keys(roStations)) {
     const station = playlists.find(s => String(s.id) === id);
     if (!station || !Array.isArray(station.playlist)) {
@@ -79,7 +78,7 @@ async function fetchRO(env, now) {
     throw new Error("RO_CACHE Worker KV binding is missing. Check Cloudflare Pages bindings.");
   }
   const CACHE_KEY = "ro-playlists";
-  const BACKUP_DURATION = 12 * 60 * 60; // 12 hours
+  const BACKUP_DURATION = 12 * 60 * 60;  // 12 hours
   // Read cached GraphQL response
   let cachedRaw = null;
   try {
