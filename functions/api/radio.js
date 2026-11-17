@@ -99,8 +99,10 @@ async function fetchRO(env, now) {
   if (cached?.data && hasROCoverage(cached.data, now)) {
     return {
       data: cached.data,
-      worker_kv: true,
-      worker_kvFetchedAt: new Date(cached.fetchedAt).toLocaleString("nl-NL", {timeZone: "Europe/Amsterdam"})
+      worker_kv: {
+        used: true,
+        fetchedAt: new Date(cached.fetchedAt).toLocaleString("nl-NL", {timeZone: "Europe/Amsterdam"})
+      }
     };
   }
   // If cache is missing or does not cover the requested timestamp, fetch fresh data from RO.
@@ -140,8 +142,10 @@ async function fetchRO(env, now) {
     );
     return {
       data,
-      worker_kv: false,
-      worker_kvFetchedAt: new Date(fetchedAt).toLocaleString("nl-NL", {timeZone: "Europe/Amsterdam"})
+      worker_kv: {
+        used: false,
+        fetchedAt: new Date(fetchedAt).toLocaleString("nl-NL", {timeZone: "Europe/Amsterdam"})
+      }
     };
   } catch (error) {
     console.error("RO fetch failed:", error);
@@ -251,25 +255,23 @@ function parseCNL(data) {
 // =========================
 async function run(fetchFn, parseFn, fallback, env, ...args) {
   let worker_kv
-  let worker_kvFetchedAt;
   try {
     const result = await fetchFn(env, ...args);
     // RO returns { data, worker_kv }; other stations return raw data.
     const raw = result?.data !== undefined ? result.data : result;
-    if (typeof result?.worker_kv === "boolean") {
+    if (typeof result?.worker_kv === "object") {
       worker_kv = result.worker_kv;
-      worker_kvFetchedAt = result.worker_kvFetchedAt;
     }
     return parseFn(raw, ...args).map(station => ({
       ...station,
-      ...(typeof worker_kv === "boolean" ? { worker_kv, worker_kvFetchedAt } : {})
+      ...(worker_kv ? { worker_kv } : {})
     }));
   } catch (err) {
     return fallback.map(name => ({
       ...(typeof name === "string"
         ? errorResponse(name, err)
         : { ...name, error: true, raw: String(err) }),
-      ...(typeof worker_kv === "boolean" ? { worker_kv, worker_kvFetchedAt } : {})
+      ...(worker_kv ? { worker_kv } : {})
     }));
   }
 }
