@@ -30,6 +30,14 @@ function errorResponse(name, err) {
     raw: err?.message ?? String(err)
   };
 }
+function log(level, event, details = {}) {
+  console[level]({
+    service: "radio-api",
+    event,
+    timestamp: new Date().toISOString(),
+    ...details
+  });
+}
 
 // =========================
 // RO
@@ -55,16 +63,6 @@ function parseTime(t) {
   const offset = localAsUtc >= start && localAsUtc < end ? 2 : 1;
   return localAsUtc - offset * 3600 * 1000;
 }
-//async function fetchRO() {
-//  const res = await fetch("https://beheer.reformatorischeomroep.nl/graphql", {
-//    method: "POST",
-//    headers: { "Content-Type": "application/json" },
-//    body: JSON.stringify({
-//      query: `{ playlists { id playlist { title author date start end } } }`
-//    })
-//  });
-//  return res.json();
-//}
 function hasROCoverage(data, now) {
   const playlists = data?.data?.playlists;
   if (!Array.isArray(playlists)) return false;
@@ -84,7 +82,7 @@ function hasROCoverage(data, now) {
   }
   return true;
 }
-async function fetchRO(env, now) {
+async function fetchRO(env, now, requestId) {
   if (!env?.RO_CACHE) {
     throw new Error(
       "RO_CACHE KV binding is missing. Check Cloudflare Pages bindings."
@@ -99,16 +97,42 @@ async function fetchRO(env, now) {
   if (cachedRaw) {
     try {
       cached = JSON.parse(cachedRaw);
-    } catch {
-      cached = null;
+    } catch (error) {
+      log("warn", "ro_kv_cache_invalid_json", {
+        message: error.message
+      });
     }
+  } else {
+    log("info", "ro_kv_cache_miss");
   }
-  // Check whether cached data covers the requested timestamp
+  // Check cached data
   if (cached?.data && hasROCoverage(cached.data, now)) {
+    const cacheAgeSeconds = cached.fetchedAt
+      ? Math.round((Date.now() - cached.fetchedAt) / 1000)
+      : null;
+    log("info", "ro_kv_cache_hit", {
+      cacheAgeSeconds,
+      fetchedAt: cached.fetchedAt
+        ? new Date(cached.fetchedAt).toISOString()
+        : null
+    });
+    if (cacheAgeSeconds !== null && cacheAgeSeconds > 300) {
+      log("warn", "ro_using_older_kv_cache", {
+        requestId,
+        cacheAgeSeconds,
+        thresholdSeconds: 300
+      });
+    }
     return cached.data;
   }
-  // Cache is missing or does not cover the requested timestamp.
-  // Fetch fresh data from RO.
+  if (cached?.data) {
+    log("warn", "ro_kv_cache_does_not_cover_current_time", {
+      fetchedAt: cached.fetchedAt
+        ? new Date(cached.fetchedAt).toISOString()
+        : null
+    });
+  }
+  // If cache is missing or does not cover the requested timestamp, fetch fresh data from RO.
   try {
     const url = new URL("https://beheer.reformatorischeomroep.nl/graphql");
     const query = `{ playlists { id playlist { title author date start end } } }`;
@@ -146,6 +170,12 @@ async function fetchRO(env, now) {
         expirationTtl: BACKUP_DURATION
       }
     );
+    log("info", "ro_kv_cache_updated", {
+      requestId,
+      fetchedAt: new Date().toISOString(),
+      stations: data.data.playlists.length,
+      expirationSeconds: BACKUP_DURATION
+    });
     // Clear previous error after successful fetch
     await env.RO_CACHE.delete(ERROR_KEY);
     return data;
@@ -163,12 +193,23 @@ async function fetchRO(env, now) {
           expirationTtl: BACKUP_DURATION
         }
       );
+      log("info", "ro_kv_cache_updated", {
+        requestId,
+        stations: data.data.playlists.length,
+        expirationSeconds: BACKUP_DURATION
+      });
     } catch (kvError) {
       console.error("Failed to store RO error in KV:", kvError);
     }
     // Only use previous data if it still covers the current timestamp
     if (cached?.data && hasROCoverage(cached.data, now)) {
-      console.warn("Using previous RO cache");
+      log("warn", "ro_kv_cache_used", {
+        requestId,
+        cacheAgeSeconds: cached.fetchedAt
+          ? Math.round((Date.now() - cached.fetchedAt) / 1000)
+          : null,
+        reason: "upstream_fetch_failed"
+      });
       return cached.data;
     }
     console.warn("No current RO fallback available. Returning error.");
@@ -204,6 +245,11 @@ function parseRO(data, now) {
 // =========================
 async function fetchGNR() {
   const res = await fetch("https://api.grootnieuwsradio.nl/static/now-playing.json");
+  if (!res.ok) {
+    throw new Error(
+      `GNR HTTP ${res.status}: ${body.slice(0, 500)}`
+    );
+  }
   return res.json();
 }
 function parseGNR(data) {
@@ -229,6 +275,11 @@ function parseGNR(data) {
 // =========================
 async function fetchCO() {
   const res = await fetch("https://christelijkeomroep.nl/custom/ajax/getnowplaying.ajax.php");
+  if (!res.ok) {
+    throw new Error(
+      `CO HTTP ${res.status}: ${body.slice(0, 500)}`
+    );
+  }
   return res.text();
 }
 function parseCO(raw) {
@@ -248,6 +299,11 @@ function parseCO(raw) {
 // =========================
 async function fetchCNL() {
   const res = await fetch("https://www.classic.nl/nowplaying/fetch.php?station=CLASSICFM");
+  if (!res.ok) {
+    throw new Error(
+      `CNL HTTP ${res.status}: ${body.slice(0, 500)}`
+    );
+  }
   return res.json();
 }
 function parseCNL(data) {
@@ -264,23 +320,30 @@ function parseCNL(data) {
 // =========================
 // RUN WRAPPER
 // =========================
-//async function run(fetchFn, parseFn, fallback, ...args) {
-//  try {
-//    const raw = await fetchFn();
-//    return parseFn(raw, ...args);
-//  } catch (err) {
-//    return fallback.map(name =>
-//      typeof name === "string"
-//        ? errorResponse(name, err)
-//        : { ...name, error: true, raw: String(err) }
-//    );
-//  }
-//}
-async function run(fetchFn, parseFn, fallback, env, ...args) {
+async function run(fetchFn, parseFn, fallback, env, station, requestId, ...args) {
+  const startedAt = Date.now();
+  log("info", "station_fetch_started", {
+    station,
+    requestId
+  });
   try {
     const raw = await fetchFn(env, ...args);
-    return parseFn(raw, ...args);
+    const result = parseFn(raw, ...args);
+    log("info", "station_fetch_success", {
+      station,
+      requestId,
+      durationMs: Date.now() - startedAt,
+      tracksReturned: result.length
+    });
+    return result;
   } catch (err) {
+    log("error", "station_fetch_failed", {
+      station,
+      requestId,
+      durationMs: Date.now() - startedAt,
+      error: err?.message ?? String(err),
+      stack: err?.stack
+    });
     return fallback.map(name =>
       typeof name === "string"
         ? errorResponse(name, err)
@@ -293,30 +356,47 @@ async function run(fetchFn, parseFn, fallback, env, ...args) {
 // WORKER
 // =========================
 export async function onRequest(context) {
+  const requestId = crypto.randomUUID();
+  const startedAt = Date.now();
   const url = new URL(context.request.url);
   const key = new Request(url.toString(), context.request);
   const cache = caches.default;
+  log("info", "request_received", {
+    requestId,
+    method: context.request.method,
+    path: url.pathname
+  });
   const cached = await cache.match(key);
-  if (cached) return cached;
+  if (cached) {
+    log("info", "cloudflare_cache_hit", {
+      requestId,
+      status: cached.status,
+      durationMs: Date.now() - startedAt
+    });
+    return cached;
+  }
+  log("info", "cloudflare_cache_miss", {
+    requestId
+  });
   const now = Date.now() + 45000;
 
-  //const [gnr, co, ro, cnl] = await Promise.all([
-  //  run(fetchRO, parseRO, Object.entries(roStations), now),
-  //  run(fetchGNR, parseGNR, Object.values(gnrStations)),
-  //  run(fetchCO, parseCO, Object.values(coStations)),
-  //  run(fetchCNL, parseCNL, Object.values(cnlStations))
-  //]);
   const [gnr, co, ro, cnl] = await Promise.all([
-    run(fetchRO, parseRO, Object.values(roStations), context.env, now),
-    run(fetchGNR, parseGNR, Object.values(gnrStations), context.env),
-    run(fetchCO, parseCO, Object.values(coStations), context.env),
-    run(fetchCNL, parseCNL, Object.values(cnlStations), context.env)
+    run(fetchRO, parseRO, Object.values(roStations), context.env, "RO", requestId, now, requestId),
+    run(fetchGNR, parseGNR, Object.values(gnrStations), context.env, "GNR", requestId),
+    run(fetchCO, parseCO, Object.values(coStations), context.env, "CO", requestId),
+    run(fetchCNL, parseCNL, Object.values(cnlStations), context.env, "CNL", requestId)
   ]);
   const result = {
     updatedAt: Date.now(),
     stations: [ ...ro, ...gnr, ...co, ...cnl]
   };
 
+  log("info", "request_completed", {
+    requestId,
+    durationMs: Date.now() - startedAt,
+    stations: result.stations.length,
+    errors: result.stations.filter(s => s.error).length
+  });
   const response = new Response(JSON.stringify(result), {
     headers: {
       "Content-Type": "application/json",
