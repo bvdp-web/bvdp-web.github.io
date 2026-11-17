@@ -245,6 +245,7 @@ function parseRO(data, now) {
 // =========================
 async function fetchGNR() {
   const res = await fetch("https://api.grootnieuwsradio.nl/static/now-playing.json");
+  const body = await res.text();
   if (!res.ok) {
     throw new Error(
       `GNR HTTP ${res.status}: ${body.slice(0, 500)}`
@@ -275,6 +276,7 @@ function parseGNR(data) {
 // =========================
 async function fetchCO() {
   const res = await fetch("https://christelijkeomroep.nl/custom/ajax/getnowplaying.ajax.php");
+  const body = await res.text();
   if (!res.ok) {
     throw new Error(
       `CO HTTP ${res.status}: ${body.slice(0, 500)}`
@@ -299,6 +301,7 @@ function parseCO(raw) {
 // =========================
 async function fetchCNL() {
   const res = await fetch("https://www.classic.nl/nowplaying/fetch.php?station=CLASSICFM");
+  const body = await res.text();
   if (!res.ok) {
     throw new Error(
       `CNL HTTP ${res.status}: ${body.slice(0, 500)}`
