@@ -52,7 +52,10 @@ function parseTime(t) {
   const [hh, mm, ss] = time.split(":").map(Number);
   const localAsUtc = Date.UTC(y, m - 1, d, hh, mm, ss);  // Need m-1, because RO JSON input gives 1-12 but JS months are 0-11.
   const { start, end } = getWinterSummerTime(y);
-  const offset = localAsUtc >= start && localAsUtc < end ? 2 : 1;
+  if (localAsUtc >= start - 3600000 && localAsUtc < start) {       // Reject the nonexistent hour when clocks advance in March.
+    return NaN;
+  }
+  const offset = localAsUtc >= start && localAsUtc < end ? 2 : 1;  // Summer: UTC+2; Winter: UTC+1.
   return localAsUtc - offset * 3600 * 1000;
 }
 function hasROCoverage(data, now) {
@@ -100,7 +103,7 @@ async function fetchRO(env, now) {
       data: cached.data,
       worker_kv: {
         used: true,
-        fetchedAt: new Date(cached.fetchedAt).toLocaleString("nl-NL", {timeZone: "Europe/Amsterdam"})
+        fetchedAt: cached.fetchedAt
       }
     };
   }
@@ -129,7 +132,7 @@ async function fetchRO(env, now) {
       throw new Error("Invalid RO response shape: " + JSON.stringify(data).slice(0, 500));
     }
     // Store the complete valid GraphQL response
-    const fetchedAt = Date.now();
+    const fetchedAt = new Date().toLocaleString("nl-NL", {timeZone: "Europe/Amsterdam"});
     await env.RO_CACHE.put(
       CACHE_KEY,
       JSON.stringify({
@@ -144,7 +147,7 @@ async function fetchRO(env, now) {
       data,
       worker_kv: {
         used: false,
-        fetchedAt: new Date(fetchedAt).toLocaleString("nl-NL", {timeZone: "Europe/Amsterdam"})
+        fetchedAt
       }
     };
   } catch (error) {
@@ -294,7 +297,7 @@ export async function onRequest(context) {
     run(fetchCNL, parseCNL, Object.values(cnlStations), context.env)
   ]);
   const result = {
-    updatedAt: Date.now(),
+    updatedAt: new Date().toLocaleString("nl-NL", {timeZone: "Europe/Amsterdam"}),
     stations: [ ...ro, ...gnr, ...co, ...cnl]
   };
 
