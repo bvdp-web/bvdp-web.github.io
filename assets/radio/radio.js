@@ -133,7 +133,7 @@ async function updateNowPlaying() {
     const timeout = setTimeout(() => controller.abort(), 10000);
     const res = await fetch("/api/radio", { cache: "no-store", signal: controller.signal });
     clearTimeout(timeout);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    if (!res.ok) throw new Error(`RADIO: API: HTTP ${res.status}`);
     const data = await res.json();
     const map = new Map(data.stations.map(s => [s.name, s]));
     document.querySelectorAll(".station-card").forEach(card => {
