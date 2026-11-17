@@ -146,8 +146,7 @@ async function fetchRO(env, now) {
     return {
       data,
       worker_kv: {
-        used: false,
-        fetchedAt
+        used: false
       }
     };
   } catch (error) {
