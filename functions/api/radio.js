@@ -76,7 +76,7 @@ function hasROCoverage(data, now) {
 }
 async function fetchRO(env, now) {
   if (!env?.RO_CACHE) {
-    throw new Error("RO_CACHE KV binding is missing. Check Cloudflare Pages bindings.");
+    throw new Error("RO_CACHE Worker KV binding is missing. Check Cloudflare Pages bindings.");
   }
   const CACHE_KEY = "ro-playlists";
   const BACKUP_DURATION = 12 * 60 * 60; // 12 hours
@@ -85,21 +85,22 @@ async function fetchRO(env, now) {
   try {
     cachedRaw = await env.RO_CACHE.get(CACHE_KEY);
   } catch (error) {
-    console.warn("RO KV cache read failed:", error);
+    console.warn("RO Worker KV cache read failed:", error);
   }
   let cached = null;
   if (cachedRaw) {
     try {
       cached = JSON.parse(cachedRaw);
     } catch {
-      console.warn("RO KV cache contains invalid JSON.");
+      console.warn("RO Worker KV cache contains invalid JSON.");
     }
   }
   // Check whether cached data covers the requested timestamp
   if (cached?.data && hasROCoverage(cached.data, now)) {
     return {
       data: cached.data,
-      kv: true
+      worker_kv: true,
+      worker_kvFetchedAt: new Date(cached.fetchedAt).toLocaleString("nl-NL", {timeZone: "Europe/Amsterdam"})
     };
   }
   // If cache is missing or does not cover the requested timestamp, fetch fresh data from RO.
@@ -139,7 +140,8 @@ async function fetchRO(env, now) {
     );
     return {
       data,
-      kv: false
+      worker_kv: false,
+      worker_kvFetchedAt: new Date(fetchedAt).toLocaleString("nl-NL", {timeZone: "Europe/Amsterdam"})
     };
   } catch (error) {
     console.error("RO fetch failed:", error);
@@ -248,24 +250,26 @@ function parseCNL(data) {
 // RUN WRAPPER
 // =========================
 async function run(fetchFn, parseFn, fallback, env, ...args) {
-  let kv
+  let worker_kv
+  let worker_kvFetchedAt;
   try {
     const result = await fetchFn(env, ...args);
-    // RO returns { data, kv }; other stations return raw data.
+    // RO returns { data, worker_kv }; other stations return raw data.
     const raw = result?.data !== undefined ? result.data : result;
-    if (typeof result?.kv === "boolean") {
-      kv = result.kv;
+    if (typeof result?.worker_kv === "boolean") {
+      worker_kv = result.worker_kv;
+      worker_kvFetchedAt = result.worker_kvFetchedAt;
     }
     return parseFn(raw, ...args).map(station => ({
       ...station,
-      ...(typeof kv === "boolean" ? { kv } : {})
+      ...(typeof worker_kv === "boolean" ? { worker_kv, worker_kvFetchedAt } : {})
     }));
   } catch (err) {
     return fallback.map(name => ({
       ...(typeof name === "string"
         ? errorResponse(name, err)
         : { ...name, error: true, raw: String(err) }),
-      kv
+      ...(typeof worker_kv === "boolean" ? { worker_kv, worker_kvFetchedAt } : {})
     }));
   }
 }
