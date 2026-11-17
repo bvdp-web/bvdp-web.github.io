@@ -114,9 +114,13 @@ async function fetchRO(env, now) {
     const query = `{ playlists { id playlist { title author date start end } } }`;
     const res = await fetch(url, {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
-        "Accept": "application/json"
+        "Accept": "application/json",
+        "Referer": "https://www.reformatorischeomroep.nl/",
+        "Origin": "https://www.reformatorischeomroep.nl",
+        "User-Agent": "Mozilla/5.0"
       },
       body: JSON.stringify({ query })
     });
