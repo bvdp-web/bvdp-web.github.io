@@ -1789,12 +1789,18 @@
     console.error("SV DAGTEKST: Een of meer HTML-elementen ontbreken.");
     return;
   }
-  // Generate a local calendar date in YYYY-MM-DD format.
+  // Generate the Dutch calendar date in YYYY-MM-DD format.
   function localDateKey(date = new Date()) {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
+    const parts = new Intl.DateTimeFormat("en-GB", {
+      timeZone: "Europe/Amsterdam",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit"
+    }).formatToParts(date);
+    const values = Object.fromEntries(
+      parts.map(part => [part.type, part.value])
+    );
+    return `${values.year}-${values.month}-${values.day}`;
   }
   // Stable hash: all visitors on the same local calendar day
   // receive the same curated passage.
@@ -1902,21 +1908,56 @@
       statusEl.textContent = "Controleer de verbinding of probeer het later opnieuw.";
     }
   }
-  // Schedule the next update at local midnight.
+  // Calculate the next midnight in Europe/Amsterdam.
+  function getNextAmsterdamMidnight() {
+    const dateKey = localDateKey(now);
+    const [year, month, day] = dateKey.split("-").map(Number);
+    const nextDate = new Date(Date.UTC(year, month - 1, day + 1));
+    const target = Date.UTC(
+      nextDate.getUTCFullYear(),
+      nextDate.getUTCMonth(),
+      nextDate.getUTCDate()
+    );
+    const formatter = new Intl.DateTimeFormat("en-GB", {
+      timeZone: "Europe/Amsterdam",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hourCycle: "h23"
+    });
+    let timestamp = target;
+    // Resolve the Amsterdam UTC offset, including DST.
+    for (let i = 0; i < 3; i++) {
+      const parts = Object.fromEntries(
+        formatter.formatToParts(new Date(timestamp))
+          .map(part => [part.type, part.value])
+      );
+      const localAsUTC = Date.UTC(
+        Number(parts.year),
+        Number(parts.month) - 1,
+        Number(parts.day),
+        Number(parts.hour),
+        Number(parts.minute),
+        Number(parts.second)
+      );
+      const offset = localAsUTC - timestamp;
+      timestamp = target - offset;
+    }
+    return new Date(timestamp);
+  }
+  // Schedule the next update at Amsterdam midnight.
   function startDailyCheck() {
     let midnightTimer;
     function refreshAndSchedule() {
       clearTimeout(midnightTimer);
       // Update the passage.
       showDailyVerse();
-      // Calculate the next local midnight.
+      // Calculate the next Amsterdam midnight.
       const now = new Date();
-      const nextMidnight = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate() + 1,
-        0, 0, 1
-      );
+      const nextMidnight = getNextAmsterdamMidnight();
       const delay = nextMidnight.getTime() - Date.now();
       midnightTimer = setTimeout(
         refreshAndSchedule,
