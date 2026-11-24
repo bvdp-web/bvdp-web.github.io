@@ -18,10 +18,19 @@
       <p>Daarnaast heb ik het Bijbelvers van dag opgenomen evenals een goede uitspraak die voor iedereen en elke dag weer anders zijn. </br>
       Tot slot heb ik nog wat goede radiozender opgenomen op deze homepagina evenals enkele muziekplaylists, zodat u kunt genieten of ook kan meezingen met de muziek.</p>
     </div>
-    <div class="card dailyVerses">
+    <!--<div class="card dailyVerses">
       <h2 id="dailyVersesTitle">Tekst van de Dag</h2>
       <div id="dailyVersesWrapper"></div>
       <script async defer src="https://dailyverses.net/get/verse.js?language=hsv"></script>
+    </div>-->
+    <div class="card dailyVerses" id="sv-dagtekst" aria-live="polite">
+      <h2 id="dailyVersesTitle">Dagelijks Bijbelvers · Statenvertaling</h2>
+      <div id="dailyVersesWrapper">
+        <p class="sv-tekst" id="sv-dagtekst-tekst">De Bijbeltekst wordt geladen…</p>
+        <p class="sv-verwijzing" id="sv-dagtekst-verwijzing"></p>
+        <p class="sv-status" id="sv-dagtekst-status"></p>
+      </div>
+      <script src="/assets/bijbelteksten.js"></script>
     </div>
     <div class="card">
       <div id="uitspraak"></div>
