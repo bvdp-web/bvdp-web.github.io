@@ -21,6 +21,18 @@
   font-family: 'SBL Greek';
   src: url(/assets/SBL_grk.ttf);
 }
+@font-face {
+  font-family: 'Day Roman';
+  src: url(/assets/DAYROM__.ttf);
+}
+@font-face {
+  font-family: 'DS Luthersche';
+  src: url(/assets/DSLuthersche.ttf);
+}
+@font-face {
+  font-family: 'Glorious Christmas';
+  src: url(/assets/Glorious%20Christmas.otf) format('opentype');;
+}
 
 /* Variables */
 :root {
@@ -240,28 +252,25 @@ html.dark footer a {
 /* Home */
 /* Daily Verses */
 .card.dailyVerses,
-.card.dailyVerses#sv-dagtekst {
+#sv-dagtekst {
   background: var(--dailyverses-bg);
   border: 1px solid var(--dailyverses-color);
+  text-align: center;
 }
-#dailyVersesTitle {
+#dailyVersesTitle,
+#sv-dagtekst-titel {
   color: var(--dailyverses-title);
-  font-family: "Georgia", Times New Roman, serif;
-  text-align: center;
+  font-family: "DS Luthersche", Georgia, Times New Roman, serif;
 }
-#dailyVersesWrapper {
-  text-align: center;
-}
-/* #sv-dagtekst .sv-tekst {
+#sv-dagtekst-tekst {
   margin: 0;
-  font-size: clamp(1.15rem, 2.5vw, 1.55rem);
-  line-height: 1.7;
-} */
-#sv-dagtekst .sv-verwijzing {
+  font-family: "Day Roman", Times New Roman, serif;
+}
+#sv-dagtekst-verwijzing {
   margin: 1.25rem 0 0;
   font: 600 .95rem/1.5 system-ui, sans-serif;
 }
-#sv-dagtekst .sv-status {
+#sv-dagtekst-status {
   margin-top: 1rem;
   font: .8rem/1.5 system-ui, sans-serif;
   opacity: .65;
