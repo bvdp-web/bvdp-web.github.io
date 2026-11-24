@@ -84,8 +84,9 @@
   function startDailyCheck(lines) {
     let midnightTimer;
     function refreshAndSchedule() {
-      updateQuote(lines);
       clearTimeout(midnightTimer);
+      // Update the passage.
+      updateQuote(lines);
       const now = new Date();
       // Calculate the next Amsterdam midnight.
       const nextMidnight = getNextAmsterdamMidnight();
