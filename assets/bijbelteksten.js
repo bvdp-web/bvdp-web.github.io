@@ -1,9 +1,9 @@
 (() => {
   "use strict";
   /*
-    * References use GetBible's standard English book names;
-    * labels shown to visitors are Dutch.
-  */
+   * References use GetBible's standard English book names;
+   * labels shown to visitors are Dutch.
+   */
   const passages = [
     { ref: "Genesis 1:1-3", label: "Genesis 1:1-3" },
     { ref: "Genesis 1:26-27", label: "Genesis 1:26-27" },
@@ -1779,23 +1779,25 @@
     { ref: "Revelation 22:16-17", label: "Openbaring 22:16-17" },
     { ref: "Revelation 22:20-21", label: "Openbaring 22:20-21" },
   ];
+  // API URL and HTML elements.
   const API = "https://query.getbible.net/v3/statenvertaling/";
-  const timezone = "Europe/Amsterdam";
   const textEl = document.getElementById("sv-dagtekst-tekst");
   const refEl = document.getElementById("sv-dagtekst-verwijzing");
   const statusEl = document.getElementById("sv-dagtekst-status");
-  function localDateKey() {
-    const parts = new Intl.DateTimeFormat("nl-NL", {
-      timeZone: timezone,
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit"
-    }).formatToParts(new Date());
-    const values = Object.fromEntries(parts.map(p => [p.type, p.value]));
-    return `${values.year}-${values.month}-${values.day}`;
+  // Check that all required elements exist.
+  if (!textEl || !refEl || !statusEl) {
+    console.error("SV DAGTEKST: Een of meer HTML-elementen ontbreken.");
+    return;
   }
-  // Stable hash: all visitors in the configured timezone receive
-  // the same curated passage on the same calendar day.
+  // Generate a local calendar date in YYYY-MM-DD format.
+  function localDateKey(date = new Date()) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
+  // Stable hash: all visitors on the same local calendar day
+  // receive the same curated passage.
   function hashString(value) {
     let hash = 2166136261;
     for (let i = 0; i < value.length; i++) {
@@ -1804,9 +1806,11 @@
     }
     return hash >>> 0;
   }
+  // Determine the passage for a specific date.
   function getPassageForDate(dateKey) {
     return passages[hashString(dateKey) % passages.length];
   }
+  // Extract Bible verses.
   function extractVerses(data) {
     const chapters = Object.values(data || {});
     const found = [];
@@ -1819,23 +1823,42 @@
       (a.chapter - b.chapter) || (a.verse - b.verse)
     );
   }
+  // Prevent overlapping API requests.
+  let requestController = null;
+  let requestId = 0;
+  // Show the daily Bible passage.
   async function showDailyVerse() {
     const dateKey = localDateKey();
     const selected = getPassageForDate(dateKey);
-    const cacheKey = `sv-dagtekst-${dateKey}`;
+    const cacheKey = `sv-dagtekst-${dateKey}-${selected.ref}`;
+    // Cancel any previous request.
+    if (requestController) {
+      requestController.abort();
+    }
+    requestController = new AbortController();
+    const currentRequestId = ++requestId;
     textEl.textContent = "De Bijbeltekst wordt geladen…";
     refEl.textContent = "";
     statusEl.textContent = "";
     try {
       let verses = null;
+      // Try to retrieve the cached passage.
       try {
         const cached = sessionStorage.getItem(cacheKey);
-        if (cached) verses = JSON.parse(cached);
-      } catch (_) {}
+        if (cached) {
+          verses = JSON.parse(cached);
+        }
+      } catch (_) {
+        // Continue without cache if storage is unavailable.
+      }
+      // Fetch the passage if no valid cache exists.
       if (!Array.isArray(verses) || !verses.length) {
         const url = API + encodeURIComponent(selected.ref);
         const response = await fetch(url, {
-          headers: { "Accept": "application/json" }
+          headers: {
+            "Accept": "application/json"
+          },
+          signal: requestController.signal
         });
         if (!response.ok) {
           throw new Error(`Bijbel-API: antwoordde met ${response.status}`);
@@ -1845,19 +1868,72 @@
         if (!verses.length) {
           throw new Error("Bijbel-API: Geen verzen gevonden voor " + selected.ref);
         }
+        // Cache the retrieved verses.
         try {
           sessionStorage.setItem(cacheKey, JSON.stringify(verses));
-        } catch (_) {}
+        } catch (_) {
+          // Continue without cache if storage is unavailable.
+        }
       }
-      textEl.textContent = verses.map(v => v.text).join(" ");
+      // Ignore outdated requests or results from a previous day.
+      if (
+        currentRequestId !== requestId ||
+        dateKey !== localDateKey()
+      ) {
+        return;
+      }
+      // Display the passage.
+      textEl.textContent = verses
+        .map(v => v.text)
+        .filter(Boolean)
+        .join(" ");
       refEl.textContent = selected.label;
       statusEl.textContent = "";
     } catch (error) {
-      console.error("SV dagtekst:", error);
+      // Ignore intentionally cancelled requests.
+      if (error.name === "AbortError") {
+        return;
+      }
+      // Ignore errors from outdated requests.
+      if (currentRequestId !== requestId) {
+        return;
+      }
+      console.error("SV DAGTEKST:", error);
       textEl.textContent = "De Bijbeltekst kon momenteel niet worden geladen.";
       refEl.textContent = selected.label;
       statusEl.textContent = "Controleer de verbinding of probeer het later opnieuw.";
     }
   }
-  showDailyVerse();
+  // Schedule the next update at local midnight.
+  function startDailyCheck() {
+    let midnightTimer;
+    function refreshAndSchedule() {
+      clearTimeout(midnightTimer);
+      // Update the passage.
+      showDailyVerse();
+      // Calculate the next local midnight.
+      const now = new Date();
+      const nextMidnight = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate() + 1,
+        0, 0, 1
+      );
+      const delay = nextMidnight.getTime() - Date.now();
+      midnightTimer = setTimeout(
+        refreshAndSchedule,
+        Math.max(1000, delay)
+      );
+    }
+    // Initial update.
+    refreshAndSchedule();
+    // Recheck when the visitor returns to the page.
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) {
+        refreshAndSchedule();
+      }
+    });
+  }
+  // Start the daily Bible passage.
+  startDailyCheck();
 })();
