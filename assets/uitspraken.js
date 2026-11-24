@@ -42,6 +42,7 @@
   }
   // Calculate the next midnight in Europe/Amsterdam.
   function getNextAmsterdamMidnight() {
+    const now = new Date();
     const dateKey = localDateKey(now);
     const [year, month, day] = dateKey.split("-").map(Number);
     const nextDate = new Date(Date.UTC(year, month - 1, day + 1));
@@ -87,7 +88,6 @@
       clearTimeout(midnightTimer);
       // Update the passage.
       updateQuote(lines);
-      const now = new Date();
       // Calculate the next Amsterdam midnight.
       const nextMidnight = getNextAmsterdamMidnight();
       const delay = nextMidnight.getTime() - Date.now();
