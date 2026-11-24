@@ -277,6 +277,9 @@ html.dark footer a {
   font: .8rem/1.5 system-ui, sans-serif;
   opacity: .65;
 }
+#sv-dagtekst-status:empty {
+  display: none;
+}
 /* Uitspaak van de Dag */
 #uitspraak {
   text-align: center;
