@@ -42,7 +42,6 @@
   }
   // Calculate the next midnight in Europe/Amsterdam.
   function getNextAmsterdamMidnight() {
-    const now = new Date();
     const dateKey = localDateKey(now);
     const [year, month, day] = dateKey.split("-").map(Number);
     const nextDate = new Date(Date.UTC(year, month - 1, day + 1));
@@ -81,14 +80,14 @@
     }
     return new Date(timestamp);
   }
-  // Schedule the next update at local midnight.
+  // Schedule the next update at Amsterdam midnight.
   function startDailyCheck(lines) {
     let midnightTimer;
     function refreshAndSchedule() {
       updateQuote(lines);
       clearTimeout(midnightTimer);
       const now = new Date();
-      // Calculate the next local midnight.
+      // Calculate the next Amsterdam midnight.
       const nextMidnight = getNextAmsterdamMidnight();
       const delay = nextMidnight.getTime() - Date.now();
       midnightTimer = setTimeout(
