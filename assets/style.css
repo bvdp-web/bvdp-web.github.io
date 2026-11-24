@@ -239,7 +239,8 @@ html.dark footer a {
 
 /* Home */
 /* Daily Verses */
-.card.dailyVerses {
+.card.dailyVerses,
+.card.dailyVerses#sv-dagtekst {
   background: var(--dailyverses-bg);
   border: 1px solid var(--dailyverses-color);
 }
@@ -250,6 +251,20 @@ html.dark footer a {
 }
 #dailyVersesWrapper {
   text-align: center;
+}
+/* #sv-dagtekst .sv-tekst {
+  margin: 0;
+  font-size: clamp(1.15rem, 2.5vw, 1.55rem);
+  line-height: 1.7;
+} */
+#sv-dagtekst .sv-verwijzing {
+  margin: 1.25rem 0 0;
+  font: 600 .95rem/1.5 system-ui, sans-serif;
+}
+#sv-dagtekst .sv-status {
+  margin-top: 1rem;
+  font: .8rem/1.5 system-ui, sans-serif;
+  opacity: .65;
 }
 /* Uitspaak van de Dag */
 #uitspraak {
