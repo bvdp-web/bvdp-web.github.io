@@ -1830,7 +1830,7 @@
   async function showDailyVerse() {
     const dateKey = localDateKey();
     const selected = getPassageForDate(dateKey);
-    const cacheKey = `sv-dagtekst-${dateKey}-${selected.ref}`;
+    const cacheKey = `sv-dagtekst ${dateKey} (${selected.label})`;
     // Cancel any previous request.
     if (requestController) {
       requestController.abort();
@@ -1844,7 +1844,7 @@
       let verses = null;
       // Try to retrieve the cached passage.
       try {
-        const cached = sessionStorage.getItem(cacheKey);
+        const cached = localStorage.getItem(cacheKey);
         if (cached) {
           verses = JSON.parse(cached);
         }
@@ -1861,7 +1861,7 @@
           signal: requestController.signal
         });
         if (!response.ok) {
-          throw new Error(`Bijbel-API: antwoordde met ${response.status}`);
+          throw new Error(`Bijbel-API: ${response.status}`);
         }
         const data = await response.json();
         verses = extractVerses(data);
@@ -1870,16 +1870,13 @@
         }
         // Cache the retrieved verses.
         try {
-          sessionStorage.setItem(cacheKey, JSON.stringify(verses));
+          localStorage.setItem(cacheKey, JSON.stringify(verses));
         } catch (_) {
           // Continue without cache if storage is unavailable.
         }
       }
       // Ignore outdated requests or results from a previous day.
-      if (
-        currentRequestId !== requestId ||
-        dateKey !== localDateKey()
-      ) {
+      if (currentRequestId !== requestId || dateKey !== localDateKey()) {
         return;
       }
       // Display the passage.
