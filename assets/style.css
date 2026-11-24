@@ -260,11 +260,13 @@ html.dark footer a {
 #dailyVersesTitle,
 #sv-dagtekst-titel {
   color: var(--dailyverses-title);
-  font-family: "DS Luthersche", Georgia, Times New Roman, serif;
+  font-family: "DS Luthersche";
+  font-size: 2.2em;
 }
 #sv-dagtekst-tekst {
   margin: 0;
-  font-family: "Day Roman", Times New Roman, serif;
+  font-family: "Day Roman";
+  font-size: 1.1em;
 }
 #sv-dagtekst-verwijzing {
   margin: 1.25rem 0 0;
