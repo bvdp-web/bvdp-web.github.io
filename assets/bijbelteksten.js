@@ -1837,7 +1837,7 @@
     const dateKey = localDateKey();
     const selected = getPassageForDate(dateKey);
     // const cacheKey = `sv-dagtekst ${dateKey} (${selected.label})`;
-    const cacheKey = `sv-dagtekst`;
+    const cacheKey = `sv-dagtekst ${dateKey}`;
     // Cancel any previous request.
     if (requestController) {
       requestController.abort();
