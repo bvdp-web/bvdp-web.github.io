@@ -1802,6 +1802,30 @@
     );
     return `${values.year}-${values.month}-${values.day}`;
   }
+  // Remove expired and invalid SV cache entries.
+  function cleanOldCache() {
+    const MAX_AGE = 24 * 60 * 60 * 1000;
+    const now = Date.now();
+    const prefix = "sv-dagtekst ";
+    try {
+      for (let i = localStorage.length - 1; i >= 0; i--) {
+        const key = localStorage.key(i);
+        if (!key || !key.startsWith(prefix)) {
+          continue;
+        }
+        try {
+          const entry = JSON.parse(localStorage.getItem(key));
+          if (!entry || !Number.isFinite(entry.timestamp) || now - entry.timestamp >= MAX_AGE || !Array.isArray(entry.verses)) {
+            localStorage.removeItem(key);
+          }
+        } catch (_) {
+          localStorage.removeItem(key);
+        }
+      }
+    } catch (error) {
+      console.warn("SV DAGTEKST: Cache cleanup failed.", error);
+    }
+  }
   // Stable hash: all visitors on the same local calendar day
   // receive the same curated passage.
   function hashString(value) {
@@ -1835,6 +1859,7 @@
   // Show the daily Bible passage.
   async function showDailyVerse() {
     const dateKey = localDateKey();
+    cleanOldCache();
     const selected = getPassageForDate(dateKey);
     // const cacheKey = `sv-dagtekst ${dateKey} (${selected.label})`;
     const cacheKey = `sv-dagtekst ${dateKey}`;
@@ -1853,7 +1878,14 @@
       try {
         const cached = localStorage.getItem(cacheKey);
         if (cached) {
-          verses = JSON.parse(cached);
+          const entry = JSON.parse(cached);
+          if (
+            Number.isFinite(entry.timestamp) &&
+            Date.now() - entry.timestamp < 24 * 60 * 60 * 1000 &&
+            Array.isArray(entry.verses)
+          ) {
+            verses = entry.verses;
+          }
         }
       } catch (_) {
         // Continue without cache if storage is unavailable.
@@ -1877,7 +1909,10 @@
         }
         // Cache the retrieved verses.
         try {
-          localStorage.setItem(cacheKey, JSON.stringify(verses));
+          localStorage.setItem(cacheKey, JSON.stringify({
+            timestamp: Date.now(),
+            verses: verses
+          }));
         } catch (_) {
           // Continue without cache if storage is unavailable.
         }
